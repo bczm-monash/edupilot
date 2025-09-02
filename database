@@ -1,0 +1,23 @@
+USE edupilot;
+
+CREATE TABLE users (
+    user_id         VARCHAR(10) NOT NULL COMMENT 'user id',
+    user_title      VARCHAR(3) NOT NULL COMMENT 'user title - Mr, Mrs, Ms',
+    user_fname      VARCHAR(30) NOT NULL COMMENT 'user first name',
+    user_lname      VARCHAR(30) NOT NULL COMMENT 'user last name',
+    user_email      VARCHAR(30) NOT NULL COMMENT 'user email - unique for each user',
+    user_password   VARCHAR(30) NOT NULL COMMENT 'user password',
+    user_role       VARCHAR(7) NOT NULL COMMENT 'user role'
+);
+
+ALTER TABLE users ADD CONSTRAINT users_pk PRIMARY KEY (user_id);
+ALTER TABLE users ADD CONSTRAINT uq_user_email UNIQUE (user_email);
+ALTER TABLE users ADD CONSTRAINT chk_user_role CHECK (user_role IN (
+    'Student',
+    'Teacher'
+));
+ALTER TABLE users ADD CONSTRAINT chk_user_title CHECK (user_title IN (
+    'Mr',
+    'Mrs',
+    'Ms'
+));

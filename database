@@ -1,11 +1,11 @@
 USE edupilot;
 
-DROP TABLE IF EXISTS user;
-DROP TABLE IF EXISTS lesson;
-DROP TABLE IF EXISTS course;
-DROP TABLE IF EXISTS enrolment;
-DROP TABLE IF EXISTS classroom;
 DROP TABLE IF EXISTS classmate;
+DROP TABLE IF EXISTS classroom;
+DROP TABLE IF EXISTS enrolment;
+DROP TABLE IF EXISTS course;
+DROP TABLE IF EXISTS lesson;
+DROP TABLE IF EXISTS user;
 
 CREATE TABLE user (
     user_id         INT(10) NOT NULL COMMENT 'user id',

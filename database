@@ -1,9 +1,11 @@
 USE edupilot;
 
-DROP TABLE IF EXISTS enrolment;
-DROP TABLE IF EXISTS course;
-DROP TABLE IF EXISTS lesson;
 DROP TABLE IF EXISTS user;
+DROP TABLE IF EXISTS lesson;
+DROP TABLE IF EXISTS course;
+DROP TABLE IF EXISTS enrolment;
+DROP TABLE IF EXISTS classroom;
+DROP TABLE IF EXISTS classmate;
 
 CREATE TABLE user (
     user_id         INT(10) NOT NULL COMMENT 'user id',
@@ -51,6 +53,8 @@ CREATE TABLE course (
 );
 
 ALTER TABLE course ADD CONSTRAINT course_pk PRIMARY KEY (course_id);
+ALTER TABLE course ADD CONSTRAINT course_user_fk FOREIGN KEY (user_id) REFERENCES user(user_id);
+ALTER TABLE course ADD CONSTRAINT course_lesson_fk FOREIGN KEY (lesson_id) REFERENCES lesson(lesson_id);
 
 CREATE TABLE enrolment(
     user_id             INT(10) COMMENT 'user that enrolled into course',
@@ -58,7 +62,26 @@ CREATE TABLE enrolment(
 );
 
 ALTER TABLE enrolment ADD CONSTRAINT enrolment_pk PRIMARY KEY (user_id,course_id);
+ALTER TABLE enrolment ADD CONSTRAINT enrolment_user_fk FOREIGN KEY (user_id) REFERENCES user(user_id);
+ALTER TABLE enrolment ADD CONSTRAINT enrolment_course_fk FOREIGN KEY (course_id) REFERENCES course(course_id);
 
+CREATE TABLE classroom(
+    classroom_id            INT(10) COMMENT 'classroom id',
+    user_id                 INT(10) COMMENT 'creator id (teacher)',
+    classroom_duration      DATETIME COMMENT 'classroom duration'  
+);
+
+ALTER TABLE classroom ADD CONSTRAINT classroom_pk PRIMARY KEY (classroom_id);
+ALTER TABLE classroom ADD CONSTRAINT classroom_user_fk FOREIGN KEY (user_id) REFERENCES user(user_id);
+
+CREATE TABLE classmate (
+    user_id         INT(10) COMMENT 'class students id',
+    classroom_id    INT(10) COMMENT 'classroom to join'
+);
+
+ALTER TABLE classmate ADD CONSTRAINT classmate_pk PRIMARY KEY (user_id,classroom_id);
+ALTER TABLE classmate ADD CONSTRAINT classmate_user_fk FOREIGN KEY (user_id) REFERENCES user(user_id);
+ALTER TABLE classmate ADD CONSTRAINT classmate_classroom_fk FOREIGN KEY (classroom_id) REFERENCES classroom(classroom_id);
 COMMIT;
 
 

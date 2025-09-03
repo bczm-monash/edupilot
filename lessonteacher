@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Lessons</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        #lessonList {
+            list-style-type: none;
+            padding-left: 20px;
+        }
+        #lessonList ul {
+            list-style-type: disc;
+            padding-left: 20px;
+        }
+        .delete-btn {
+            margin-left: 10px;
+            color: white;
+            background-color: red;
+            border: none;
+            padding: 2px 6px;
+            cursor: pointer;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body>
+  <nav>
+    <a href="teacher.html">Teacher</a>
+  </nav>
+
+  <h1>Lessons</h1>
+
+  <form id="lessonForm">
+    <input type="text" id="lessonTitle" placeholder="Lesson Title" required>
+    <button type="submit">+</button>
+  </form>
+
+  <ul id="lessonList">
+    <h3>Lessons List</h3>
+    <li>
+        <strong>Lesson 1</strong> - Math
+        <button class="delete-btn">Delete</button>
+        <ul>
+            <li>Prerequisites :</li>
+            <li>Estimated Hours :</li>
+            <li>Content :</li>
+            <li>Credit Points :</li>
+        </ul>
+    </li>
+    <li>
+        <strong>Lesson 2</strong> - English
+        <button class="delete-btn">Delete</button>
+        <ul>
+            <li>Prerequisites :</li>
+            <li>Estimated Hours :</li>
+            <li>Content :</li>
+            <li>Credit Points :</li>
+        </ul>
+    </li>
+  </ul>
+
+  <script>
+    // Handle adding new lessons
+    document.getElementById("lessonForm").addEventListener("submit", function(e) {
+        e.preventDefault();
+        const title = document.getElementById("lessonTitle").value.trim();
+        if (title !== "") {
+            const li = document.createElement("li");
+            li.innerHTML = `<strong>${title}</strong> 
+                <button class="delete-btn">Delete</button>
+                <ul>
+                    <li>Prerequisites :</li>
+                    <li>Estimated Hours :</li>
+                    <li>Content :</li>
+                </ul>`;
+            document.getElementById("lessonList").appendChild(li);
+            document.getElementById("lessonTitle").value = "";
+        }
+    });
+
+    // Handle deleting lessons
+    document.getElementById("lessonList").addEventListener("click", function(e) {
+        if (e.target.classList.contains("delete-btn")) {
+            e.target.parentElement.remove();
+        }
+    });
+  </script>
+</body>
+</html>

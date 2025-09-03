@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Lessons</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        #lessonList {
+            list-style-type: none;
+            padding-left: 20px;
+        }
+        #lessonList ul {
+            list-style-type: disc;
+            padding-left: 20px;
+        }
+    </style>
+</head>
+<body>
+  <nav>
+    <a href="student.html">Student</a>
+  </nav>
+
+  <h1>Lessons</h1>
+
+  <form id="lessonForm">
+    <input type="text" id="lessonTitle" placeholder="Lesson Title" required>
+    <button type="submit">+</button>
+  </form>
+
+  <ul id="lessonList">
+    <h3>Lessons List</h3>
+    <li>
+        <strong>Lesson 1</strong> - Software Engineering 
+        <ul>
+            <li>Prerequisites :</li>
+            <li>Estimated Hours :</li>
+            <li>Content :</li>
+            <li>Credit Points :</li>
+        </ul>
+    </li>
+    <li>
+        <strong>Lesson 2</strong> - Theory of Computation 
+        <ul>
+            <li>Prerequisites :</li>
+            <li>Estimated Hours :</li>
+            <li>Content :</li>
+            <li>Credit Points :</li>
+        </ul>
+    </li>
+  </ul>
+
+  <script>
+    // Handle adding new lessons
+    document.getElementById("lessonForm").addEventListener("submit", function(e) {
+        e.preventDefault();
+        const title = document.getElementById("lessonTitle").value.trim();
+        if (title !== "") {
+            const li = document.createElement("li");
+            li.innerHTML = `<strong>${title}</strong> 
+                <ul>
+                    <li>Prerequisites :</li>
+                    <li>Estimated Hours :</li>
+                    <li>Content :</li>
+                </ul>`;
+            document.getElementById("lessonList").appendChild(li);
+            document.getElementById("lessonTitle").value = "";
+        }
+    });
+  </script>
+</body>
+</html>

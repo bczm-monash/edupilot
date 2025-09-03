@@ -83,5 +83,3 @@ ALTER TABLE classmate ADD CONSTRAINT classmate_pk PRIMARY KEY (user_id,classroom
 ALTER TABLE classmate ADD CONSTRAINT classmate_user_fk FOREIGN KEY (user_id) REFERENCES user(user_id);
 ALTER TABLE classmate ADD CONSTRAINT classmate_classroom_fk FOREIGN KEY (classroom_id) REFERENCES classroom(classroom_id);
 COMMIT;
-
-

@@ -4,8 +4,78 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registration</title>
+    <link rel="stylesheet" href="../css/signup.css">
+    <script src="/EduPilot/JavaScript/redirect.js"></script>
 </head>
 <body>
+    <span class="logo">
+        <img src ="../Images/logo.webp" alt="EduPilot logo" width = 150>
+        <h1>EduPilot</h1>
+    </span>
+
+    <div class = "signupbox">
+        <p class = "highlight">Please enter your details<p>
+        <h2>Sign up</h2>
+
+        <form>
+        <div class = "fields">
+            <select id = "title" name = "title" required>
+                <option value ="" disabled selected>--Select title--</option>
+                <option value = "student">Ms</option>
+                <option value = "teacher">Mrs</option>
+                <option value = "admin">Mr</option>
+            </select>
+        </div>
+
+        <div class = "fields">
+            <input id = "firstname" type = "firstname" placeholder="Enter your first name" required>
+        </div>
+
+        <div class = "fields">
+            <input id = "lastname" type = "lastname" placeholder="Enter your last name" required>
+        </div>
+
+        <div class = "fields">
+            <input id = "email" type = "email" placeholder="Enter your email address" required>
+        </div>
+
+        <div class = "fields">
+            <input id = "password" type = "password" placeholder = "Enter password" required>
+        </div>
+
+        <p> Password must contain:
+            <ul>
+                <li> At least 8 characters</li>
+                <li> At least 1 lowercase character</li>
+                <li> At least 1 uppercase character</li>
+                <li> At least 1 number</li>
+            </ul>
+        </p>
+
+        <div class = "fields">
+            <input id = "confirmpassword" type = "password" placeholder = "Confirm password" required>
+        </div>
+
+        <div class = "fields">
+            <select id = "role" name = "role" required>
+                <option value ="" disabled selected>--Select your role--</option>
+                <option value = "student">Student</option>
+                <option value = "teacher">Teacher</option>
+                <option value = "admin">Administrator</option>
+            </select>
+        </div>
+
+        <div class = "fields">
+            <input id = "key" type = "key" placeholder = "Key (Teacher required)">
+        </div>
+
+            <button onclick="">Sign Up</button>
+        </form>
+
+        <p class = "highlight", class = "login-link"> Already have an account? 
+        <a href="#" onclick = "toLogin()">Log in</a></p>
+        
+    </div>
     
 </body>
 </html>

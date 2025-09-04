@@ -1,0 +1,72 @@
+body{
+    background-color: gainsboro;
+    font-family: Arial, sans-serif;
+}
+
+h1{
+    color: darkblue;
+    font-weight: bold;
+}
+
+.logo{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.logo h1{
+    margin:0;
+}
+
+.signupbox{
+    background-color: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.1);
+    width: 300px;
+    margin: 100px auto;
+    
+}
+
+.highlight{
+    font-size: 13px;
+    color: grey;
+}
+
+.fields{
+    display: flex;
+    padding: 5px;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px;
+    border-radius: 10px;
+    border-width: 1px; 
+    border-style: solid;
+    border-color: lightgray;
+}
+
+input[type = "firstname"], input[type = "lastname"], input[type = "email"], 
+input[type = "password"], input[type = "confirmpassword"], input[type= "key"], select{
+    width: 100%;
+    border: none;
+    outline: none;
+    font-size: 16px;
+    padding: 6px 2px;
+}
+
+button{
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    background-color: darkblue;
+    border-radius: 10px;
+    color: white;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.login-link{
+    margin-top: 15px;
+    text-align: center;
+    font-size: 13
+
+}

@@ -31,7 +31,7 @@ ALTER TABLE user ADD CONSTRAINT chk_user_title CHECK (user_title IN (
 
 CREATE TABLE lesson (
     lesson_id            INT(10) NOT NULL COMMENT 'lesson id',
-    lesson_desc          VARCHAR(100) NOT NULL COMMENT 'lesson description',
+    lesson_desc          VARCHAR(200) NOT NULL COMMENT 'lesson description',
     lesson_prereq        INT(10) COMMENT 'lesson prerequisite',
     user_id              INT(10) NOT NULL COMMENT 'lesson creator',
     lesson_date_created  DATETIME NOT NULL COMMENT 'lesson created date',
@@ -46,7 +46,7 @@ CREATE TABLE course (
     course_id              VARCHAR(10) NOT NULL COMMENT 'course id',
     user_id                INT(10) NOT NULL COMMENT 'course creator',
     lesson_id              INT(10) COMMENT 'lesson id',
-    course_desc            VARCHAR(100) NOT NULL COMMENT 'course desciption',
+    course_desc            VARCHAR(200) NOT NULL COMMENT 'course desciption',
     course_date_created    DATETIME NOT NULL COMMENT 'course created date',
     course_modified        DATETIME NOT NULL COMMENT 'course last modified date',
     course_credit_points   INT(3) NOT NULL COMMENT 'course credit points'

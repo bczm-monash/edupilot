@@ -14,68 +14,87 @@
     </span>
 
     <div class = "signupbox">
-        <p class = "highlight">Please enter your details<p>
-        <h2>Sign up</h2>
-
-        <form>
-        <div class = "fields">
-            <select id = "title" name = "title" required>
-                <option value ="" disabled selected>--Select title--</option>
-                <option value = "student">Ms</option>
-                <option value = "teacher">Mrs</option>
-                <option value = "admin">Mr</option>
-            </select>
+        <div class = "box-header">
+            <p class = "highlight">Please enter your details<p>
+            <h2>Sign up</h2>
         </div>
 
-        <div class = "fields">
-            <input id = "firstname" type = "firstname" placeholder="Enter your first name" required>
+        <div class = "box-scroll">
+            <form>
+            <div class = "fields">
+                <select id = "title" name = "title" required>
+                    <option value ="" disabled selected>--Select title--</option>
+                    <option value = "student">Ms</option>
+                    <option value = "teacher">Mrs</option>
+                    <option value = "admin">Mr</option>
+                </select>
+            </div>
+
+            <div class = "fields">
+                <input id = "firstname" type = "firstname" placeholder="Enter your first name" required>
+            </div>
+
+            <div class = "fields">
+                <input id = "lastname" type = "lastname" placeholder="Enter your last name" required>
+            </div>
+
+            <div class = "fields">
+                <input id = "email" type = "email" placeholder="Enter your email address" required>
+            </div>
+
+            <div class = "fields">
+                <input id = "password" type = "password" placeholder = "Enter password" required>
+            </div>
+
+            <p> Password must contain:
+                <ul>
+                    <li> At least 8 characters</li>
+                    <li> At least 1 lowercase character</li>
+                    <li> At least 1 uppercase character</li>
+                    <li> At least 1 number</li>
+                </ul>
+            </p>
+
+            <div class = "fields">
+                <input id = "confirmpassword" type = "password" placeholder = "Confirm password" required>
+            </div>
+
+            <div class = "fields">
+                <select id = "role" name = "role" required>
+                    <option value ="" disabled selected>--Select your role--</option>
+                    <option value = "student">Student</option>
+                    <option value = "teacher">Teacher</option>
+                </select>
+            </div>
+
+            <div class = "fields">
+                <input id = "key" type = "key" placeholder = "Key (Teacher required)">
+            </div>
+            </form>
         </div>
 
-        <div class = "fields">
-            <input id = "lastname" type = "lastname" placeholder="Enter your last name" required>
-        </div>
-
-        <div class = "fields">
-            <input id = "email" type = "email" placeholder="Enter your email address" required>
-        </div>
-
-        <div class = "fields">
-            <input id = "password" type = "password" placeholder = "Enter password" required>
-        </div>
-
-        <p> Password must contain:
-            <ul>
-                <li> At least 8 characters</li>
-                <li> At least 1 lowercase character</li>
-                <li> At least 1 uppercase character</li>
-                <li> At least 1 number</li>
-            </ul>
-        </p>
-
-        <div class = "fields">
-            <input id = "confirmpassword" type = "password" placeholder = "Confirm password" required>
-        </div>
-
-        <div class = "fields">
-            <select id = "role" name = "role" required>
-                <option value ="" disabled selected>--Select your role--</option>
-                <option value = "student">Student</option>
-                <option value = "teacher">Teacher</option>
-                <option value = "admin">Administrator</option>
-            </select>
-        </div>
-
-        <div class = "fields">
-            <input id = "key" type = "key" placeholder = "Key (Teacher required)">
-        </div>
-
-            <button onclick="">Sign Up</button>
-        </form>
+        <div class="box-footer">
+        <button form="signupForm" type="button" onclick="openPopup()">Sign Up</button>
 
         <p class = "highlight", class = "login-link"> Already have an account? 
         <a href="#" onclick = "toLogin()">Log in</a></p>
+        </div>
+
+        <div class="popup" id="popup">
+            <img src ="../Images/green tick.png" alt="Green tick" width = 150>
+            <h2> Registration Successful </h2>
+            <p> Please login with the registered information. Thank You! </p>
+            <button onclick="toLogin()">Log in</button>
+        </div>
         
     </div>
-    
+
+    <script>
+        let popup = document.getElementById("popup")
+
+        function openPopup(){
+            popup.classList.add("open-popup");
+        }
+    </script>
 </body>
 </html>

@@ -28,18 +28,21 @@ h1{
     width: 100%;
     height:75px;
     padding: 0px 0px;
+    align-items: center;
 }
 
-button{
-    padding:5px 25px;
+.menu button{
+    height: 75px;
+    width:150px;
     background-color:black;
     color: white;
-    font-size: 25px;
+    font-size: 20px;
     font-weight: bold;
     border-left: 1px solid white;
     border-top: 0;
     border-bottom: 0;
     border-right: 0;
+    text-align: center;
 }
 
 

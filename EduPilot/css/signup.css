@@ -1,6 +1,7 @@
 body{
     background-color: gainsboro;
     font-family: Arial, sans-serif;
+    overflow: hidden;
 }
 
 h1{
@@ -19,12 +20,35 @@ h1{
 
 .signupbox{
     background-color: white;
-    padding: 30px;
+    padding: 0;
     border-radius: 10px;
     box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.1);
-    width: 300px;
-    margin: 100px auto;
-    
+    width: 360px;
+    margin: 40px auto;
+    max-height:75vh;
+    display: flex;
+    flex-direction: column; 
+}
+
+.signupbox .box-header{
+    border-radius: 10px;
+  position: sticky;
+  padding: 0px 24px;
+  background-color: white;
+}
+
+.signupbox .box-scroll{
+  padding: 16px 24px 24px;
+  overflow-y: auto;  
+  flex:1;          
+}
+
+.signupbox .box-footer{
+    padding: 16px 24px;
+    position: sticky;
+    bottom: 0;
+    background-color: white;
+    border-radius: 10px;
 }
 
 .highlight{
@@ -68,5 +92,27 @@ button{
     margin-top: 15px;
     text-align: center;
     font-size: 13
+}
+
+.popup{
+    width: 400px;
+    background-color: white;
+    border-radius:10px;
+    position: absolute;
+    top: 0;
+    left: 50%;
+    right: 50%;
+    transform: translate(-50%, -50%) scale(0.1);
+    text-align: center;
+    padding: 0 30px 30px;
+    color: black;
+    visibility: hidden;
+    transition: transform 0.4s, top 0.4s;
+}
+
+.open-popup{
+    visibility: visible;
+    top: 50%;
+    transform: translate(-50%, -50%) scale(1);
 
 }

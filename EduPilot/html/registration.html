@@ -6,6 +6,7 @@
     <title>Registration</title>
     <link rel="stylesheet" href="../css/signup.css">
     <script src="/EduPilot/JavaScript/redirect.js"></script>
+    <script src="/EduPilot/JavaScript/registration_validation.js"></script>
 </head>
 <body>
     <span class="logo">
@@ -74,7 +75,7 @@
         </div>
 
         <div class="box-footer">
-        <button form="signupForm" type="button" onclick="openPopup()">Sign Up</button>
+        <button form="signupForm" type="button" onclick="validateForm()">Sign Up</button>
 
         <p class = "highlight", class = "login-link"> Already have an account? 
         <a href="#" onclick = "toLogin()">Log in</a></p>
@@ -89,12 +90,5 @@
         
     </div>
 
-    <script>
-        let popup = document.getElementById("popup")
-
-        function openPopup(){
-            popup.classList.add("open-popup");
-        }
-    </script>
 </body>
 </html>

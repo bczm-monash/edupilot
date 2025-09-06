@@ -1,0 +1,57 @@
+function openPopup(){
+    let popup = document.getElementById("popup")
+    popup.classList.add("open-popup");
+}
+
+function validateForm() {
+    const title = document.getElementById("title").value;
+    const firstname = document.getElementById("firstname").value.trim();
+    const lastname = document.getElementById("lastname").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value;
+    const confirmPassword = document.getElementById("confirmpassword").value;
+    const role = document.getElementById("role").value;
+    const key = document.getElementById("key").value.trim();
+
+    // make sure every field is filled
+    if (!title || !firstname || !lastname || !email || !password || !confirmPassword || !role) {
+        alert("Please fill in all required fields.");
+        return false;
+    }
+
+    // validate email
+    const emailPattern = /^[^ ]+@[^ ]+\.[a-z]{2,}$/i;
+    if (!emailPattern.test(email)) {
+        alert("Please enter a valid email address.");
+        return false;
+    }
+
+    // validate pw
+    const passPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
+    if (!passPattern.test(password)) {
+        alert("Password must have at least 8 characters, 1 lowercase, 1 uppercase, and 1 number.");
+        return false;
+    }
+
+    // cfm pw match
+    if (password !== confirmPassword) {
+        alert("Passwords do not match.");
+        return false;
+    }
+
+    // teacher key
+    const requiredKey = "teacher2025"; 
+    if (role === "teacher" && !key) {
+        alert("Teachers must provide a key.");
+        return false;
+    } else if (role === "teacher" && key !== requiredKey) {
+        alert("Invalid key for teacher registration.");
+        return false;
+    }
+
+    // check everything before popup
+    openPopup();
+    return true;
+}
+
+

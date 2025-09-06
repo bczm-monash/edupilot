@@ -3,7 +3,7 @@ function openPopup(){
     popup.classList.add("open-popup");
 }
 
-function validateForm() {
+async function validateForm() {
     const title = document.getElementById("title").value;
     const firstname = document.getElementById("firstname").value.trim();
     const lastname = document.getElementById("lastname").value.trim();
@@ -49,9 +49,36 @@ function validateForm() {
         return false;
     }
 
-    // check everything before popup
-    openPopup();
-    return true;
-}
+    // Add to supabase
+    if (!window.supabase) {
+        alert("Supabase is not initialized. Please check your supabase-init.js configuration.");
+        return false;
+    }
 
+    try {
+        const { data, error } = await window.supabase.auth.signUp({
+            email,
+            password,
+            options: {
+                data: {
+                    title,
+                    first_name: firstname,
+                    last_name: lastname,
+                    role,
+                },
+            },
+        });
+
+        if (error) {
+            alert(`Sign up failed: ${error.message}`);
+            return false;
+        }
+
+        openPopup();
+        return true;
+    } catch (e) {
+        alert(`Unexpected error during sign up: ${e.message || e}`);
+        return false;
+    }
+}
 

@@ -15,7 +15,7 @@ function toTCourse() {
 }
 
 function toLesson() {
-    window.location.href = "//EduPilothtml/teacher/lessons.html";
+    window.location.href = "/EduPilot/html/teacher/lessons.html";
 }
 
 function toCreateLesson() {

@@ -36,18 +36,3 @@ async function signIn(event) {
     return false;
   }
 }
-
-// If already authenticated, redirect based on stored role
-document.addEventListener('DOMContentLoaded', async () => {
-  if (!window.supabase) return;
-  const { data } = await window.supabase.auth.getUser();
-  const user = data?.user;
-  if (!user) return;
-  const role = user.user_metadata?.role || 'student';
-  if (role === 'teacher') {
-    toTCourse();
-  } else {
-    toSCourse();
-  }
-});
-

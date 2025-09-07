@@ -41,10 +41,10 @@ async function validateForm() {
 
     // teacher key
     const requiredKey = "teacher2025"; 
-    if (role === "teacher" && !key) {
+    if (role === "Teacher" && !key) {
         alert("Teachers must provide a key.");
         return false;
-    } else if (role === "teacher" && key !== requiredKey) {
+    } else if (role === "Teacher" && key !== requiredKey) {
         alert("Invalid key for teacher registration.");
         return false;
     }

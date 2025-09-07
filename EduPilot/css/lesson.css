@@ -1,0 +1,210 @@
+.toolbar { 
+  margin: 12px; 
+  display: flex; 
+  gap: 8px; 
+  justify-content: flex-end; 
+}
+
+.edit-lesson-btn {
+  display: inline-block;
+  padding: 8px 16px;
+  font-size: 16px;
+  font-weight: bold;
+  color: white;
+  background-color: #6c757d;
+  text-decoration: none;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+.edit-lesson-btn:hover { 
+  background-color: #5a6268; 
+}
+
+.overlay-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+.overlay-panel {
+  background: #fff;
+  width: min(700px, 92vw);
+  max-height: 80vh;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+}
+.overlay-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.overlay-title {
+  margin: 0;
+  font-size: 20px;
+}
+
+.overlay-body {
+  margin-top: 12px;
+  overflow: auto;
+  border: 1px solid #eee;
+  border-radius: 8px;
+  padding: 8px;
+}
+
+.overlay-actions {
+  margin-top: 12px;
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.list-row { 
+  display: flex; 
+  align-items: center; 
+  gap: 8px; 
+  padding: 8px; 
+  border-bottom: 1px solid #f2f2f2; 
+}
+.list-row:last-child {
+  border-bottom: 0;
+}
+
+.danger-btn { 
+  background-color: #d9534f; 
+  color: #fff; 
+  border: none; 
+  border-radius: 8px; 
+  padding: 10px 14px; 
+  font-weight: bold; 
+  cursor: pointer; 
+}
+.danger-btn:hover {
+  background-color: #c9302c;
+}
+
+.secondary-btn { 
+  background-color: #f0f0f0; 
+  color: #333; 
+  border: 1px solid #ddd; 
+  border-radius: 8px; 
+  padding: 10px 14px; 
+  cursor: pointer; 
+}
+
+.muted {
+  color: #666;
+  font-size: 14px;
+}
+
+#lessonList {
+  list-style: none;
+  margin: 0;
+  padding: 12px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+
+.lesson-card {
+  background-color: #ffffff;
+  border: 1px solid #000000;
+  border-radius: 8px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  min-height: 120px;
+  cursor: pointer;
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+
+.lesson-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.lesson-btn {
+  flex: 1;
+  width: 100%;
+  padding: 15px;
+  font-size: 18px;
+  font-weight: bold;
+  background-color: #0a26c6;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-bottom: 10px;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.lesson-btn:hover {
+  background-color:#0a26c6;
+  transform: scale(1.02);
+}
+
+.delete-btn {
+  background-color: red;
+  color: white;
+  border: none;
+  padding: 8px;
+  border-radius: 5px;
+  cursor: pointer;
+  align-self: flex-end;
+}
+.delete-btn:hover {
+  background-color: darkred;
+}
+
+.add-lesson-btn {
+  display: inline-block;
+  padding: 8px 16px;
+  font-size: 24px;
+  font-weight: bold;
+  color: white;
+  background-color:#0a26c6;
+  text-decoration: none;
+  border-radius: 8px;
+  transition: background-color 0.3s ease;
+}
+.add-lesson-btn:hover {
+  background-color: #3a5f88;
+}
+
+.lesson-title {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.lesson-meta {
+  font-size: 14px;
+  font-weight: normal;
+  color: #333;
+}
+
+@media (max-width: 1200px) {
+  #lessonList {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 900px) {
+  #lessonList {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  #lessonList {
+    grid-template-columns: 1fr;
+  }
+}

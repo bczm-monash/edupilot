@@ -1,6 +1,14 @@
+:root,
+body,
+button,
+input,
+select,
+textarea {
+  font-family: Arial, sans-serif;
+}
+
 body{
     background-color: gainsboro;
-    font-family: Arial, sans-serif;
 }
 
 h1{

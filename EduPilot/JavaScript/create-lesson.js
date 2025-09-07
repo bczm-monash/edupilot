@@ -1,4 +1,3 @@
-// Create Lesson page logic: loads prerequisites and inserts lesson to Supabase
 (function () {
   async function ensureAuth() {
     if (!window.supabase) return { user: null };
@@ -11,7 +10,6 @@
     const select = document.getElementById('prerequisite');
     if (!window.supabase || !select) return;
 
-    // Reset options and add default 'None'
     select.innerHTML = '';
     const none = document.createElement('option');
     none.value = '';
@@ -41,13 +39,12 @@
     const idEl = document.getElementById('lessonId');
     const titleEl = document.getElementById('title');
     const descEl = document.getElementById('description');
+    const objectiveEl = document.getElementById('objective');
     const prereqEl = document.getElementById('prerequisite');
     const creditEl = document.getElementById('creditPoints');
+    const estimatedHoursEl = document.getElementById('estimatedHours');
 
-    // Populate prerequisite dropdown from DB
     loadPrerequisites();
-
-    // We do not expose the user id in the form; we read it from auth during submit.
 
     if (form) {
       form.addEventListener('submit', async (e) => {
@@ -69,11 +66,19 @@
         const lesson_desc = descEl.value.trim();
         const lesson_title = titleEl ? titleEl.value.trim() : '';
         const lesson_prereq = prereqEl.value ? prereqEl.value : null;
+        const lesson_objective = objectiveEl ? objectiveEl.value.trim() : '';
         const users_id = user.id;
         const nowIso = new Date().toISOString();
         const credit_pts = (function() {
           if (!creditEl) return null;
           const v = creditEl.value;
+          if (v === '' || v === null || typeof v === 'undefined') return null;
+          const n = parseInt(v, 10);
+          return Number.isNaN(n) ? null : n;
+        })();
+        const lesson_estimated_hours = (function() {
+          if (!estimatedHoursEl) return null;
+          const v = estimatedHoursEl.value;
           if (v === '' || v === null || typeof v === 'undefined') return null;
           const n = parseInt(v, 10);
           return Number.isNaN(n) ? null : n;
@@ -89,8 +94,10 @@
           lesson_id,
           lesson_title,
           lesson_desc,
+          lesson_objective,
           lesson_credit_pts: credit_pts,
           lesson_prereq,
+          lesson_est_hrs: lesson_estimated_hours,
           users_id,
           lesson_date_created: nowIso,
           lesson_modified: nowIso,

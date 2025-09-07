@@ -45,4 +45,98 @@ h1{
     text-align: center;
 }
 
+/*  */
 
+.menu button:hover {
+    background-color: #222; /* hover effect */
+}
+
+body {
+    font-family: Arial, sans-serif;
+}
+
+
+.site-title {
+    font-size: 45px;
+    font-weight: bold;
+    color: #333;
+}
+
+nav {
+    margin: 20px 0;
+}
+
+.lesson-card {
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    min-height: 140px;
+}
+
+.lesson-btn {
+    flex: 1;
+    width: 100%;
+    padding: 15px;
+    font-size: 18px;
+    font-weight: bold;
+    background-color: #0a26c6;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-bottom: 10px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.lesson-btn:hover {
+    background-color:#0a26c6;
+    transform: scale(1.02);
+}
+
+.delete-btn {
+    background-color: red;
+    color: white;
+    border: none;
+    padding: 8px;
+    border-radius: 5px;
+    cursor: pointer;
+    align-self: flex-end;
+}
+
+.delete-btn:hover {
+    background-color: darkred;
+}
+
+/* Plus button styling */
+.add-lesson-btn {
+    display: inline-block;
+    padding: 8px 16px;
+    font-size: 24px;
+    font-weight: bold;
+    color: white;
+    background-color:#0a26c6;
+    text-decoration: none;
+    border-radius: 8px;
+    transition: background-color 0.3s ease;
+}
+
+.add-lesson-btn:hover {
+    background-color: #3a5f88;
+}
+.lesson-title {
+font-size: 18px;
+font-weight: bold;
+margin-bottom: 5px;
+}
+
+.lesson-meta {
+    font-size: 14px;
+    font-weight: normal;
+    color: #f0f0f0; /* lighter text for contrast */
+}
+
+/* creating page */

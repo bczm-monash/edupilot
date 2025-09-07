@@ -25,7 +25,7 @@ async function signIn(event) {
     const user = data.user;
     const role = user?.user_metadata?.role || 'student';
 
-    if (role === 'teacher') {
+    if (role === 'Teacher') {
       toTCourse();
     } else {
       toSCourse();

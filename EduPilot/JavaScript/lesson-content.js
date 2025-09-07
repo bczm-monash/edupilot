@@ -17,6 +17,7 @@
   // Sections
   const descEl = document.getElementById('lessonDesc');
   const objEl = document.getElementById('lessonObjective');
+  const editBtn = document.getElementById('editBtn');
 
   function getQueryId() {
     const p = new URLSearchParams(window.location.search);
@@ -71,6 +72,14 @@
 
   async function load() {
     const queryId = getQueryId();
+    if (editBtn) {
+      editBtn.addEventListener('click', () => {
+        const target = queryId
+          ? `/EduPilot/html/teacher/EditLesson.html?id=${encodeURIComponent(queryId)}`
+          : `/EduPilot/html/teacher/EditLesson.html`;
+        window.location.href = target;
+      });
+    }
     if (!queryId) {
       setHeader('', 'Lesson');
       return;
@@ -85,8 +94,15 @@
       }
 
       const titleVal = data?.title || data?.lesson_title || data?.name || data?.lesson_desc || 'Lesson';
-      const idVal = data?.id || data?.lesson_id || queryId;
+      const idVal = data?.lesson_id || data?.id || queryId;
       setHeader(idVal, titleVal);
+      // ensure Edit button uses canonical id
+      if (editBtn) {
+        editBtn.onclick = () => {
+          const target = `/EduPilot/html/teacher/EditLesson.html?id=${encodeURIComponent(idVal)}`;
+          window.location.href = target;
+        };
+      }
 
       // Details
       const prereq = data?.lesson_prereq ?? '';

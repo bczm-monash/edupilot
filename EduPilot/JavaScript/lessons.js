@@ -68,7 +68,8 @@
 
     function open() {
       if (idVal) {
-        window.location.href = `/EduPilot/html/teacher/lesson_content.html?id=${encodeURIComponent(idVal)}`;
+        const linkId = item.lesson_id ?? idVal;
+        window.location.href = `/EduPilot/html/teacher/lesson_content.html?id=${encodeURIComponent(linkId)}`;
       }
     }
     li.addEventListener('click', open);

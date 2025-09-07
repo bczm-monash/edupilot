@@ -45,4 +45,208 @@ h1{
     text-align: center;
 }
 
+/*  */
 
+.menu button:hover {
+    background-color: #222; /* hover effect */
+}
+
+body {
+    font-family: Arial, sans-serif;
+}
+
+
+.site-title {
+    font-size: 45px;
+    font-weight: bold;
+    color: #333;
+}
+
+nav {
+    margin: 20px 0;
+}
+
+.lesson-card {
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    min-height: 140px;
+}
+
+.lesson-btn {
+    flex: 1;
+    width: 100%;
+    padding: 15px;
+    font-size: 18px;
+    font-weight: bold;
+    background-color: #0a26c6;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-bottom: 10px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.lesson-btn:hover {
+    background-color:#0a26c6;
+    transform: scale(1.02);
+}
+
+.delete-btn {
+    background-color: red;
+    color: white;
+    border: none;
+    padding: 8px;
+    border-radius: 5px;
+    cursor: pointer;
+    align-self: flex-end;
+}
+
+.delete-btn:hover {
+    background-color: darkred;
+}
+
+/* Plus button styling */
+.add-lesson-btn {
+    display: inline-block;
+    padding: 8px 16px;
+    font-size: 24px;
+    font-weight: bold;
+    color: white;
+    background-color:#0a26c6;
+    text-decoration: none;
+    border-radius: 8px;
+    transition: background-color 0.3s ease;
+}
+
+.add-lesson-btn:hover {
+    background-color: #3a5f88;
+}
+.lesson-title {
+font-size: 18px;
+font-weight: bold;
+margin-bottom: 5px;
+}
+
+.lesson-meta {
+    font-size: 14px;
+    font-weight: normal;
+    color: #f0f0f0; /* lighter text for contrast */
+}
+
+/* creating page */
+/* Shared page container for centered content */
+.page-container {
+    max-width: 900px;
+    margin: 30px auto;
+    padding: 0 16px;
+}
+
+/* Generic card for forms and panels */
+.form-card {
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    padding: 20px;
+}
+
+/* Form layout */
+.form-title {
+    margin: 0 0 12px 0;
+    color: #333;
+}
+
+.form-subtitle {
+    margin: 0 0 20px 0;
+    color: #666;
+    font-weight: normal;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+.form-grid .full-width {
+    grid-column: 1 / -1;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 6px;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+    padding: 10px 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 16px;
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    background-color: #fff;
+}
+
+.form-group textarea {
+    min-height: 120px;
+    resize: vertical;
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+    border-color: #0a26c6;
+    box-shadow: 0 0 0 3px rgba(10, 38, 198, 0.1);
+}
+
+.form-actions {
+    margin-top: 20px;
+    display: flex;
+    gap: 12px;
+}
+
+.btn-primary {
+    background-color: #0a26c6;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 18px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.btn-primary:hover {
+    background-color: #0920a8;
+    transform: translateY(-1px);
+}
+
+.btn-secondary {
+    background-color: #f0f0f0;
+    color: #333;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 12px 18px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+@media (max-width: 720px) {
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+}

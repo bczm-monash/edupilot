@@ -114,7 +114,26 @@
       // Resolve creator name
       const creatorName = await resolveCreator(data?.users_id || data?.user_id);
 
-      showRow(rowPrereq, valPrereq, prereq);
+      // Resolve prerequisite display as "id - title"
+      if (prereq !== '' && prereq !== null && prereq !== undefined && window.supabase) {
+        try {
+          const { data: pre, error: preErr } = await window.supabase
+            .from('lesson')
+            .select('lesson_id, lesson_title')
+            .eq('lesson_id', prereq)
+            .maybeSingle();
+          if (!preErr && pre) {
+            const title = pre.lesson_title ?? '';
+            showRow(rowPrereq, valPrereq, `${pre.lesson_id} - ${title}`);
+          } else {
+            showRow(rowPrereq, valPrereq, prereq);
+          }
+        } catch (_) {
+          showRow(rowPrereq, valPrereq, prereq);
+        }
+      } else {
+        showRow(rowPrereq, valPrereq, '');
+      }
       showRow(rowCreator, valCreator, creatorName);
       showRow(rowEst, valEst, est);
       showRow(rowCredit, valCredit, credit);

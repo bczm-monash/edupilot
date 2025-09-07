@@ -66,7 +66,7 @@
     try {
       const { data, error } = await window.supabase
         .from('lesson')
-        .select('lesson_id, lesson_desc')
+        .select('lesson_id, lesson_title')
         .order('lesson_id', { ascending: true });
       if (error) { console.warn('Prereq fetch error', error); return; }
       prereqEl.innerHTML = '';
@@ -77,7 +77,8 @@
       (data || []).forEach(row => {
         const opt = document.createElement('option');
         opt.value = row.lesson_id;
-        opt.textContent = `${row.lesson_id} — ${row.lesson_desc ?? ''}`.trim();
+        const title = row.lesson_title ?? '';
+        opt.textContent = `${row.lesson_id} - ${title}`.trim();
         // Avoid self-reference
         if (String(row.lesson_id) === String(currentId)) {
           opt.disabled = true;

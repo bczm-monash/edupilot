@@ -1,6 +1,22 @@
 (function () {
   const headerEl = document.getElementById('lessonHeader');
-  const detailsEl = document.getElementById('lessonDetails');
+  // Detail rows
+  const rowPrereq = document.getElementById('rowPrereq');
+  const rowCreator = document.getElementById('rowCreator');
+  const rowEst = document.getElementById('rowEst');
+  const rowCredit = document.getElementById('rowCredit');
+  const rowModified = document.getElementById('rowModified');
+  const rowCreated = document.getElementById('rowCreated');
+  // Values
+  const valPrereq = document.getElementById('valPrereq');
+  const valCreator = document.getElementById('valCreator');
+  const valEst = document.getElementById('valEst');
+  const valCredit = document.getElementById('valCredit');
+  const valModified = document.getElementById('valModified');
+  const valCreated = document.getElementById('valCreated');
+  // Sections
+  const descEl = document.getElementById('lessonDesc');
+  const objEl = document.getElementById('lessonObjective');
 
   function getQueryId() {
     const p = new URLSearchParams(window.location.search);
@@ -13,35 +29,14 @@
     headerEl.textContent = idPart ? `${idPart} - ${titlePart}` : titlePart;
   }
 
-  function renderDetails(obj) {
-    if (!detailsEl) return;
-    detailsEl.innerHTML = '';
-    if (!obj || typeof obj !== 'object') {
-      const li = document.createElement('li');
-      li.textContent = 'No details available';
-      detailsEl.appendChild(li);
-      return;
-    }
-
-    const entries = Object.entries(obj).filter(([, v]) => v !== null && v !== undefined && v !== '');
-    if (entries.length === 0) {
-      const li = document.createElement('li');
-      li.textContent = 'No details available';
-      detailsEl.appendChild(li);
-      return;
-    }
-
-    for (const [key, val] of entries) {
-      const li = document.createElement('li');
-      const k = document.createElement('span');
-      k.className = 'details-key';
-      k.textContent = `${key}:`;
-      const v = document.createElement('span');
-      v.className = 'details-value';
-      v.textContent = Array.isArray(val) || typeof val === 'object' ? JSON.stringify(val) : String(val);
-      li.appendChild(k);
-      li.appendChild(v);
-      detailsEl.appendChild(li);
+  function fmtDate(v) {
+    if (!v) return '';
+    try {
+      const d = typeof v === 'string' || typeof v === 'number' ? new Date(v) : v;
+      if (isNaN(d.getTime())) return String(v);
+      return d.toLocaleString();
+    } catch (e) {
+      return String(v);
     }
   }
 
@@ -53,11 +48,31 @@
     return res;
   }
 
+  async function resolveCreator(users_id) {
+    if (!users_id || !window.supabase) return '';
+    const { data, error } = await window.supabase
+      .from('users')
+      .select('users_fname, users_lname')
+      .eq('users_id', users_id)
+      .maybeSingle();
+    if (error || !data) return '';
+    return [data.users_fname, data.users_lname].filter(Boolean).join(' ');
+  }
+
+  function showRow(rowEl, valEl, value) {
+    if (!rowEl || !valEl) return;
+    if (value === null || value === undefined || value === '') {
+      rowEl.style.display = 'none';
+    } else {
+      valEl.textContent = String(value);
+      rowEl.style.display = '';
+    }
+  }
+
   async function load() {
     const queryId = getQueryId();
     if (!queryId) {
       setHeader('', 'Lesson');
-      renderDetails(null);
       return;
     }
 
@@ -66,18 +81,36 @@
       if (error) {
         console.error('Failed to fetch lesson', error);
         setHeader(queryId, 'Lesson');
-        renderDetails(null);
         return;
       }
 
       const titleVal = data?.title || data?.lesson_title || data?.name || data?.lesson_desc || 'Lesson';
       const idVal = data?.id || data?.lesson_id || queryId;
       setHeader(idVal, titleVal);
-      renderDetails(data);
+
+      // Details
+      const prereq = data?.lesson_prereq ?? '';
+      const est = data?.lesson_estimated_hours ?? data?.lesson_est_hrs ?? '';
+      const credit = data?.lesson_credit_pts ?? '';
+      const modified = data?.lesson_modified ? fmtDate(data?.lesson_modified) : '';
+      const created = data?.lesson_date_created ? fmtDate(data?.lesson_date_created) : '';
+
+      // Resolve creator name
+      const creatorName = await resolveCreator(data?.users_id || data?.user_id);
+
+      showRow(rowPrereq, valPrereq, prereq);
+      showRow(rowCreator, valCreator, creatorName);
+      showRow(rowEst, valEst, est);
+      showRow(rowCredit, valCredit, credit);
+      showRow(rowModified, valModified, modified);
+      showRow(rowCreated, valCreated, created);
+
+      // Sections
+      if (descEl) descEl.textContent = data?.lesson_desc || '';
+      if (objEl) objEl.textContent = data?.lesson_objective || '';
     } catch (e) {
       console.error('Unexpected error', e);
       setHeader(queryId, 'Lesson');
-      renderDetails(null);
     }
   }
 
@@ -87,4 +120,3 @@
     load();
   }
 })();
-

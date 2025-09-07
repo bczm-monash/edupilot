@@ -13,7 +13,7 @@
 
 .lesson-header {
   margin: 12px;
-  font-size: 24px;
+  font-size: 36px;
   font-weight: bold;
 }
 
@@ -53,4 +53,24 @@
   border-radius: 10px;
   box-shadow: 0 2px 6px rgba(0,0,0,0.15);
   padding: 20px;
+  margin: 12px;
+}
+
+.section-title {
+  margin: 0 0 10px 0;
+  font-size: 20px;
+}
+
+.section-text {
+  margin: 0;
+  color: #333;
+  line-height: 1.5;
+}
+
+/* Ensure details list typography and spacing feel consistent */
+.details-list {
+  margin-top: 0;
+}
+.details-list li {
+  line-height: 1.5;
 }

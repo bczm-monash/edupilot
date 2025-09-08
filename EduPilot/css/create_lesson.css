@@ -148,3 +148,15 @@
     grid-template-columns: 1fr;
   }
 }
+
+@media (max-width: 520px) {
+  .form-card {
+    padding: 16px;
+  }
+  .form-actions {
+    flex-direction: column;
+  }
+  .btn-primary, .btn-secondary {
+    width: 100%;
+  }
+}

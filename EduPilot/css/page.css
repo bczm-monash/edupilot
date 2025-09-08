@@ -25,7 +25,7 @@ h1{
 }
 .logo h1{
     margin:0;
-    font-size: 60;
+    font-size: 60px;
 }
 
 .navigationBar{
@@ -73,3 +73,53 @@ nav {
 }
 
 /* Lesson-specific and form-specific styles moved to lesson.css and create_lesson.css */
+
+/* Global responsive media + utilities */
+img, video, svg {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Responsive navigation */
+@media (max-width: 900px) {
+  .navigationBar {
+    flex-direction: column;
+    align-items: stretch;
+    height: auto;
+    padding: 8px 0;
+    gap: 8px;
+  }
+  .logo {
+    padding: 0 12px;
+  }
+  .logo h1 {
+    font-size: 36px;
+  }
+  .menu {
+    display: flex;
+    gap: 0;
+    overflow-x: auto;
+  }
+  .menu button {
+    flex: 1 0 auto;
+    min-width: 120px;
+    height: 56px;
+    font-size: 16px;
+    border-left: 1px solid white;
+  }
+}
+
+@media (max-width: 600px) {
+  .menu button {
+    min-width: 100px;
+    height: 48px;
+    font-size: 14px;
+  }
+  .logo img {
+    width: 72px;
+    height: auto;
+  }
+  .logo h1 {
+    font-size: 28px;
+  }
+}

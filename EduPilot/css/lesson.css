@@ -207,4 +207,8 @@
   #lessonList {
     grid-template-columns: 1fr;
   }
+  .toolbar {
+    justify-content: space-between;
+    flex-wrap: wrap;
+  }
 }

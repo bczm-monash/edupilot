@@ -36,6 +36,13 @@
   }
 
   document.addEventListener('DOMContentLoaded', () => {
+    function nowIsoUtcPlus8() {
+      const now = new Date();
+      const plus8 = new Date(now.getTime() + 8 * 60 * 60 * 1000);
+      const iso = plus8.toISOString();
+      return iso.slice(0, 19) + '+08:00';
+    }
+
     const form = document.getElementById('createLessonForm');
     const idEl = document.getElementById('lessonId');
     const titleEl = document.getElementById('title');
@@ -69,7 +76,7 @@
         const lesson_prereq = prereqEl.value ? prereqEl.value : null;
         const lesson_objective = objectiveEl ? objectiveEl.value.trim() : '';
         const users_id = user.id;
-        const nowIso = new Date().toISOString();
+        const nowIso = nowIsoUtcPlus8();
         const credit_pts = (function() {
           if (!creditEl) return null;
           const v = creditEl.value;

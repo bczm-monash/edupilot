@@ -40,7 +40,6 @@
     }
 
     (data || []).forEach((row) => {
-      // Optionally skip self as prerequisite
       const opt = document.createElement('option');
       opt.value = row.lesson_id;
       const title = row.lesson_title ?? '';
@@ -62,6 +61,13 @@
   }
 
   async function load() {
+    function nowIsoUtcPlus8() {
+      const now = new Date();
+      const plus8 = new Date(now.getTime() + 8 * 60 * 60 * 1000);
+      const iso = plus8.toISOString();
+      return iso.slice(0, 19) + '+08:00';
+    }
+
     const form = document.getElementById('editLessonForm');
     const idEl = document.getElementById('lessonId');
     const titleEl = document.getElementById('title');
@@ -123,7 +129,7 @@
             lesson_prereq: prereqEl && prereqEl.value !== '' ? prereqEl.value : null,
             lesson_credit_pts: parseIntOrNull(creditEl ? creditEl.value : null),
             lesson_est_hrs: parseIntOrNull(estimatedHoursEl ? estimatedHoursEl.value : null),
-            lesson_modified: new Date().toISOString(),
+            lesson_modified: nowIsoUtcPlus8(),
           };
 
           if (!payload.lesson_desc) {

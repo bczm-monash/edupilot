@@ -75,8 +75,8 @@
     if (editBtn) {
       editBtn.addEventListener('click', () => {
         const target = queryId
-          ? `/EduPilot/html/teacher/EditLesson.html?id=${encodeURIComponent(queryId)}`
-          : `/EduPilot/html/teacher/EditLesson.html`;
+          ? `/EduPilot/html/teacher/editLesson.html?id=${encodeURIComponent(queryId)}`
+          : `/EduPilot/html/teacher/editLesson.html`;
         window.location.href = target;
       });
     }
@@ -99,7 +99,7 @@
       // ensure Edit button uses canonical id
       if (editBtn) {
         editBtn.onclick = () => {
-          const target = `/EduPilot/html/teacher/EditLesson.html?id=${encodeURIComponent(idVal)}`;
+          const target = `/EduPilot/html/teacher/editLesson.html?id=${encodeURIComponent(idVal)}`;
           window.location.href = target;
         };
       }

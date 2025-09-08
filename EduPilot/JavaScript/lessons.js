@@ -88,6 +88,7 @@
     const { data: lesson, error } = await window.supabase
       .from('lesson')
       .select('*')
+      .order('lesson_id', { ascending: true })
       .limit(100);
 
     if (error) {

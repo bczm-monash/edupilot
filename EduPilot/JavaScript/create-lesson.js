@@ -119,7 +119,18 @@
             .select();
 
           if (error) {
-            alert(`Create failed: ${error.message}`);
+            const msg = String(error.message || '');
+            const details = String(error.details || '');
+            const isUniqueViolation =
+              error.code === '23505' ||
+              /duplicate key|unique constraint|already exists/i.test(msg) ||
+              /lesson_pk|unique/i.test(details);
+
+            if (isUniqueViolation) {
+              alert('A lesson with this Lesson ID already exists. Please choose a different Lesson ID.');
+            } else {
+              alert(`Create failed: ${error.message}`);
+            }
             return;
           }
 

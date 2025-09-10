@@ -35,16 +35,16 @@ ALTER TABLE users ADD CONSTRAINT chk_user_title CHECK (users_title IN (
 ));
 
 CREATE TABLE lesson (
-    lesson_id            INT,
+    lesson_id            Text,
     lesson_title         Text,
     lesson_desc          Text NOT NULL,
     lesson_objective     Text,
-    lesson_prereq        INT,
+    lesson_prereq        Text,
     users_id             uuid references auth.users(id) on delete cascade,
     lesson_date_created  TIMESTAMP NOT NULL,
     lesson_modified      TIMESTAMP NOT NULL,
     lesson_credit_pts    INT,
-    lesson_estimated_hours INT
+    lesson_est_hrs       INT
 );
 
 COMMENT ON COLUMN lesson.lesson_id IS 'lesson id';
@@ -56,7 +56,7 @@ COMMENT ON COLUMN lesson.users_id IS 'lesson creator';
 COMMENT ON COLUMN lesson.lesson_date_created IS 'lesson created date';
 COMMENT ON COLUMN lesson.lesson_modified IS 'lesson last modified date';
 COMMENT ON COLUMN lesson.lesson_credit_pts IS 'lesson credit points';
-COMMENT ON COLUMN lesson.lesson_estimated_hours IS 'estimated hours to complete';
+COMMENT ON COLUMN lesson.lesson_est_hrs IS 'lesson estimated hours';
 
 ALTER TABLE lesson ADD CONSTRAINT lesson_pk PRIMARY KEY (lesson_id);
 ALTER TABLE lesson ADD CONSTRAINT lesson_user_fk FOREIGN KEY (users_id) REFERENCES users(users_id);
@@ -65,7 +65,7 @@ ALTER TABLE lesson ADD CONSTRAINT lesson_prereq_fk FOREIGN KEY (lesson_prereq) R
 CREATE TABLE course (
     course_id              Text,
     users_id               UUID NOT NULL,
-    lesson_id              INT,
+    lesson_id              Text,
     course_desc            Text NOT NULL,
     course_date_created    TIMESTAMP NOT NULL,
     course_modified        TIMESTAMP NOT NULL,

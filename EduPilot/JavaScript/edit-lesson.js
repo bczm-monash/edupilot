@@ -39,7 +39,10 @@
       return;
     }
 
-    (data || []).forEach((row) => {
+    const currentIdStr = String(currentId);
+    (data || [])
+      .filter((row) => String(row.lesson_id) !== currentIdStr)
+      .forEach((row) => {
       const opt = document.createElement('option');
       opt.value = row.lesson_id;
       const title = row.lesson_title ?? '';
@@ -47,7 +50,12 @@
       select.appendChild(opt);
     });
 
-    if (selectedPrereq !== null && selectedPrereq !== undefined && selectedPrereq !== '') {
+    if (
+      selectedPrereq !== null &&
+      selectedPrereq !== undefined &&
+      selectedPrereq !== '' &&
+      String(selectedPrereq) !== currentIdStr
+    ) {
       select.value = selectedPrereq;
     } else {
       select.value = '';

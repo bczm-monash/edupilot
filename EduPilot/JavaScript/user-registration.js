@@ -89,6 +89,29 @@ async function validateForm() {
             return false;
         }
 
+        // Also insert a corresponding profile row into public.users
+        try {
+            const userId = data?.user?.id;
+            if (userId) {
+                const { error: insertErr } = await window.supabase
+                    .from('users')
+                    .insert([{
+                        users_id: userId,
+                        users_title: title,
+                        users_fname: firstname,
+                        users_lname: lastname,
+                        users_email: email,
+                        users_role: role,
+                    }]);
+                if (insertErr && insertErr.code !== '23505') { // ignore unique violations if row already exists
+                    alert(`Sign up succeeded, but profile save failed: ${insertErr.message}`);
+                    return false;
+                }
+            }
+        } catch (_) {
+            // Non-fatal; continue to success popup
+        }
+
         openPopup();
         return true;
     } catch (e) {

@@ -77,13 +77,13 @@ h1{
     border-color: lightgray;
 }
 
-input[type = "firstname"], input[type = "lastname"], input[type = "email"], 
-input[type = "password"], input[type = "confirmpassword"], input[type= "key"], select{
-    width: 100%;
-    border: none;
-    outline: none;
-    font-size: 16px;
-    padding: 6px 2px;
+.fields input,
+.fields select {
+  width: 100%;
+  border: none;
+  outline: none;
+  font-size: 16px;
+  padding: 6px 2px;
 }
 
 button{

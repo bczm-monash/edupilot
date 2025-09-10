@@ -18,7 +18,7 @@
 
     <div class = "signupbox">
         <div class = "box-header">
-            <p class = "highlight">Please enter your details<p>
+            <p class="highlight">Please enter your details</p>
             <h2>Sign up</h2>
         </div>
 
@@ -34,11 +34,11 @@
             </div>
 
             <div class = "fields">
-                <input id = "firstname" type = "firstname" placeholder="Enter your first name" required>
+                <input id = "firstname" type = "text" placeholder="Enter your first name" required>
             </div>
 
             <div class = "fields">
-                <input id = "lastname" type = "lastname" placeholder="Enter your last name" required>
+                <input id = "lastname" type = "text" placeholder="Enter your last name" required>
             </div>
 
             <div class = "fields">
@@ -71,20 +71,20 @@
             </div>
 
             <div class = "fields">
-                <input id = "key" type = "key" placeholder = "Key (Teacher required)">
+                <input id = "key" type = "text" placeholder = "Key (Teacher required)">
             </div>
             </form>
         </div>
 
         <div class="box-footer">
-        <button form="signupForm" type="button" onclick="validateForm()">Sign Up</button>
+        <button type="button" onclick="validateForm()">Sign Up</button>
 
-        <p class = "highlight", class = "login-link"> Already have an account? 
+        <p class="highlight login-link"> Already have an account? 
         <a href="#" onclick = "toLogin()">Log in</a></p>
         </div>
 
         <div class="popup" id="popup">
-            <img src ="../Images/green tick.png" alt="Green tick" width = 150>
+            <img src="../Images/greentick.png" alt="Success" width="150">
             <h2> Registration Successful </h2>
             <p> Please login with the registered information. Thank You! </p>
             <button onclick="toLogin()">Log in</button>

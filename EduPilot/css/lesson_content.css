@@ -1,0 +1,88 @@
+.back-bar {
+  margin: 12px;
+}
+
+.back-btn {
+  background-color: #f0f0f0;
+  color: #333;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+.lesson-header {
+  margin: 12px;
+  font-size: 36px;
+  font-weight: bold;
+}
+
+.details-card {
+  margin: 12px;
+}
+
+.details-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.details-list li {
+  padding: 8px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.details-list li:last-child {
+  border-bottom: 0;
+}
+
+.details-key {
+  font-weight: bold;
+  color: #333;
+  margin-right: 6px;
+}
+
+.page-container {
+  max-width: 900px;
+  margin: 30px auto;
+  padding: 0 16px;
+}
+
+.form-card {
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+  padding: 20px;
+  margin: 12px;
+}
+
+.section-title {
+  margin: 0 0 10px 0;
+  font-size: 20px;
+}
+
+.section-text {
+  margin: 0;
+  color: #333;
+  line-height: 1.5;
+}
+
+/* Ensure details list typography and spacing feel consistent */
+.details-list {
+  margin-top: 0;
+}
+.details-list li {
+  line-height: 1.5;
+}
+
+@media (max-width: 600px) {
+  .lesson-header {
+    font-size: 28px;
+  }
+  .form-card {
+    padding: 16px;
+  }
+  .section-title {
+    font-size: 18px;
+  }
+}

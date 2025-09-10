@@ -1,0 +1,143 @@
+:root,
+body,
+button,
+input,
+select,
+textarea {
+  font-family: Arial, sans-serif;
+}
+
+body{
+    background-color: gainsboro;
+    /* Allow page to scroll on small screens */
+    overflow: auto;
+}
+
+h1{
+    color: darkblue;
+    font-weight: bold;
+}
+
+.logo{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.logo h1{
+    margin:0;
+}
+
+.signupbox{
+    background-color: white;
+    padding: 0;
+    border-radius: 10px;
+    box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.1);
+    width: min(92vw, 420px);
+    margin: 24px auto;
+    max-height: 80vh;
+    display: flex;
+    flex-direction: column; 
+}
+
+.signupbox .box-header{
+    border-radius: 10px;
+  position: sticky;
+  padding: 0px 24px;
+  background-color: white;
+}
+
+.signupbox .box-scroll{
+  padding: 16px 24px 24px;
+  overflow-y: auto;  
+  flex:1;          
+}
+
+.signupbox .box-footer{
+    padding: 16px 24px;
+    position: sticky;
+    bottom: 0;
+    background-color: white;
+    border-radius: 10px;
+}
+
+.highlight{
+    font-size: 13px;
+    color: grey;
+}
+
+.fields{
+    display: flex;
+    padding: 5px;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px;
+    border-radius: 10px;
+    border-width: 1px; 
+    border-style: solid;
+    border-color: lightgray;
+}
+
+input[type = "firstname"], input[type = "lastname"], input[type = "email"], 
+input[type = "password"], input[type = "confirmpassword"], input[type= "key"], select{
+    width: 100%;
+    border: none;
+    outline: none;
+    font-size: 16px;
+    padding: 6px 2px;
+}
+
+button{
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    background-color: darkblue;
+    border-radius: 10px;
+    color: white;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.login-link{
+    margin-top: 15px;
+    text-align: center;
+    font-size: 13
+}
+
+.popup{
+    width: min(400px, 92vw);
+    background-color: white;
+    border-radius:10px;
+    position: fixed;
+    top: 0;
+    left: 50%;
+    right: 50%;
+    transform: translate(-50%, -50%) scale(0.1);
+    text-align: center;
+    padding: 0 20px 20px;
+    color: black;
+    visibility: hidden;
+    transition: transform 0.4s, top 0.4s;
+    box-sizing: border-box;
+}
+
+.open-popup{
+    visibility: visible;
+    top: 50%;
+    transform: translate(-50%, -50%) scale(1);
+
+}
+
+@media (max-width: 480px) {
+  .signupbox .box-header {
+    padding: 8px 16px;
+  }
+  .signupbox .box-scroll {
+    padding: 12px 16px 16px;
+  }
+  .signupbox .box-footer {
+    padding: 12px 16px;
+  }
+  button {
+    font-size: 16px;
+  }
+}

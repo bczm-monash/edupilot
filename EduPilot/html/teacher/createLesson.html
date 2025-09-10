@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Create Lesson</title>
+    <link rel="stylesheet" href="../../css/page.css" />
+    <link rel="stylesheet" href="../../css/create_lesson.css" />
+    <script type="module" src="/EduPilot/JavaScript/supabase-init.js"></script>
+    <script src="/EduPilot/JavaScript/redirect.js"></script>
+    <script src="/EduPilot/JavaScript/create-lesson.js"></script>
+  </head>
+  
+  <body>
+    <div class="navigationBar">
+      <span class="logo">
+        <img src="../../Images/logo.webp" alt="EduPilot logo" width="100" />
+        <h1>EduPilot</h1>
+      </span>
+      <div class="menu">
+        <button onclick="toLesson()">Lesson</button>
+        <button onclick="toTCourse()">Course</button>
+        <button>Classroom</button>
+        <button onclick="toLogin()">Log Out</button>
+      </div>
+    </div>
+
+    <div class="page-container">
+      <div class="form-card">
+        <h2 class="form-title">Create Lesson</h2>
+        <p class="form-subtitle">Enter details to add a new lesson.</p>
+
+        <form id="createLessonForm">
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="lessonId">Lesson ID</label>
+              <input type="text" id="lessonId" name="lessonId" placeholder="Lesson ID" required />
+            </div>
+
+            <div class="form-group">
+              <label for="title">Title</label>
+              <input type="text" id="title" name="title" placeholder="What is this lesson?" required />
+            </div>
+
+            <div class="form-group full-width">
+              <label for="description">Description</label>
+              <textarea id="description" name="description" placeholder="What is the lesson about?" required></textarea>
+            </div>
+
+            <div class="form-group full-width">
+              <label for="objective">Lesson Objective</label>
+              <textarea id="objective" name="objective" placeholder="What will students learn?" required></textarea>
+            </div>
+
+            <div class="form-group">
+              <label for="prerequisite">Prerequisite</label>
+              <select id="prerequisite" name="prerequisite"></select>
+            </div>
+
+            <div class="form-group">
+              <label for="creditPoints">Credit Points</label>
+              <input type="number" id="creditPoints" name="creditPoints" min="0" step="1" required />
+            </div>
+
+            <div class="form-group">
+              <label for="estimatedHours">Estimated Hours</label>
+              <input type="number" id="estimatedHours" name="estimatedHours" min="0" step="1" />
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" class="btn-primary">Create Lesson</button>
+            <button type="button" class="btn-secondary" onclick="toLesson()">Cancel</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </body>
+  </html>

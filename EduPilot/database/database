@@ -1,0 +1,125 @@
+'this code is put into supabase to create an online database'
+
+DROP TABLE IF EXISTS classmate;
+DROP TABLE IF EXISTS classroom;
+DROP TABLE IF EXISTS enrolment;
+DROP TABLE IF EXISTS course;
+DROP TABLE IF EXISTS lesson;
+DROP TABLE IF EXISTS users;
+
+CREATE TABLE users (
+    users_id         uuid primary key references auth.users(id) on delete cascade,
+    users_title      Text,
+    users_fname      Text,
+    users_lname      Text,
+    users_email      Text NOT NULL,
+    users_role       Text
+);
+
+COMMENT ON COLUMN users.users_id IS 'user id';
+COMMENT ON COLUMN users.users_title IS 'user title - Mr, Mrs, Ms';
+COMMENT ON COLUMN users.users_fname IS 'user first name';
+COMMENT ON COLUMN users.users_lname IS 'user last name';
+COMMENT ON COLUMN users.users_email IS 'user email - unique for each user';
+COMMENT ON COLUMN users.users_role IS 'user role';
+
+ALTER TABLE users ADD CONSTRAINT uq_user_email UNIQUE (users_email);
+ALTER TABLE users ADD CONSTRAINT chk_user_role CHECK (users_role IN (
+    'Student',
+    'Teacher'
+));
+ALTER TABLE users ADD CONSTRAINT chk_user_title CHECK (users_title IN (
+    'Mr',
+    'Mrs',
+    'Ms'
+));
+
+CREATE TABLE lesson (
+    lesson_id            Text,
+    lesson_title         Text,
+    lesson_desc          Text NOT NULL,
+    lesson_objective     Text,
+    lesson_prereq        Text,
+    users_id             uuid references auth.users(id) on delete cascade,
+    lesson_date_created  TIMESTAMP NOT NULL,
+    lesson_modified      TIMESTAMP NOT NULL,
+    lesson_credit_pts    INT,
+    lesson_est_hrs       INT
+);
+
+COMMENT ON COLUMN lesson.lesson_id IS 'lesson id';
+COMMENT ON COLUMN lesson.lesson_title IS 'lesson title';
+COMMENT ON COLUMN lesson.lesson_desc IS 'lesson description';
+COMMENT ON COLUMN lesson.lesson_objective IS 'lesson objective';
+COMMENT ON COLUMN lesson.lesson_prereq IS 'lesson prerequisite';
+COMMENT ON COLUMN lesson.users_id IS 'lesson creator';
+COMMENT ON COLUMN lesson.lesson_date_created IS 'lesson created date';
+COMMENT ON COLUMN lesson.lesson_modified IS 'lesson last modified date';
+COMMENT ON COLUMN lesson.lesson_credit_pts IS 'lesson credit points';
+COMMENT ON COLUMN lesson.lesson_est_hrs IS 'lesson estimated hours';
+
+ALTER TABLE lesson ADD CONSTRAINT lesson_pk PRIMARY KEY (lesson_id);
+ALTER TABLE lesson ADD CONSTRAINT lesson_user_fk FOREIGN KEY (users_id) REFERENCES users(users_id);
+ALTER TABLE lesson ADD CONSTRAINT lesson_prereq_fk FOREIGN KEY (lesson_prereq) REFERENCES lesson(lesson_id);
+
+CREATE TABLE course (
+    course_id              Text,
+    users_id               UUID NOT NULL,
+    lesson_id              Text,
+    course_desc            Text NOT NULL,
+    course_date_created    TIMESTAMP NOT NULL,
+    course_modified        TIMESTAMP NOT NULL,
+    course_credit_points   INT NOT NULL
+);
+
+COMMENT ON COLUMN course.course_id IS 'course id';
+COMMENT ON COLUMN course.users_id IS 'course creator';
+COMMENT ON COLUMN course.lesson_id IS 'lesson id';
+COMMENT ON COLUMN course.course_desc IS 'course desciption';
+COMMENT ON COLUMN course.course_date_created IS 'course created date';
+COMMENT ON COLUMN course.course_modified IS 'course last modified date';
+COMMENT ON COLUMN course.course_credit_points IS 'course credit points';
+
+ALTER TABLE course ADD CONSTRAINT course_pk PRIMARY KEY (course_id);
+ALTER TABLE course ADD CONSTRAINT course_user_fk FOREIGN KEY (users_id) REFERENCES users(users_id);
+ALTER TABLE course ADD CONSTRAINT course_lesson_fk FOREIGN KEY (lesson_id) REFERENCES lesson(lesson_id);
+
+CREATE TABLE enrolment(
+    user_id             UUID,
+    course_id           Text
+);
+
+COMMENT ON COLUMN enrolment.user_id IS 'user that enrolled into course';
+COMMENT ON COLUMN enrolment.course_id IS 'course id';
+
+ALTER TABLE enrolment ADD CONSTRAINT enrolment_pk PRIMARY KEY (user_id,course_id);
+ALTER TABLE enrolment ADD CONSTRAINT enrolment_user_fk FOREIGN KEY (user_id) REFERENCES users(users_id);
+ALTER TABLE enrolment ADD CONSTRAINT enrolment_course_fk FOREIGN KEY (course_id) REFERENCES course(course_id);
+
+CREATE TABLE classroom(
+    classroom_id            INT NOT NULL,
+    users_id                UUID NOT NULL,
+    classroom_duration      TIMESTAMP  NOT NULL
+);
+
+
+COMMENT ON COLUMN classroom.classroom_id IS 'classroom id';
+COMMENT ON COLUMN classroom.users_id IS 'creator id (teacher)';
+COMMENT ON COLUMN classroom.classroom_duration IS 'classroom duration';
+
+ALTER TABLE classroom ADD CONSTRAINT classroom_pk PRIMARY KEY (classroom_id);
+ALTER TABLE classroom ADD CONSTRAINT classroom_user_fk FOREIGN KEY (users_id) REFERENCES users(users_id);
+
+CREATE TABLE classmate (
+    users_id         UUID,
+    classroom_id     INT
+);
+
+COMMENT ON COLUMN classmate.users_id IS 'class students id';
+COMMENT ON COLUMN classmate.classroom_id IS 'classroom to join';
+
+ALTER TABLE classmate ADD CONSTRAINT classmate_pk PRIMARY KEY (users_id,classroom_id);
+ALTER TABLE classmate ADD CONSTRAINT classmate_user_fk FOREIGN KEY (users_id) REFERENCES users(users_id);
+ALTER TABLE classmate ADD CONSTRAINT classmate_classroom_fk FOREIGN KEY (classroom_id) REFERENCES classroom(classroom_id);
+
+COMMIT;

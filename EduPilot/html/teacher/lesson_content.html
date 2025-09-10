@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lesson Content - EduPilot</title>
+  <link rel="stylesheet" href="../../css/page.css" />
+  <link rel="stylesheet" href="../../css/lesson.css" />
+  <link rel="stylesheet" href="../../css/lesson_content.css" />
+  <script src="/EduPilot/JavaScript/redirect.js"></script>
+  <script type="module" src="/EduPilot/JavaScript/supabase-init.js"></script>
+</head>
+<body>
+  <div class="navigationBar">
+    <span class="logo">
+      <img src="../../Images/logo.webp" alt="EduPilot logo" width="100" />
+      <h1>EduPilot</h1>
+    </span>
+    <div class="menu">
+      <button onclick="toLesson()">Lesson</button>
+      <button onclick="toTCourse()">Course</button>
+      <button onclick="">Classroom</button>
+      <button onclick="toLogin()">Log Out</button>
+    </div>
+  </div>
+
+  <div class="toolbar">
+    <button type="button" id="editBtn" class="edit-lesson-btn">Edit</button>
+  </div>
+
+  <div class="back-bar">
+    <button class="back-btn" onclick=toLesson()>← Back</button>
+  </div>
+
+  <div class="lesson-header" id="lessonHeader">Lesson</div>
+
+  <div class="page-container">
+    <div class="form-card details-card">
+      <ul class="details-list">
+        <li id="rowPrereq"><span class="details-key">Prerequisite:</span> <span id="valPrereq" class="details-value"></span></li>
+        <li id="rowCreator"><span class="details-key">Creator:</span> <span id="valCreator" class="details-value"></span></li>
+        <li id="rowEst"><span class="details-key">Estimated Hours:</span> <span id="valEst" class="details-value"></span></li>
+        <li id="rowCredit"><span class="details-key">Credit Points:</span> <span id="valCredit" class="details-value"></span></li>
+        <li id="rowModified"><span class="details-key">Last Modified:</span> <span id="valModified" class="details-value"></span></li>
+        <li id="rowCreated"><span class="details-key">Created Date:</span> <span id="valCreated" class="details-value"></span></li>
+      </ul>
+    </div>
+
+    <div class="form-card">
+      <h3 class="section-title">Description</h3>
+      <p id="lessonDesc" class="section-text"></p>
+    </div>
+
+    <div class="form-card">
+      <h3 class="section-title">Lesson Objective</h3>
+      <p id="lessonObjective" class="section-text"></p>
+    </div>
+  </div>
+
+  <script src="/EduPilot/JavaScript/lesson-content.js"></script>
+</body>
+</html>

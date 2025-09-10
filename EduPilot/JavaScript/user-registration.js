@@ -56,6 +56,21 @@ async function validateForm() {
     }
 
     try {
+        // Check if email already exists
+        try {
+            const { data: existing, error: checkErr } = await window.supabase
+                .from('users')
+                .select('users_id')
+                .eq('users_email', email)
+                .maybeSingle();
+
+            if (!checkErr && existing) {
+                alert('This email is already registered. Please log in.');
+                return false;
+            }
+        } catch (_) {
+        }
+
         const { data, error } = await window.supabase.auth.signUp({
             email,
             password,
@@ -81,4 +96,3 @@ async function validateForm() {
         return false;
     }
 }
-

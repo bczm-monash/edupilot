@@ -1,8 +1,3 @@
-function openPopup(){
-    let popup = document.getElementById("popup")
-    popup.classList.add("open-popup");
-}
-
 async function validateForm() {
     const title = document.getElementById("title").value;
     const firstname = document.getElementById("firstname").value.trim();
@@ -95,4 +90,10 @@ async function validateForm() {
         alert(`Unexpected error during sign up: ${e.message || e}`);
         return false;
     }
+}
+
+
+function openPopup(){
+    let popup = document.getElementById("popup")
+    popup.classList.add("open-popup");
 }

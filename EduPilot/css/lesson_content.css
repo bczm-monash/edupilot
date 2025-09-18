@@ -15,6 +15,7 @@
   margin: 12px;
   font-size: 36px;
   font-weight: bold;
+  text-align: center; /* aligned the header */
 }
 
 .details-card {
@@ -43,7 +44,7 @@
 }
 
 .page-container {
-  max-width: 900px;
+  max-width: 1000px; /* wider width */ 
   margin: 30px auto;
   padding: 0 16px;
 }

@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Teacher's Course</title>
     <link rel="stylesheet" href="../../css/page.css">
+    <link rel="stylesheet" href="../../css/course.css">
     <script src="/EduPilot/JavaScript/redirect.js"></script>
 </head>
 <body>
@@ -21,5 +22,46 @@
             <button onclick="toLogin()">Log Out</button>
         </div>
     </div>
+     <div class="toolbar">
+        <a href="#" onclick="toCreateCourse()" class="add-course-btn" aria-label="Create Course">+</a>
+        <button type="button" id="editToggle" onclick="toEditCourse()" class="edit-course-btn">Edit</button>
+    </div>
+
+    <h3 style="margin-left: 12px; font-size: 35px;">Course</h3>
+    <ul id="CourseList"></ul>
+
+    <div id="editOverlay" class="overlay-backdrop" role="dialog" aria-modal="true" aria-labelledby="overlayTitle">
+        <div class="overlay-panel">
+            <div class="overlay-header">
+                <h4 id="overlayTitle" class="overlay-title">Edit Course</h4>
+                <label style="display:flex; align-items:center; gap:6px;">
+                    <input type="checkbox" id="selectAllChk">
+                    <span>Select All</span>
+                </label>
+            </div>
+            <div id="overlayBody" class="overlay-body">
+                <div class="muted">Loading courses…</div>
+            </div>
+            <div class="overlay-actions">
+                <button type="button" id="deleteSelected" class="danger-btn">Delete Selected</button>
+                <button type="button" id="closeOverlay" class="secondary-btn">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="/EduPilot/JavaScript/courses.js"></script>
+    <script>
+    function toEditCourse() {
+        document.getElementById("editOverlay").style.display = "flex";
+    }
+
+    document.getElementById("closeOverlay").addEventListener("click", () => {
+        document.getElementById("editOverlay").style.display = "none";
+    });
+
+    function toCreateCourse() {
+    window.location.href = "create_tCourse.html";
+    }
+    </script>
 </body>
 </html>

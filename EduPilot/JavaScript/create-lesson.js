@@ -48,6 +48,8 @@
     const titleEl = document.getElementById('title');
     const descEl = document.getElementById('description');
     const objectiveEl = document.getElementById('objective');
+    const readingEl = document.getElementById('reading');
+    const assignmentEl = document.getElementById('assignment');
     const prereqEl = document.getElementById('prerequisite');
     const creditEl = document.getElementById('creditPoints');
     const estimatedHoursEl = document.getElementById('estimatedHours');
@@ -75,6 +77,8 @@
         const lesson_title = titleEl ? titleEl.value.trim() : '';
         const lesson_prereq = prereqEl.value ? prereqEl.value : null;
         const lesson_objective = objectiveEl ? objectiveEl.value.trim() : '';
+        const lesson_reading_list = readingEl ? readingEl.value.trim() : '';
+        const lesson_assignment_list = assignmentEl ? assignmentEl.value.trim() : '';
         const users_id = user.id;
         const nowIso = nowIsoUtcPlus8();
         const credit_pts = (function() {
@@ -106,6 +110,8 @@
           lesson_credit_pts: credit_pts,
           lesson_prereq,
           lesson_est_hrs: lesson_estimated_hours,
+          lesson_reading_list: lesson_reading_list || null,
+          lesson_assignment_list: lesson_assignment_list || null,
           users_id,
           lesson_date_created: nowIso,
           lesson_modified: nowIso,

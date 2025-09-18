@@ -66,6 +66,7 @@
   margin: 0;
   color: #333;
   line-height: 1.5;
+  white-space: pre-wrap;
 }
 
 /* Ensure details list typography and spacing feel consistent */

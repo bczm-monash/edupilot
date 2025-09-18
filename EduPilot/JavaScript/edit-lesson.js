@@ -81,6 +81,8 @@
     const titleEl = document.getElementById('title');
     const descEl = document.getElementById('description');
     const objectiveEl = document.getElementById('objective');
+    const readingEl = document.getElementById('reading');
+    const assignmentEl = document.getElementById('assignment');
     const prereqEl = document.getElementById('prerequisite');
     const creditEl = document.getElementById('creditPoints');
     const estimatedHoursEl = document.getElementById('estimatedHours');
@@ -106,6 +108,8 @@
       if (titleEl) titleEl.value = data.lesson_title || '';
       if (descEl) descEl.value = data.lesson_desc || '';
       if (objectiveEl) objectiveEl.value = data.lesson_objective || '';
+      if (readingEl) readingEl.value = data.lesson_reading_list || '';
+      if (assignmentEl) assignmentEl.value = data.lesson_assignment_list || '';
       if (creditEl) creditEl.value = data.lesson_credit_pts ?? '';
       if (estimatedHoursEl) {
         const hrs = data.lesson_estimated_hours ?? data.lesson_est_hrs;
@@ -134,6 +138,8 @@
             lesson_title: titleEl ? titleEl.value.trim() : '',
             lesson_desc: descEl ? descEl.value.trim() : '',
             lesson_objective: objectiveEl ? objectiveEl.value.trim() : '',
+            lesson_reading_list: readingEl ? readingEl.value.trim() || null : null,
+            lesson_assignment_list: assignmentEl ? assignmentEl.value.trim() || null : null,
             lesson_prereq: prereqEl && prereqEl.value !== '' ? prereqEl.value : null,
             lesson_credit_pts: parseIntOrNull(creditEl ? creditEl.value : null),
             lesson_est_hrs: parseIntOrNull(estimatedHoursEl ? estimatedHoursEl.value : null),

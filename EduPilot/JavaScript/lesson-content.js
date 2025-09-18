@@ -17,6 +17,10 @@
   // Sections
   const descEl = document.getElementById('lessonDesc');
   const objEl = document.getElementById('lessonObjective');
+  const readingCard = document.getElementById('readingCard');
+  const assignmentCard = document.getElementById('assignmentCard');
+  const readingEl = document.getElementById('lessonReading');
+  const assignmentEl = document.getElementById('lessonAssignment');
   const editBtn = document.getElementById('editBtn');
 
   function getQueryId() {
@@ -67,6 +71,18 @@
     } else {
       valEl.textContent = String(value);
       rowEl.style.display = '';
+    }
+  }
+
+  function setSection(cardEl, textEl, value) {
+    if (!cardEl || !textEl) return;
+    const str = value === null || value === undefined ? '' : String(value);
+    if (str.trim() === '') {
+      cardEl.style.display = 'none';
+      textEl.textContent = '';
+    } else {
+      textEl.textContent = str;
+      cardEl.style.display = '';
     }
   }
 
@@ -143,6 +159,8 @@
       // Sections
       if (descEl) descEl.textContent = data?.lesson_desc || '';
       if (objEl) objEl.textContent = data?.lesson_objective || '';
+      setSection(readingCard, readingEl, data?.lesson_reading_list);
+      setSection(assignmentCard, assignmentEl, data?.lesson_assignment_list);
     } catch (e) {
       console.error('Unexpected error', e);
       setHeader(queryId, 'Lesson');

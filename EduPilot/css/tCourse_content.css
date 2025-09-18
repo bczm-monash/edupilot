@@ -34,7 +34,7 @@
 
 .side-panel{
     display: none;
-    width: 200px;
+    width: 40%;
     flex-shrink:0;
     padding:20px 20px 50px 50px;
     color:black;

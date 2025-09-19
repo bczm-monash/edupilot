@@ -25,7 +25,7 @@
     </div>
   </div>
 
-  <div class = "wrapper ">
+  <div class = "wrapper side-panel-open">
     <div class="side-panel">
         <div class="page-container">
           <div class="form-card details-card">
@@ -60,6 +60,7 @@
         <button class="back-btn" onclick=toTCourse()>← Back</button>
       </div>
       <h2>Lesson List</h2>
+      <ul id="lessonList"></ul>
     </div>
   </div>
   
@@ -100,6 +101,8 @@
             </div>
         </div>
   </div>
+
+  <script src="/EduPilot/JavaScript/course-content.js"></script>
 
   <script>
     document.querySelector(".side-panel-toggle").addEventListener("click", () => 

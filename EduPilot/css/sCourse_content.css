@@ -34,7 +34,7 @@
 
 .side-panel{
     display: none;
-    width: 200px;
+    width: 40%;
     flex-shrink:0;
     padding:20px 20px 50px 50px;
     color:black;
@@ -85,4 +85,29 @@
   box-shadow: 0 2px 6px rgba(0,0,0,0.15);
   padding: 20px;
   margin: 12px;
+}
+
+.section-title {
+  margin: 0 0 10px 0;
+  font-size: 20px;
+}
+
+.section-text {
+  margin: 0;
+  color: #333;
+  line-height: 1.5;
+  white-space: pre-wrap;
+}
+
+.back-bar {
+  margin: 12px;
+}
+
+.back-btn {
+  background-color: #f0f0f0;
+  color: #333;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 8px 12px;
+  cursor: pointer;
 }

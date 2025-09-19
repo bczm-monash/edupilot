@@ -22,6 +22,35 @@
   const readingEl = document.getElementById('lessonReading');
   const assignmentEl = document.getElementById('lessonAssignment');
   const editBtn = document.getElementById('editBtn');
+  const backBtn = document.getElementById('backBtn');
+
+  const referrer = document.referrer || '';
+  const editPagePattern = /\/edit[^/]*\.html/i;
+  let backDestination = '';
+
+  if (referrer && !editPagePattern.test(referrer)) {
+    try {
+      const url = new URL(referrer, window.location.href);
+      if (url.origin === window.location.origin) {
+        const samePage = url.pathname === window.location.pathname && url.search === window.location.search;
+        if (!samePage) backDestination = url.href;
+      }
+    } catch (err) {
+      console.warn('Unable to parse referrer for back navigation:', err);
+    }
+  }
+
+  if (backBtn) {
+    backBtn.addEventListener('click', () => {
+      if (backDestination) {
+        window.location.href = backDestination;
+      } else if (typeof toLesson === 'function') {
+        toLesson();
+      } else {
+        window.location.href = '/EduPilot/html/teacher/lessons.html';
+      }
+    });
+  }
 
   function getQueryId() {
     const p = new URLSearchParams(window.location.search);

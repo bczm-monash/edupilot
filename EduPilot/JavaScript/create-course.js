@@ -351,7 +351,11 @@
         }
 
         alert('Course created successfully.');
-        if (typeof toCourse === 'function') toCourse();
+        if (typeof toTCourse === 'function') {
+          toTCourse();
+        } else {
+          window.location.href = '/EduPilot/html/teacher/tCourse.html';
+        }
       } catch (err) {
         alert(`Unexpected error: ${err.message || err}`);
       }

@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="../../css/page.css">
     <link rel="stylesheet" href="../../css/tCourse.css">
     <script src="/EduPilot/JavaScript/redirect.js"></script>
+    <script type="module" src="/EduPilot/JavaScript/supabase-init.js"></script>
 </head>
 <body>
 
@@ -23,8 +24,8 @@
         </div>
     </div>
     <div class="toolbar">
-        <a href="#" onclick="toCreateCourse()" class="add-course-btn" aria-label="Create Course">+</a>
-        <button type="button" id="editToggle" onclick="toEditCourse()" class="edit-course-btn">Edit</button>
+        <a href="create_tCourse.html" class="add-course-btn" aria-label="Create Course">+</a>
+        <button type="button" id="editToggle" class="edit-course-btn">Edit</button>
     </div>
 
     <h3 style="margin-left: 12px; font-size: 35px;">Course</h3>
@@ -40,7 +41,7 @@
                 </label>
             </div>
             <div id="overlayBody" class="overlay-body">
-                <div class="muted">Loading courses…</div>
+                <div class="muted">Loading courses...</div>
             </div>
             <div class="overlay-actions">
                 <button type="button" id="deleteSelected" class="danger-btn">Delete Selected</button>
@@ -50,18 +51,5 @@
     </div>
 
     <script src="/EduPilot/JavaScript/courses.js"></script>
-    <script>
-    function toEditCourse() {
-        document.getElementById("editOverlay").style.display = "flex";
-    }
-
-    document.getElementById("closeOverlay").addEventListener("click", () => {
-        document.getElementById("editOverlay").style.display = "none";
-    });
-
-    function toCreateCourse() {
-    window.location.href = "create_tCourse.html";
-    }
-    </script>
 </body>
 </html>

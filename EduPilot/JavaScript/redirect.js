@@ -25,3 +25,7 @@ function toCreateLesson() {
 function toEditLesson() {
     window.location.href = "/EduPilot/html/teacher/editLesson.html";
 }
+
+function toAdmin() {
+    window.location.href = "/EduPilot/html/admin/adminpage.html";
+}

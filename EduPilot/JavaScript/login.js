@@ -23,10 +23,30 @@ async function signIn(event) {
     }
 
     const user = data.user;
-    const role = user?.user_metadata?.role || 'student';
+    let role = 'student';
+
+    if (user) {
+      try {
+        const { data: users, error: roleError } = await window.supabase
+          .from('users')
+          .select('users_role')
+          .eq('users_email', user.email || email)
+          .maybeSingle();
+
+        if (roleError) {
+          console.warn('Failed to fetch user role', roleError);
+        } else if (users?.users_role) {
+          role = users.users_role;
+        }
+      } catch (roleException) {
+        console.warn('Unexpected error fetching user role', roleException);
+      }
+    }
 
     if (role === 'Teacher') {
       toTCourse();
+    } else if (role === 'Admin') {
+      toAdmin();
     } else {
       toSCourse();
     }

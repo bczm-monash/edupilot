@@ -293,12 +293,12 @@
       const users_id = user.id;
       const nowIso = nowIsoUtcPlus8();
 
-      const course_credit_pts = (function() {
-        if (!courseCreditEl) return null;
+      const course_credit_points = (function() {
+        if (!courseCreditEl) return computedTotalCreditPoints;
         const v = courseCreditEl.value;
-        if (v === '' || v === null || typeof v === 'undefined') return null;
+        if (v === '' || v === null || typeof v === 'undefined') return computedTotalCreditPoints;
         const n = parseInt(v, 10);
-        return Number.isNaN(n) ? null : n;
+        return Number.isNaN(n) ? computedTotalCreditPoints : n;
       })();
 
       const course_estimated_hours = (function() {
@@ -322,11 +322,11 @@
         course_id,
         course_title,
         course_desc,
-        course_lessons: selectedLessons,
         course_credit_points: computedTotalCreditPoints,
         users_id,
         course_date_created: nowIso,
         course_modified: nowIso,
+        course_status:course_status,
       };
 
       try {

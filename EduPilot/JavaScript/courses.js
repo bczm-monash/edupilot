@@ -13,9 +13,9 @@
 
   function normaliseCredit(course) {
     const fields = [
+      course.course_credit_points,
       course.course_total_credit_pts,
       course.course_credit_pts,
-      course.course_credit_points,
     ];
     for (const value of fields) {
       if (value !== null && value !== undefined && value !== '') {

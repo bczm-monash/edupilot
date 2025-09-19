@@ -54,7 +54,7 @@
       <div class="toolbar">
         <a href="#" id="openAddLessons" class="add-lesson-btn" aria-label="Add Lesson">Add</a>
         <a href="#" id="openRemoveLessons" class="delete-lesson-btn" aria-label="Delete Lesson">Remove</a>
-        <button type="button" id="editToggle" onclick="toEditCourse()" class="edit-course-btn">Edit</button>
+        <button type="button" id="editCourseBtn" class="edit-course-btn">Edit</button>
       </div>
       <div class="back-bar">
         <button class="back-btn" onclick=toTCourse()>← Back</button>
@@ -107,10 +107,6 @@
   <script>
     document.querySelector(".side-panel-toggle").addEventListener("click", () => 
     {document.querySelector(".wrapper").classList.toggle("side-panel-open");});
-
-    function toEditCourse() {
-      window.location.href = "edit_tCourse.html";
-    }
   </script>
 </body>
 </html>

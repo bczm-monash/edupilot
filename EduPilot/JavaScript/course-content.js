@@ -15,6 +15,7 @@
 
   const openAddBtn = document.getElementById('openAddLessons');
   const openRemoveBtn = document.getElementById('openRemoveLessons');
+  const editCourseBtn = document.getElementById('editCourseBtn');
 
   let courseId = '';
   let currentCourse = null;
@@ -57,9 +58,9 @@
 
   function normaliseCredit(course) {
     const candidates = [
+      course.course_credit_points,
       course.course_total_credit_pts,
       course.course_credit_pts,
-      course.course_credit_points,
     ];
     for (const value of candidates) {
       if (value === null || value === undefined || value === '') continue;
@@ -480,12 +481,12 @@
       updatePayload.course_total_credit_pts = totalCredit;
     }
 
-    if (currentCourse && Object.prototype.hasOwnProperty.call(currentCourse, 'course_credit_pts')) {
-      updatePayload.course_credit_pts = totalCredit;
-    }
-
     if (currentCourse && Object.prototype.hasOwnProperty.call(currentCourse, 'course_credit_points')) {
       updatePayload.course_credit_points = totalCredit;
+    }
+
+    if (currentCourse && Object.prototype.hasOwnProperty.call(currentCourse, 'course_credit_pts')) {
+      updatePayload.course_credit_pts = totalCredit;
     }
 
     const hasCourseEstHrs = currentCourse && Object.prototype.hasOwnProperty.call(currentCourse, 'course_est_hrs');
@@ -568,6 +569,13 @@
       }
 
       renderCourseDetails(course);
+
+      if (editCourseBtn) {
+        editCourseBtn.onclick = () => {
+          const url = `/EduPilot/html/teacher/edit_tCourse.html?id=${encodeURIComponent(courseId)}`;
+          window.location.href = url;
+        };
+      }
 
       const lessonIds = parseLessonIds(course.course_lessons);
       const lessons = await fetchLessonsForCourse(courseId, lessonIds);

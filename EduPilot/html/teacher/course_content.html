@@ -52,8 +52,8 @@
     </button>
     <div class="main">
       <div class="toolbar">
-        <a href="#" onclick="toAddLesson()" class="add-lesson-btn" aria-label="Add Lesson">Add</a>
-        <a href="#" onclick="toDeleteLesson()" class="delete-lesson-btn" aria-label="Delete Lesson">Remove</a>
+        <a href="#" id="openAddLessons" class="add-lesson-btn" aria-label="Add Lesson">Add</a>
+        <a href="#" id="openRemoveLessons" class="delete-lesson-btn" aria-label="Delete Lesson">Remove</a>
         <button type="button" id="editToggle" onclick="toEditCourse()" class="edit-course-btn">Edit</button>
       </div>
       <div class="back-bar">
@@ -64,16 +64,16 @@
     </div>
   </div>
   
-  <div id="editOverlay" class="overlay-backdrop" role="dialog" aria-modal="true" aria-labelledby="overlayTitle">
+    <div id="editOverlay" class="overlay-backdrop" role="dialog" aria-modal="true" aria-labelledby="removeOverlayTitle">
         <div class="overlay-panel">
             <div class="overlay-header">
-                <h4 id="overlayTitle" class="overlay-title">Remove Lessons</h4>
+                <h4 id="removeOverlayTitle" class="overlay-title">Remove Lessons</h4>
                 <label style="display:flex; align-items:center; gap:6px;">
-                    <input type="checkbox" id="selectAllChk">
+                    <input type="checkbox" id="deleteSelectAll">
                     <span>Select All</span>
                 </label>
             </div>
-            <div id="overlayBody" class="overlay-body">
+            <div id="deleteOverlayBody" class="overlay-body">
                 <div class="muted">Loading lessons…</div>
             </div>
             <div class="overlay-actions">
@@ -81,18 +81,18 @@
                 <button type="button" id="closeOverlay" class="secondary-btn">Cancel</button>
             </div>
         </div>
-  </div>
+    </div>
   
-  <div id="editOverlay2" class="overlay-backdrop" role="dialog" aria-modal="true" aria-labelledby="overlayTitle">
+  <div id="editOverlay2" class="overlay-backdrop" role="dialog" aria-modal="true" aria-labelledby="addOverlayTitle">
         <div class="overlay-panel">
             <div class="overlay-header">
-                <h4 id="overlayTitle" class="overlay-title">Add Lessons</h4>
+                <h4 id="addOverlayTitle" class="overlay-title">Add Lessons</h4>
                 <label style="display:flex; align-items:center; gap:6px;">
-                    <input type="checkbox" id="selectAllChk">
+                    <input type="checkbox" id="addSelectAll">
                     <span>Select All</span>
                 </label>
             </div>
-            <div id="overlayBody" class="overlay-body">
+            <div id="addOverlayBody" class="overlay-body">
                 <div class="muted">Loading lessons…</div>
             </div>
             <div class="overlay-actions">
@@ -107,30 +107,10 @@
   <script>
     document.querySelector(".side-panel-toggle").addEventListener("click", () => 
     {document.querySelector(".wrapper").classList.toggle("side-panel-open");});
-  </script>
 
-  <script>
-  function toAddLesson() {
-    document.getElementById("editOverlay2").style.display = "flex";
-  }
-
-  document.getElementById("closeOverlay2").addEventListener("click", () => {
-    document.getElementById("editOverlay2").style.display = "none";
-  });
-  </script>
-
-  <script>
-  function toDeleteLesson() {
-    document.getElementById("editOverlay").style.display = "flex";
-  }
-
-  document.getElementById("closeOverlay").addEventListener("click", () => {
-    document.getElementById("editOverlay").style.display = "none";
-  });
-
-  function toEditCourse() {
-    window.location.href = "edit_tCourse.html";
-  }
+    function toEditCourse() {
+      window.location.href = "edit_tCourse.html";
+    }
   </script>
 </body>
 </html>

@@ -14,12 +14,140 @@
   }
 
   const lessonCredits = {};
+  const lessonMetadata = {};
+  let allLessons = [];
+  let selectedLessonIds = [];
+  let pendingLessonSelection = new Set();
+  let isLessonFetchInProgress = false;
+  let lessonsLoadError = '';
 
-  async function loadLessonsForCourseSelect() {
-    const select = document.getElementById('courseLessons');
-    if (!window.supabase || !select) return;
+  let selectedLessonsDisplayEl = null;
+  let courseLessonsHiddenEl = null;
+  let courseCreditEl = null;
+  let courseTotalCreditPointsEl = null;
+  let lessonOverlayEl = null;
+  let lessonOverlayBodyEl = null;
 
-    select.innerHTML = '';
+  function renderSelectedLessons() {
+    const availableIds = selectedLessonIds.filter((id) => Boolean(lessonMetadata[id]));
+    if (availableIds.length !== selectedLessonIds.length) {
+      selectedLessonIds = availableIds;
+    }
+
+    const textValue = selectedLessonIds.map((id) => {
+      const meta = lessonMetadata[id] || {};
+      const titlePart = meta.lesson_title ? ` - ${meta.lesson_title}` : '';
+      return `${id}${titlePart}`;
+    }).join('\n');
+
+    if (selectedLessonsDisplayEl) {
+      selectedLessonsDisplayEl.value = textValue;
+    }
+
+    if (courseLessonsHiddenEl) {
+      courseLessonsHiddenEl.value = selectedLessonIds.join(',');
+    }
+
+    const totalCredits = selectedLessonIds.reduce((sum, lessonId) => {
+      const value = lessonCredits[lessonId];
+      return sum + (typeof value === 'number' && Number.isFinite(value) ? value : 0);
+    }, 0);
+
+    if (courseCreditEl) {
+      courseCreditEl.value = totalCredits;
+    }
+
+    if (courseTotalCreditPointsEl) {
+      courseTotalCreditPointsEl.value = totalCredits;
+    }
+  }
+
+  function renderLessonOverlayList() {
+    if (!lessonOverlayBodyEl) return;
+
+    lessonOverlayBodyEl.innerHTML = '';
+
+    if (lessonsLoadError) {
+      const errorEl = document.createElement('div');
+      errorEl.className = 'muted';
+      errorEl.textContent = lessonsLoadError;
+      lessonOverlayBodyEl.appendChild(errorEl);
+      return;
+    }
+
+    if (isLessonFetchInProgress) {
+      const loadingEl = document.createElement('div');
+      loadingEl.className = 'muted';
+      loadingEl.textContent = 'Loading lessons...';
+      lessonOverlayBodyEl.appendChild(loadingEl);
+      return;
+    }
+
+    if (!allLessons.length) {
+      const emptyEl = document.createElement('div');
+      emptyEl.className = 'muted';
+      emptyEl.textContent = 'No lessons available.';
+      lessonOverlayBodyEl.appendChild(emptyEl);
+      return;
+    }
+
+    allLessons.forEach((lesson) => {
+      const label = document.createElement('label');
+      label.className = 'lesson-row';
+      label.setAttribute('data-lesson-id', lesson.lesson_id);
+
+      const checkbox = document.createElement('input');
+      checkbox.type = 'checkbox';
+      checkbox.value = lesson.lesson_id;
+      checkbox.checked = pendingLessonSelection.has(lesson.lesson_id);
+      checkbox.className = 'lesson-checkbox';
+
+      const content = document.createElement('div');
+      const titleEl = document.createElement('strong');
+      titleEl.textContent = lesson.lesson_title || 'Untitled lesson';
+
+      const metaEl = document.createElement('span');
+      const credit = lesson.lesson_credit_pts == null ? 0 : Number(lesson.lesson_credit_pts);
+      metaEl.textContent = `ID: ${lesson.lesson_id} | Credit Points: ${Number.isFinite(credit) ? credit : 0}`;
+
+      content.appendChild(titleEl);
+      content.appendChild(metaEl);
+
+      label.appendChild(checkbox);
+      label.appendChild(content);
+
+      lessonOverlayBodyEl.appendChild(label);
+    });
+  }
+
+  function showLessonOverlay() {
+    if (!lessonOverlayEl) return;
+    lessonOverlayEl.style.display = 'flex';
+  }
+
+  function hideLessonOverlay() {
+    if (!lessonOverlayEl) return;
+    lessonOverlayEl.style.display = 'none';
+  }
+
+  async function loadLessonsForSelection(retryAttempt = 0) {
+    if (!isLessonFetchInProgress) {
+      isLessonFetchInProgress = true;
+      lessonsLoadError = '';
+      renderLessonOverlayList();
+    }
+
+    if (!window.supabase) {
+      if (retryAttempt < 3) {
+        setTimeout(() => loadLessonsForSelection(retryAttempt + 1), 500 * (retryAttempt + 1));
+      } else {
+        isLessonFetchInProgress = false;
+        lessonsLoadError = 'Unable to load lessons. Please refresh and try again.';
+        renderLessonOverlayList();
+      }
+      return;
+    }
+
     const { data, error } = await window.supabase
       .from('lesson')
       .select('lesson_id, lesson_title, lesson_credit_pts')
@@ -27,33 +155,108 @@
 
     if (error) {
       console.error('Failed to load lessons for course select:', error);
+      isLessonFetchInProgress = false;
+      lessonsLoadError = 'Failed to load lessons. Please try again.';
+      renderLessonOverlayList();
       return;
     }
 
-    (data || []).forEach((row) => {
-      lessonCredits[row.lesson_id] = (row.lesson_credit_pts == null) ? 0 : Number(row.lesson_credit_pts);
-      const opt = document.createElement('option');
-      opt.value = row.lesson_id;
-      const title = row.lesson_title ?? '';
-      const cp = (row.lesson_credit_pts == null) ? '' : ` (CP: ${row.lesson_credit_pts})`;
-      opt.textContent = `${row.lesson_id} - ${title}${cp}`.trim();
-      select.appendChild(opt);
+    isLessonFetchInProgress = false;
+    lessonsLoadError = '';
+    allLessons = Array.isArray(data) ? data : [];
+    allLessons.forEach((row) => {
+      const credit = row.lesson_credit_pts == null ? 0 : Number(row.lesson_credit_pts);
+      lessonCredits[row.lesson_id] = Number.isFinite(credit) ? credit : 0;
+      lessonMetadata[row.lesson_id] = row;
     });
+
+    pendingLessonSelection = new Set(selectedLessonIds);
+    renderLessonOverlayList();
+    renderSelectedLessons();
   }
 
   document.addEventListener('DOMContentLoaded', () => {
     const courseForm = document.getElementById('createCourseForm');
-    const courseIdEl = document.getElementById('courseId');
-    const courseTitleEl = document.getElementById('courseTitle');
-    const courseDescEl = document.getElementById('courseDescription');
-    const courseLessonsEl = document.getElementById('courseLessons');
-    const courseCreditEl = document.getElementById('courseCreditPoints');
+    const courseIdEl = document.getElementById('courseId') || document.getElementById('lessonId');
+    const courseTitleEl = document.getElementById('courseTitle') || document.getElementById('title');
+    const courseDescEl = document.getElementById('courseDescription') || document.getElementById('description');
+    courseLessonsHiddenEl = document.getElementById('courseLessons');
+    selectedLessonsDisplayEl = document.getElementById('selectedLessonsDisplay');
+    courseCreditEl = document.getElementById('courseCreditPoints') || document.getElementById('initialCreditPoints');
     const courseEstimatedHoursEl = document.getElementById('courseEstimatedHours');
 
-    const courseStatusEl = document.getElementById('courseStatus');
-    const courseTotalCreditPointsEl = document.getElementById('courseTotalCreditPoints');
+    const courseStatusEl = document.getElementById('courseStatus') || document.getElementById('status');
+    courseTotalCreditPointsEl = document.getElementById('courseTotalCreditPoints');
 
-    loadLessonsForCourseSelect();
+    lessonOverlayEl = document.getElementById('lessonOverlay');
+    lessonOverlayBodyEl = document.getElementById('lessonOverlayBody');
+    const openLessonOverlayBtn = document.getElementById('openLessonOverlay');
+    const applyLessonSelectionBtn = document.getElementById('applyLessonSelection');
+    const cancelLessonSelectionBtn = document.getElementById('cancelLessonSelection');
+    const closeLessonOverlayBtn = document.getElementById('closeLessonOverlay');
+
+    if (lessonOverlayBodyEl) {
+      lessonOverlayBodyEl.addEventListener('change', (event) => {
+        const target = event.target;
+        if (!target || target.type !== 'checkbox') return;
+        const lessonId = target.value;
+        if (!lessonId) return;
+        if (target.checked) {
+          pendingLessonSelection.add(lessonId);
+        } else {
+          pendingLessonSelection.delete(lessonId);
+        }
+      });
+    }
+
+    const closeOverlay = () => {
+      pendingLessonSelection = new Set(selectedLessonIds);
+      hideLessonOverlay();
+    };
+
+    if (openLessonOverlayBtn) {
+      openLessonOverlayBtn.addEventListener('click', () => {
+        pendingLessonSelection = new Set(selectedLessonIds);
+        const shouldReloadLessons = !isLessonFetchInProgress && (lessonsLoadError !== '' || !allLessons.length);
+        if (shouldReloadLessons) {
+          loadLessonsForSelection();
+        }
+        renderLessonOverlayList();
+        showLessonOverlay();
+      });
+    }
+
+    if (applyLessonSelectionBtn) {
+      applyLessonSelectionBtn.addEventListener('click', () => {
+        selectedLessonIds = Array.from(pendingLessonSelection);
+        renderSelectedLessons();
+        hideLessonOverlay();
+      });
+    }
+
+    if (cancelLessonSelectionBtn) {
+      cancelLessonSelectionBtn.addEventListener('click', closeOverlay);
+    }
+
+    if (closeLessonOverlayBtn) {
+      closeLessonOverlayBtn.addEventListener('click', closeOverlay);
+    }
+
+    if (lessonOverlayEl) {
+      lessonOverlayEl.addEventListener('click', (event) => {
+        if (event.target === lessonOverlayEl) {
+          closeOverlay();
+        }
+      });
+    }
+
+    if (courseLessonsHiddenEl && typeof courseLessonsHiddenEl.value === 'string' && courseLessonsHiddenEl.value.trim() !== '') {
+      selectedLessonIds = courseLessonsHiddenEl.value.split(',').map((id) => id.trim()).filter(Boolean);
+      pendingLessonSelection = new Set(selectedLessonIds);
+    }
+
+    loadLessonsForSelection();
+    renderSelectedLessons();
 
     if (!courseForm) return;
 
@@ -76,11 +279,7 @@
       const course_title = courseTitleEl ? courseTitleEl.value.trim() : '';
       const course_desc = courseDescEl ? courseDescEl.value.trim() : '';
 
-      let selectedLessons = [];
-      if (courseLessonsEl) {
-        const opts = Array.from(courseLessonsEl.options || []);
-        selectedLessons = opts.filter(o => o.selected).map(o => o.value);
-      }
+      const selectedLessons = Array.from(selectedLessonIds);
 
       const computedTotalCreditPoints = selectedLessons.reduce((sum, lid) => {
         const v = lessonCredits[lid];
@@ -124,13 +323,10 @@
         course_title,
         course_desc,
         course_lessons: selectedLessons,
-        course_credit_pts,
-        course_total_credit_pts: computedTotalCreditPoints,
-        course_est_hrs: course_estimated_hours,
+        course_credit_points: computedTotalCreditPoints,
         users_id,
         course_date_created: nowIso,
         course_modified: nowIso,
-        course_status,
       };
 
       try {

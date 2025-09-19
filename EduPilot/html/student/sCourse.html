@@ -22,8 +22,41 @@
         </div>
     </div>
 
+    <div class="toolbar">
+        <a href="#" onclick="toUnenrolledCourse()" class="enroll-course-btn" aria-label="See Unenrolled Course">See Unenrolled Course</a>
+        <a href="#" onclick="toEnrollCourse()" class="enroll-course-btn" aria-label="Enroll Course">Enroll Course</a>
+    </div>
+
     <h3 style="margin-left: 12px; font-size: 35px;">Course</h3>
     <ul id="CourseList"></ul>
 
+    <div id="editOverlay" class="overlay-backdrop" role="dialog" aria-modal="true" aria-labelledby="overlayTitle">
+        <div class="overlay-panel">
+            <div class="overlay-header">
+                <h4 id="overlayTitle" class="overlay-title">Enroll Courses</h4>
+                <label style="display:flex; align-items:center; gap:6px;">
+                    <input type="checkbox" id="selectAllChk">
+                    <span>Select All</span>
+                </label>
+            </div>
+            <div id="overlayBody" class="overlay-body">
+                <div class="muted">Loading courses…</div>
+            </div>
+            <div class="overlay-actions">
+                <button type="button" id="addSelected" class="green-btn">Add Selected</button>
+                <button type="button" id="closeOverlay" class="secondary-btn">Cancel</button>
+            </div>
+        </div>
+  </div>
+
+  <script>
+  function toEnrollCourse() {
+    document.getElementById("editOverlay").style.display = "flex";
+  }
+
+  document.getElementById("closeOverlay").addEventListener("click", () => {
+    document.getElementById("editOverlay").style.display = "none";
+  });
+  </script>
 </body>
 </html>

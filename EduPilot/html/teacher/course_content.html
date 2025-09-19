@@ -27,14 +27,24 @@
 
   <div class = "wrapper ">
     <div class="side-panel">
-        <ul class="details-list">
-          <li id="rowCourseIdTitle"><span class="details-key">Course:</span> <span id="valCourseID" class="details-value"></span> <span id="valCourseTitle" class="details-value"></span></li>
-          <li id="rowCreditCourse"><span class="details-key">Credit Points:</span> <span id="valCreditPoint" class="details-value"></span></li>
-          <li id="rowCreatorCourse"><span class="details-key">Creator:</span> <span id="valCreatorCourse" class="details-value"></span></li>
-          <li id="rowDetailsCourse"><span class="details-key">Description:</span> <span id="valCourseDescription" class="details-value"></span></li>
-          <li id="rowCreatedCourse"><span class="details-key">Status:</span> <span id="valStatus" class="details-value"></span></li>
-          <li id="rowModifiedCourse"><span class="details-key">Last Modified:</span> <span id="valModifiedCourse" class="details-value"></span></li>
-          <li id="rowCreatedCourse"><span class="details-key">Created Date:</span> <span id="valCourseDate" class="details-value"></span></li>
+        <div class="page-container">
+          <div class="form-card details-card">
+            <ul class="details-list">
+              <li id="rowStatus"><span class="details-key">Status:</span> <span id="valStatus" class="details-value"></span></li>
+              <li id="rowCourseID"><span class="details-key">Course ID:</span> <span id="valCourseID" class="details-value"></span></li>
+              <li id="rowTit"><span class="details-key">Course Title:</span> <span id="valTit" class="details-value"></span></li>
+              <li id="rowCreator"><span class="details-key">Creator:</span> <span id="valCreator" class="details-value"></span></li>
+              <li id="rowCredit"><span class="details-key">Credit Points:</span> <span id="valCredit" class="details-value"></span></li>
+              <li id="rowModified"><span class="details-key">Last Modified:</span> <span id="valModified" class="details-value"></span></li>
+              <li id="rowCreated"><span class="details-key">Created Date:</span> <span id="valCreated" class="details-value"></span></li>
+            </ul>
+          </div>
+
+          <div class="form-card">
+            <h3 class="section-title">Description</h3>
+            <p id="lessonDesc" class="section-text"></p>
+          </div>
+        </div>
     </div>
     <button class="side-panel-toggle" type = "button">
       <span class="material-symbols-outlined sp-icon-open">keyboard_double_arrow_right</span>
@@ -45,6 +55,9 @@
         <a href="#" onclick="toAddLesson()" class="add-lesson-btn" aria-label="Add Lesson">Add</a>
         <a href="#" onclick="toDeleteLesson()" class="delete-lesson-btn" aria-label="Delete Lesson">Remove</a>
         <button type="button" id="editToggle" onclick="toEditCourse()" class="edit-course-btn">Edit</button>
+      </div>
+      <div class="back-bar">
+        <button class="back-btn" onclick=toSCourse()>← Back</button>
       </div>
       <h2>Lesson List</h2>
     </div>

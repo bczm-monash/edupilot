@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Classroom Content (Teacher)- EduPilot</title>
+  <link rel="stylesheet" href="../../css/page.css" />
+  <link rel="stylesheet" href="../../css/tClassroom.css" />
+  <link rel="stylesheet" href="../../css/tClassroom_content.css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
+  <script src="/EduPilot/JavaScript/redirect.js"></script>
+  <script type="module" src="/EduPilot/JavaScript/supabase-init.js"></script>
+</head>
+<body>
+  <div class="navigationBar">
+    <span class="logo">
+      <img src="../../Images/logo.webp" alt="EduPilot logo" width="100" />
+      <h1>EduPilot</h1>
+    </span>
+    <div class="menu">
+      <button onclick="toLesson()">Lesson</button>
+      <button onclick="toTCourse()">Course</button>
+      <button>Classroom</button>
+      <button onclick="toLogin()">Log Out</button>
+    </div>
+  </div>
+
+  <div class = "wrapper ">
+    <div class="side-panel">
+        <div class="page-container">
+          <div class="form-card details-card">
+            <ul class="details-list">
+              <li id="rowClassName"><span class="details-key">Classroom Name:</span> <span id="valClassName" class="details-value"></span></li>
+              <li id="rowClassID"><span class="details-key">Classroom ID:</span> <span id="valClassID" class="details-value"></span></li>
+              <li id="rowInstructor"><span class="details-key">Instructor:</span> <span id="valInstructor" class="details-value"></span></li>
+              <li id="rowStart"><span class="details-key">Start date:</span> <span id="valStart" class="details-value"></span></li>
+              <li id="rowEnd"><span class="details-key">End date:</span> <span id="valEnd" class="details-value"></span></li>
+              <li id="rowCourseID"><span class="details-key">Course ID:</span> <span id="valCourseID" class="details-value"></span></li>
+              <li id="rowModified"><span class="details-key">Last Modified:</span> <span id="valModified" class="details-value"></span></li>
+              <li id="rowCreated"><span class="details-key">Created Date:</span> <span id="valCreated" class="details-value"></span></li>
+            </ul>
+          </div>
+
+          <div class="form-card">
+            <h3 class="section-title">Student List</h3>
+            <p id="lessonDesc" class="section-text"></p>
+          </div>
+        </div>
+    </div>
+    <button class="side-panel-toggle" type = "button">
+      <span class="material-symbols-outlined sp-icon-open">keyboard_double_arrow_right</span>
+      <span class="material-symbols-outlined sp-icon-close">keyboard_double_arrow_left</span>
+    </button>
+    <div class="main">
+      <div class="toolbar">
+        <a href="#" onclick="toAddLesson()" class="add-lesson-btn" aria-label="Add Lesson">Add</a>
+        <a href="#" onclick="toDeleteLesson()" class="delete-lesson-btn" aria-label="Delete Lesson">Remove</a>
+        <button type="button" id="editToggle" onclick="toEditClassroom()" class="edit-classroom-btn">Edit</button>
+      </div>
+      <div class="back-bar">
+        <button class="back-btn" onclick=toTClassroom()>← Back</button>
+      </div>
+      <h2>Lesson List</h2>
+    </div>
+  </div>
+  
+  <div id="editOverlay" class="overlay-backdrop" role="dialog" aria-modal="true" aria-labelledby="overlayTitle">
+        <div class="overlay-panel">
+            <div class="overlay-header">
+                <h4 id="overlayTitle" class="overlay-title">Remove Lessons</h4>
+                <label style="display:flex; align-items:center; gap:6px;">
+                    <input type="checkbox" id="selectAllChk">
+                    <span>Select All</span>
+                </label>
+            </div>
+            <div id="overlayBody" class="overlay-body">
+                <div class="muted">Loading lessons…</div>
+            </div>
+            <div class="overlay-actions">
+                <button type="button" id="deleteSelected" class="danger-btn">Delete Selected</button>
+                <button type="button" id="closeOverlay" class="secondary-btn">Cancel</button>
+            </div>
+        </div>
+  </div>
+  
+  <div id="editOverlay2" class="overlay-backdrop" role="dialog" aria-modal="true" aria-labelledby="overlayTitle">
+        <div class="overlay-panel">
+            <div class="overlay-header">
+                <h4 id="overlayTitle" class="overlay-title">Add Lessons</h4>
+                <label style="display:flex; align-items:center; gap:6px;">
+                    <input type="checkbox" id="selectAllChk">
+                    <span>Select All</span>
+                </label>
+            </div>
+            <div id="overlayBody" class="overlay-body">
+                <div class="muted">Loading lessons…</div>
+            </div>
+            <div class="overlay-actions">
+                <button type="button" id="addSelected" class="green-btn">Add Selected</button>
+                <button type="button" id="closeOverlay2" class="secondary-btn">Cancel</button>
+            </div>
+        </div>
+  </div>
+
+  <script>
+    document.querySelector(".side-panel-toggle").addEventListener("click", () => 
+    {document.querySelector(".wrapper").classList.toggle("side-panel-open");});
+  </script>
+
+  <script>
+  function toAddLesson() {
+    document.getElementById("editOverlay2").style.display = "flex";
+  }
+
+  document.getElementById("closeOverlay2").addEventListener("click", () => {
+    document.getElementById("editOverlay2").style.display = "none";
+  });
+  </script>
+
+  <script>
+  function toDeleteLesson() {
+    document.getElementById("editOverlay").style.display = "flex";
+  }
+
+  document.getElementById("closeOverlay").addEventListener("click", () => {
+    document.getElementById("editOverlay").style.display = "none";
+  });
+
+  function toEditCourse() {
+    window.location.href = "edit_tCourse.html";
+  }
+  </script>
+</body>
+</html>

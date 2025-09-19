@@ -1,3 +1,7 @@
+-- code to be in supabase 
+
+
+
 DROP TABLE IF EXISTS classmate;
 DROP TABLE IF EXISTS classroom;
 DROP TABLE IF EXISTS enrolment;
@@ -36,6 +40,7 @@ ALTER TABLE users ADD CONSTRAINT chk_user_title CHECK (users_title IN (
 CREATE TABLE course (
     course_id              Text,
     users_id               UUID NOT NULL,
+    course_title           Text,
     course_desc            Text NOT NULL,
     course_date_created    TIMESTAMP NOT NULL,
     course_modified        TIMESTAMP NOT NULL,
@@ -44,6 +49,7 @@ CREATE TABLE course (
 
 COMMENT ON COLUMN course.course_id IS 'course id';
 COMMENT ON COLUMN course.users_id IS 'course creator';
+COMMENT ON COLUMN course.course_title IS 'course title';
 COMMENT ON COLUMN course.course_desc IS 'course desciption';
 COMMENT ON COLUMN course.course_date_created IS 'course created date';
 COMMENT ON COLUMN course.course_modified IS 'course last modified date';
@@ -64,8 +70,7 @@ CREATE TABLE lesson (
     lesson_credit_pts       INT,
     lesson_est_hrs          INT,
     lesson_reading_list     Text,
-    lesson_assignment_list  Text,
-    course_id               Text
+    lesson_assignment_list  Text
 );
 
 COMMENT ON COLUMN lesson.lesson_id IS 'lesson id';
@@ -80,13 +85,23 @@ COMMENT ON COLUMN lesson.lesson_credit_pts IS 'lesson credit points';
 COMMENT ON COLUMN lesson.lesson_est_hrs IS 'lesson estimated hours';
 COMMENT ON COLUMN lesson.lesson_reading_list IS 'lesson reading list';
 COMMENT ON COLUMN lesson.lesson_assignment_list IS 'lesson assignment list';
-COMMENT ON COLUMN lesson.course_id IS 'course id that the lesson is added into';
 
 ALTER TABLE lesson ADD CONSTRAINT lesson_pk PRIMARY KEY (lesson_id);
 ALTER TABLE lesson ADD CONSTRAINT lesson_user_fk FOREIGN KEY (users_id) REFERENCES users(users_id);
 ALTER TABLE lesson ADD CONSTRAINT lesson_prereq_fk FOREIGN KEY (lesson_prereq) REFERENCES lesson(lesson_id);
 ALTER TABLE course ADD CONSTRAINT course_lesson_fk FOREIGN KEY (course_id) REFERENCES course(course_id);
 
+CREATE TABLE units(
+    lesson_id               Text,
+    course_id               Text
+);
+
+COMMENT ON COLUMN units.lesson_id IS 'lesson id';
+COMMENT ON COLUMN units.course_id IS 'course id';
+
+ALTER TABLE units ADD CONSTRAINT units_pk PRIMARY KEY (lesson_id,course_id);
+ALTER TABLE units ADD CONSTRAINT units_lesson_fk FOREIGN KEY (lesson_id) REFERENCES lesson(lesson_id);
+ALTER TABLE units ADD CONSTRAINT units_course_fk FOREIGN KEY (course_id) REFERENCES course(course_id);
 
 CREATE TABLE enrolment(
     user_id             UUID,
@@ -126,6 +141,6 @@ ALTER TABLE classmate ADD CONSTRAINT classmate_pk PRIMARY KEY (users_id,classroo
 ALTER TABLE classmate ADD CONSTRAINT classmate_user_fk FOREIGN KEY (users_id) REFERENCES users(users_id);
 ALTER TABLE classmate ADD CONSTRAINT classmate_classroom_fk FOREIGN KEY (classroom_id) REFERENCES classroom(classroom_id);
 
-INSERT into public.users (users_id, users_title, users_fname, users_lname, users_email, users_role) VALUES ('430c6dba-18ee-4d66-b467-27760608724a',null,'Admin',null,'edupilot123@gmail.com','Admin');
+INSERT into public.users (users_id, users_title, users_fname, users_lname, users_email, users_role) VALUES ('a76d4b0a-2e53-4957-b843-c902977570cb',null,'Admin',null,'edupilot123@gmail.com','Admin');
 
 COMMIT;

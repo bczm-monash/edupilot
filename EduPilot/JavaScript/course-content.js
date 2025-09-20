@@ -16,6 +16,7 @@
   const openAddBtn = document.getElementById('openAddLessons');
   const openRemoveBtn = document.getElementById('openRemoveLessons');
   const editCourseBtn = document.getElementById('editCourseBtn');
+  const courseHeaderTitleEl = document.getElementById('courseHeader');
 
   let courseId = '';
   let currentCourse = null;
@@ -260,6 +261,12 @@
     const descEl = document.getElementById('lessonDesc');
     if (descEl) {
       descEl.textContent = course.course_desc || 'No description provided yet.';
+    }
+
+    if (courseHeaderTitleEl) {
+      const idPart = course.course_id ? String(course.course_id) : '';
+      const titlePart = course.course_title ? String(course.course_title) : 'Course';
+      courseHeaderTitleEl.textContent = idPart ? `${idPart} - ${titlePart}` : titlePart;
     }
 
     currentCourse = course;

@@ -163,6 +163,23 @@
   justify-content: flex-end; 
 }
 
+.header-bar {
+  margin: 12px;
+  margin-bottom: 4px;
+}
+
+.course-header-title {
+  margin: 0 12px;
+  font-size: 36px;
+  font-weight: 700;
+  color: #111;
+}
+
+.lesson-list-title {
+  margin: 12px;
+  margin-top: 8px;
+}
+
 .delete-btn {
   background-color: red;
   color: white;

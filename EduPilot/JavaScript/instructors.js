@@ -1,99 +1,232 @@
 // instructors.js
 
-// Get elements
-const editBtn = document.getElementById("editToggle");
-const overlay = document.getElementById("editOverlay");
-const closeOverlayBtn = document.getElementById("closeOverlay");
-const deleteBtn = document.getElementById("deleteSelected");
-const selectAllChk = document.getElementById("selectAllChk");
-const overlayBody = document.getElementById("overlayBody");
+const editBtn = document.getElementById('editToggle');
+const overlay = document.getElementById('editOverlay');
+const closeOverlayBtn = document.getElementById('closeOverlay');
+const deleteBtn = document.getElementById('deleteSelected');
+const selectAllChk = document.getElementById('selectAllChk');
+const overlayBody = document.getElementById('overlayBody');
+const instructorListEl = document.getElementById('instructorList');
 
-// Mock data (replace later with DB fetch)
-const instructors = [
-  { id: 1, name: "Mr. Chong", email: "chong@example.com" },
-  { id: 2, name: "Dr. Kamala", email: "kamala@example.com" },
-  { id: 3, name: "Dr. Fikri", email: "fikri@example.com" }
-];
+let instructors = [];
 
-// Render instructor table in main page
+function waitForSupabase(timeoutMs = 6000) {
+  if (window.supabase) {
+    return Promise.resolve(window.supabase);
+  }
+
+  return new Promise((resolve, reject) => {
+    const cleanup = () => {
+      document.removeEventListener('supabase-ready', onReady);
+      if (timer) {
+        clearTimeout(timer);
+      }
+    };
+
+    const onReady = (event) => {
+      cleanup();
+      resolve(event?.detail?.supabase || window.supabase);
+    };
+
+    document.addEventListener('supabase-ready', onReady, { once: true });
+
+    const timer = timeoutMs
+      ? setTimeout(() => {
+          cleanup();
+          reject(new Error('Supabase client not available.'));
+        }, timeoutMs)
+      : null;
+  });
+}
+
+function renderMessage(message) {
+  if (!instructorListEl) return;
+  const row = document.createElement('tr');
+  const cell = document.createElement('td');
+  cell.colSpan = 3;
+  cell.className = 'muted';
+  cell.textContent = message;
+  row.appendChild(cell);
+  instructorListEl.innerHTML = '';
+  instructorListEl.appendChild(row);
+}
+
+function formatName({ users_title, users_fname, users_lname, users_email }) {
+  const parts = [users_title, users_fname, users_lname]
+    .map(part => (typeof part === 'string' ? part.trim() : part))
+    .filter(Boolean);
+  if (parts.length) {
+    return parts.join(' ');
+  }
+  return users_email || 'Unknown';
+}
+
 function renderInstructors() {
-  const list = document.getElementById("instructorList");
-  list.innerHTML = "";
+  if (!instructorListEl) return;
+
+  instructorListEl.innerHTML = '';
+  if (!instructors.length) {
+    renderMessage('No instructors found.');
+    return;
+  }
+
+  const fragment = document.createDocumentFragment();
+
   instructors.forEach(inst => {
-    const row = document.createElement("tr");
-    row.innerHTML = `
-      <td class="instructor-title">${inst.name}</td>
-      <td class="instructor-email">${inst.email}</td>
-      <td>
-        <button class="delete-btn" onclick="removeInstructor(${inst.id})">Remove</button>
-      </td>
-    `;
-    list.appendChild(row);
+    const tr = document.createElement('tr');
+
+    const nameTd = document.createElement('td');
+    nameTd.textContent = inst.name;
+
+    const emailTd = document.createElement('td');
+    emailTd.textContent = inst.email || '—';
+
+    const actionTd = document.createElement('td');
+    const removeBtn = document.createElement('button');
+    removeBtn.type = 'button';
+    removeBtn.className = 'delete-btn';
+    removeBtn.dataset.id = inst.id;
+    removeBtn.textContent = 'Remove';
+    actionTd.appendChild(removeBtn);
+
+    tr.appendChild(nameTd);
+    tr.appendChild(emailTd);
+    tr.appendChild(actionTd);
+
+    fragment.appendChild(tr);
   });
+
+  instructorListEl.appendChild(fragment);
 }
 
-// Render instructor list in overlay
 function renderOverlayList() {
-  overlayBody.innerHTML = "";
+  if (!overlayBody) return;
+
+  overlayBody.innerHTML = '';
+
+  if (!instructors.length) {
+    const emptyMsg = document.createElement('div');
+    emptyMsg.className = 'muted';
+    emptyMsg.textContent = 'No instructors available.';
+    overlayBody.appendChild(emptyMsg);
+    return;
+  }
+
+  const fragment = document.createDocumentFragment();
+
   instructors.forEach(inst => {
-    const row = document.createElement("div");
-    row.className = "list-row";
-    row.innerHTML = `
-      <input type="checkbox" class="rowChk" data-id="${inst.id}">
-      <span>${inst.name} (${inst.email})</span>
-    `;
-    overlayBody.appendChild(row);
+    const row = document.createElement('div');
+    row.className = 'list-row';
+
+    const checkbox = document.createElement('input');
+    checkbox.type = 'checkbox';
+    checkbox.className = 'rowChk';
+    checkbox.dataset.id = inst.id;
+
+    const label = document.createElement('span');
+    label.textContent = `${inst.name} (${inst.email || '—'})`;
+
+    row.appendChild(checkbox);
+    row.appendChild(label);
+    fragment.appendChild(row);
   });
+
+  overlayBody.appendChild(fragment);
 }
 
-// Show overlay
-editBtn.addEventListener("click", () => {
-  renderOverlayList();
-  overlay.style.display = "flex";
-});
-
-// Close overlay
-closeOverlayBtn.addEventListener("click", () => {
-  overlay.style.display = "none";
-});
-
-// Select all toggle
-selectAllChk.addEventListener("change", (e) => {
-  document.querySelectorAll(".rowChk").forEach(chk => {
-    chk.checked = e.target.checked;
-  });
-});
-
-// Remove one instructor (from table)
 function removeInstructor(id) {
-  // Remove from instructors array
-  for (let i = instructors.length - 1; i >= 0; i--) {
-    if (instructors[i].id === id) {
-      instructors.splice(i, 1);
-      break;
-    }
-  }
+  if (!id) return;
+  const index = instructors.findIndex(inst => inst.id === id);
+  if (index === -1) return;
 
-  // Re-render table & overlay
+  instructors.splice(index, 1);
   renderInstructors();
   renderOverlayList();
 }
 
-// Delete selected (from overlay)
-deleteBtn.addEventListener("click", () => {
-  const selectedIds = Array.from(document.querySelectorAll(".rowChk:checked"))
-    .map(chk => parseInt(chk.dataset.id));
-
-  // Remove from instructors list
-  for (let i = instructors.length - 1; i >= 0; i--) {
-    if (selectedIds.includes(instructors[i].id)) {
-      instructors.splice(i, 1);
-    }
+async function fetchInstructorsFromDb() {
+  const supabaseClient = window.supabase;
+  if (!supabaseClient) {
+    throw new Error('Supabase client not available.');
   }
 
+  const { data: users, error } = await supabaseClient
+    .from('users')
+    .select('users_id, users_title, users_fname, users_lname, users_email, users_role')
+    .order('users_fname', { ascending: true });
+
+  if (error) {
+    throw error;
+  }
+
+  const results = Array.isArray(users) ? users : [];
+
+  return results
+    .filter(user => {
+      const role = (user?.users_role || '').toLowerCase();
+      return role === 'teacher' || role === 'instructor';
+    })
+    .map(user => ({
+      id: user.users_id,
+      name: formatName(user),
+      email: user.users_email || '',
+    }));
+}
+
+async function init() {
+  renderMessage('Loading instructors…');
+
+  try {
+    await waitForSupabase();
+    instructors = await fetchInstructorsFromDb();
+    renderInstructors();
+    renderOverlayList();
+  } catch (err) {
+    console.error('Failed to load instructors:', err);
+    renderMessage('Failed to load instructors.');
+  }
+}
+
+editBtn?.addEventListener('click', () => {
+  selectAllChk.checked = false;
+  renderOverlayList();
+  overlay.style.display = 'flex';
+});
+
+closeOverlayBtn?.addEventListener('click', () => {
+  overlay.style.display = 'none';
+});
+
+selectAllChk?.addEventListener('change', (event) => {
+  const checked = event.target.checked;
+  document.querySelectorAll('.rowChk').forEach(chk => {
+    chk.checked = checked;
+  });
+});
+
+deleteBtn?.addEventListener('click', () => {
+  const selectedIds = Array.from(document.querySelectorAll('.rowChk:checked'))
+    .map(chk => chk.dataset.id)
+    .filter(Boolean);
+
+  if (!selectedIds.length) {
+    overlay.style.display = 'none';
+    return;
+  }
+
+  instructors = instructors.filter(inst => !selectedIds.includes(inst.id));
   renderInstructors();
   renderOverlayList();
 });
 
-// Initial load
-renderInstructors();
+instructorListEl?.addEventListener('click', (event) => {
+  const target = event.target;
+  if (!(target instanceof HTMLElement)) return;
+
+  if (target.classList.contains('delete-btn')) {
+    const id = target.dataset.id;
+    removeInstructor(id);
+  }
+});
+
+init();

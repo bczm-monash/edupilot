@@ -337,10 +337,7 @@
         courseTotalCreditPointsEl.value = courseCreditEl ? courseCreditEl.value : (creditVal ?? 0);
       }
 
-      let lessonIds = normalizeArray(course.course_lessons);
-      if (!lessonIds.length) {
-        lessonIds = await fetchCourseLessonIds(courseIdParam);
-      }
+      let lessonIds = await fetchCourseLessonIds(courseIdParam);
       initialLessonIds = Array.from(new Set(lessonIds));
       selectedLessonIds = Array.from(initialLessonIds);
       pendingLessonSelection = new Set(selectedLessonIds);
@@ -415,7 +412,6 @@
       const payload = {
         course_title,
         course_desc,
-        course_lessons: selectedLessons,
         course_credit_points: computedTotalCreditPoints,
         course_status,
         course_modified: nowIso,

@@ -210,18 +210,16 @@
 
     let ids = Array.isArray(lessonIds) ? [...lessonIds] : [];
 
-    if (!ids.length) {
-      try {
-        const { data, error } = await supabase
-          .from('units')
-          .select('lesson_id')
-          .eq('course_id', courseId);
-        if (!error && Array.isArray(data)) {
-          ids = data.map((row) => row.lesson_id).filter(Boolean);
-        }
-      } catch (err) {
-        console.warn('Failed to load units for course:', err);
+    try {
+      const { data, error } = await supabase
+        .from('units')
+        .select('lesson_id')
+        .eq('course_id', courseId);
+      if (!error && Array.isArray(data)) {
+        ids = data.map((row) => row.lesson_id).filter(Boolean);
       }
+    } catch (err) {
+      console.warn('Failed to load units for course:', err);
     }
 
     const uniqueIds = Array.from(new Set(ids));
@@ -480,10 +478,6 @@
 
     const updatePayload = {};
 
-    if (currentCourse && Object.prototype.hasOwnProperty.call(currentCourse, 'course_lessons')) {
-      updatePayload.course_lessons = nextIds;
-    }
-
     if (currentCourse && Object.prototype.hasOwnProperty.call(currentCourse, 'course_total_credit_pts')) {
       updatePayload.course_total_credit_pts = totalCredit;
     }
@@ -543,8 +537,7 @@
     const refreshedCourse = await fetchCourse(courseId);
     if (!refreshedCourse) return;
     renderCourseDetails(refreshedCourse);
-    const lessonIds = parseLessonIds(refreshedCourse.course_lessons);
-    const lessons = await fetchLessonsForCourse(courseId, lessonIds);
+    const lessons = await fetchLessonsForCourse(courseId, []);
     renderLessons(lessons);
   }
 
@@ -584,8 +577,7 @@
         };
       }
 
-      const lessonIds = parseLessonIds(course.course_lessons);
-      const lessons = await fetchLessonsForCourse(courseId, lessonIds);
+      const lessons = await fetchLessonsForCourse(courseId, []);
       renderLessons(lessons);
     } catch (err) {
       console.error('Unexpected error loading course content:', err);

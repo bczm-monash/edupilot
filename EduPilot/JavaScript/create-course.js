@@ -326,7 +326,7 @@
         users_id,
         course_date_created: nowIso,
         course_modified: nowIso,
-        course_status:course_status,
+        course_status: course_status,
       };
 
       try {
@@ -348,6 +348,23 @@
             alert(`Create course failed: ${error.message}`);
           }
           return;
+        }
+
+        if (selectedLessons.length) {
+          const unitsPayload = selectedLessons.map((lessonId) => ({
+            course_id,
+            lesson_id: lessonId,
+          }));
+
+          const { error: unitsError } = await window.supabase
+            .from('units')
+            .insert(unitsPayload);
+
+          if (unitsError) {
+            console.error('Failed to link lessons in units table:', unitsError);
+            alert('Course created, but failed to link lessons.');
+            return;
+          }
         }
 
         alert('Course created successfully.');

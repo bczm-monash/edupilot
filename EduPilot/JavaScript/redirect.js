@@ -34,6 +34,10 @@ function toEditLesson() {
     window.location.href = "/EduPilot/html/teacher/editLesson.html";
 }
 
+function toCreateClassroom() {
+    window.location.href = "/EduPilot/html/teacher/create_classroom.html";
+}
+
 function toAdmin() {
     window.location.href = "/EduPilot/html/admin/adminpage.html";
 }

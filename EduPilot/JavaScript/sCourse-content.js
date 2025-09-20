@@ -161,7 +161,7 @@
 
     const { data, error } = await supabase
       .from('course')
-      .select('course_id, users_id, course_title, course_desc, course_date_created, course_modified, course_credit_points, course_lessons, course_status')
+      .select('course_id, users_id, course_title, course_desc, course_date_created, course_modified, course_credit_points, course_status')
       .eq('course_id', courseId)
       .maybeSingle();
 
@@ -265,8 +265,7 @@
       descEl.textContent = course.course_desc || 'No description provided.';
     }
 
-    const lessonIds = normaliseLessonIds(course.course_lessons);
-    const lessons = await fetchLessonsForCourse(course.course_id, lessonIds);
+    const lessons = await fetchLessonsForCourse(course.course_id, []);
     renderLessonCards(lessons);
   }
 

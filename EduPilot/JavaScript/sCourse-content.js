@@ -96,10 +96,11 @@
     lessons.forEach((lesson) => {
       const li = document.createElement('li');
       li.className = 'lesson-card';
+      const lessonId = lesson.lesson_id || '';
 
       const title = document.createElement('div');
       title.className = 'lesson-title';
-      title.textContent = `${lesson.lesson_id || ''} - ${lesson.lesson_title || 'Untitled lesson'}`.trim();
+      title.textContent = `${lessonId} - ${lesson.lesson_title || 'Untitled lesson'}`.trim();
 
       const credit = document.createElement('div');
       credit.className = 'lesson-meta';
@@ -125,6 +126,21 @@
       if (credit.textContent) li.appendChild(credit);
       if (hours.textContent) li.appendChild(hours);
       if (desc.textContent) li.appendChild(desc);
+
+      if (lessonId) {
+        li.tabIndex = 0;
+        li.setAttribute('role', 'button');
+        const open = () => {
+          window.location.href = `/EduPilot/html/student/sLesson_content.html?id=${encodeURIComponent(lessonId)}`;
+        };
+        li.addEventListener('click', open);
+        li.addEventListener('keypress', (event) => {
+          if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault();
+            open();
+          }
+        });
+      }
 
       frag.appendChild(li);
     });

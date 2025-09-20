@@ -99,7 +99,7 @@
     }
     const list = data?.users_courses;
     if (Array.isArray(list)) {
-      return new Set(list.map((id) => String(id)));
+      return new Set(list.map((item) => (typeof item === 'object' ? String(item.course_id || item.id || '') : String(item || ''))).filter(Boolean));
     }
     return new Set();
   }

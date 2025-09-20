@@ -24,11 +24,32 @@
         </div>
     </div>
 
-    <div class="back-bar">
+    <div class="header-row">
         <button class="back-btn" onclick=toSCourse()>← Back</button>
+        <button class="enroll-btn" id="openEnrollOverlay" type="button">Enroll Courses</button>
     </div>
     <h3 style="margin-left: 12px; font-size: 35px;">Unenrolled Course</h3>
     <ul id="CourseList"></ul>
+
+    <div id="enrollOverlay" class="overlay-backdrop" role="dialog" aria-modal="true" aria-labelledby="enrollOverlayTitle">
+      <div class="overlay-panel">
+        <div class="overlay-header">
+          <h4 id="enrollOverlayTitle" class="overlay-title">Enroll Courses</h4>
+          <label class="overlay-select-all">
+            <input type="checkbox" id="enrollSelectAll">
+            <span>Select All</span>
+          </label>
+        </div>
+        <div id="enrollOverlayBody" class="overlay-body">
+          <div class="muted">Loading courses...</div>
+        </div>
+        <div class="overlay-actions">
+          <button type="button" id="confirmEnroll" class="green-btn">Enroll Selected</button>
+          <button type="button" id="cancelEnroll" class="secondary-btn">Cancel</button>
+        </div>
+      </div>
+    </div>
+
     <script src="/EduPilot/JavaScript/scourse-unenroll.js"></script>
 </body>
 </html>

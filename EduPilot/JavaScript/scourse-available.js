@@ -89,49 +89,16 @@
     const supabase = await ensureSupabaseReady();
     if (!supabase) return new Set();
     const { data, error } = await supabase
-      .from('users')
-      .select('users_courses')
-      .eq('users_id', userId)
-      .maybeSingle();
+      .from('enrolment')
+      .select('course_id')
+      .eq('user_id', userId);
     if (error) {
       console.warn('Failed to load user courses:', error);
       return new Set();
     }
-    let list = data?.users_courses;
-
-    if (!Array.isArray(list)) {
-      if (typeof list === 'string') {
-        try {
-          const parsed = JSON.parse(list);
-          if (Array.isArray(parsed)) {
-            list = parsed;
-          } else if (parsed) {
-            list = [parsed];
-          }
-        } catch (_) {
-          list = list
-            .split(',')
-            .map((item) => item.trim())
-            .filter(Boolean)
-            .map((item) => item.replace(/^["']|["']$/g, ''));
-        }
-      } else if (list && typeof list === 'object') {
-        list = [list];
-      } else {
-        list = [];
-      }
-    }
-
     return new Set(
-      list
-        .map((item) => {
-          if (typeof item === 'string') return item.replace(/^["']|["']$/g, '');
-          if (item && typeof item === 'object') {
-            return item.course_id || item.id || '';
-          }
-          return '';
-        })
-        .map((id) => String(id))
+      (Array.isArray(data) ? data : [])
+        .map((row) => (row?.course_id ? String(row.course_id) : ''))
         .filter(Boolean)
     );
   }
@@ -264,16 +231,19 @@
       return;
     }
 
-    const nextSet = new Set(userCourseIds);
-    selectedIds.forEach((id) => nextSet.add(String(id)));
-    const nextArray = Array.from(nextSet);
+    const normalized = selectedIds.map((id) => String(id));
+    const rowsToInsert = normalized
+      .filter((id) => !userCourseIds.has(id))
+      .map((id) => ({ user_id: currentUserId, course_id: id }));
 
-    const payload = JSON.stringify(nextArray);
+    if (!rowsToInsert.length) {
+      alert('You are already enrolled in the selected courses.');
+      return;
+    }
 
     const { error } = await supabase
-      .from('users')
-      .update({ users_courses: payload })
-      .eq('users_id', currentUserId);
+      .from('enrolment')
+      .upsert(rowsToInsert, { onConflict: 'user_id,course_id' });
 
     if (error) {
       console.error('Failed to enroll courses:', error);
@@ -281,6 +251,8 @@
       return;
     }
 
+    const nextSet = new Set(userCourseIds);
+    rowsToInsert.forEach((row) => nextSet.add(row.course_id));
     userCourseIds = nextSet;
     closeOverlay();
     alert('Courses enrolled successfully.');

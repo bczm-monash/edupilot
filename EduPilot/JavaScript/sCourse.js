@@ -87,50 +87,17 @@
     if (!supabase) return [];
 
     const { data, error } = await supabase
-      .from('users')
-      .select('users_courses')
-      .eq('users_id', userId)
-      .maybeSingle();
+      .from('enrolment')
+      .select('course_id')
+      .eq('user_id', userId);
 
     if (error) {
       console.warn('Failed to load enrolled course ids:', error);
       return [];
     }
 
-    let list = data?.users_courses;
-
-    if (!Array.isArray(list)) {
-      if (typeof list === 'string') {
-        try {
-          const parsed = JSON.parse(list);
-          if (Array.isArray(parsed)) {
-            list = parsed;
-          } else if (parsed) {
-            list = [parsed];
-          }
-        } catch (_) {
-          list = list
-            .split(',')
-            .map((item) => item.trim())
-            .filter(Boolean)
-            .map((item) => item.replace(/^["']|["']$/g, ''));
-        }
-      } else if (list && typeof list === 'object') {
-        list = [list];
-      } else {
-        list = [];
-      }
-    }
-
-    return list
-      .map((item) => {
-        if (typeof item === 'string') return item.replace(/^["']|["']$/g, '');
-        if (item && typeof item === 'object') {
-          return item.course_id || item.id || '';
-        }
-        return '';
-      })
-      .map((id) => String(id))
+    return (Array.isArray(data) ? data : [])
+      .map((row) => (row?.course_id ? String(row.course_id) : ''))
       .filter(Boolean);
   }
 
@@ -290,15 +257,13 @@
       return;
     }
 
-    const nextSet = new Set(enrolledCourseIds);
-    selectedIds.forEach((id) => nextSet.delete(String(id)));
-    const nextArray = Array.from(nextSet);
-    const payload = JSON.stringify(nextArray);
+    const normalized = selectedIds.map((id) => String(id));
 
     const { error } = await supabase
-      .from('users')
-      .update({ users_courses: payload })
-      .eq('users_id', currentUserId);
+      .from('enrolment')
+      .delete()
+      .eq('user_id', currentUserId)
+      .in('course_id', normalized);
 
     if (error) {
       console.error('Failed to unenroll courses:', error);
@@ -306,6 +271,8 @@
       return;
     }
 
+    const nextSet = new Set(enrolledCourseIds);
+    normalized.forEach((id) => nextSet.delete(id));
     enrolledCourseIds = nextSet;
     closeOverlay();
     alert('Selected courses have been unenrolled.');

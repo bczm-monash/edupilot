@@ -6,6 +6,7 @@
   <title>Students - EduPilot</title>
   <link rel="stylesheet" href="../../css/page.css">
   <link rel="stylesheet" href="../../css/list_Students.css"> <!-- reuse lesson CSS -->
+  <script type="module" src="/EduPilot/JavaScript/supabase-init.js"></script>
   <script src="/EduPilot/JavaScript/redirect.js"></script>
 </head>
 <body>
@@ -25,6 +26,7 @@
 
   <!-- Toolbar -->
   <div class="toolbar">
+    <button type="button" class="secondary-btn back-btn" onclick="toAdmin()">Back</button>
     <button type="button" id="editToggle" class="edit-btn">Edit</button>
   </div>
 
@@ -44,13 +46,13 @@
   <div id="editOverlay" class="overlay-backdrop" role="dialog" aria-modal="true" aria-labelledby="overlayTitle">
     <div class="overlay-panel">
       <div class="overlay-header">
-        <h4 id="overlayTitle" class="overlay-title">Edit Instructors</h4>
+        <h4 id="overlayTitle" class="overlay-title">Edit Students</h4>
           <input type="checkbox" id="selectAllChk">
           <span>Select All</span>
         </label>
       </div>
       <div id="overlayBody" class="overlay-body">
-        <div class="muted">Loading instructors…</div>
+        <div class="muted">Loading students…</div>
       </div>
       <div class="overlay-actions">
         <button type="button" id="deleteSelected" class="danger-btn">Delete Selected</button>

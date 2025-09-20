@@ -84,3 +84,15 @@ function toAdminClassroom() {
     setAdminModeFlag();
     toTClassroom();
 }
+
+function toAdminStudentList() {
+    window.location.href = "/EduPilot/html/admin/list_Students.html";
+}
+
+function toAdminInstructorList() {
+    window.location.href = "/EduPilot/html/admin/list_Instructors.html";
+}
+
+function toAdminReports() {
+    window.location.href = "/EduPilot/html/admin/reports.html";
+}

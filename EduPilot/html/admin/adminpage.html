@@ -22,5 +22,30 @@
             <button onclick="toLogin()">Log Out</button>
         </div>
     </div>
+
+    <main class="admin-dashboard">
+        <h2>Welcome back, Admin</h2>
+        <p class="page-subtitle">Manage your community quickly from the shortcuts below.</p>
+
+        <section class="card-grid" aria-label="Admin quick actions">
+            <article class="admin-card">
+                <h3>Student Lists</h3>
+                <p>Review enrolments, update details, and keep your student records accurate.</p>
+                <button type="button" onclick="toAdminStudentList()">View students</button>
+            </article>
+
+            <article class="admin-card">
+                <h3>Instructor List</h3>
+                <p>Check instructor profiles, adjust assignments, and manage teaching staff.</p>
+                <button type="button" onclick="toAdminInstructorList()">View instructors</button>
+            </article>
+
+            <article class="admin-card">
+                <h3>Reports</h3>
+                <p>Track classroom activity and course performance with upcoming analytics.</p>
+                <button type="button" onclick="toAdminReports()">Open reports</button>
+            </article>
+        </section>
+    </main>
 </body>
 </html>

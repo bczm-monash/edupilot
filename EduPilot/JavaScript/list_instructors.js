@@ -9,6 +9,7 @@ const overlayBody = document.getElementById('overlayBody');
 const instructorListEl = document.getElementById('instructorList');
 
 let instructors = [];
+let supabaseClient = null;
 
 function waitForSupabase(timeoutMs = 6000) {
   if (window.supabase) {
@@ -134,18 +135,52 @@ function renderOverlayList() {
   overlayBody.appendChild(fragment);
 }
 
-function removeInstructor(id) {
+async function deleteInstructorsFromDb(ids) {
+  if (!supabaseClient) {
+    throw new Error('Supabase client not available.');
+  }
+
+  if (!Array.isArray(ids) || !ids.length) {
+    return;
+  }
+
+  const { error } = await supabaseClient
+    .from('users')
+    .delete()
+    .in('users_id', ids);
+
+  if (error) {
+    throw error;
+  }
+}
+
+async function removeInstructor(id, { button } = {}) {
   if (!id) return;
   const index = instructors.findIndex(inst => inst.id === id);
   if (index === -1) return;
 
-  instructors.splice(index, 1);
-  renderInstructors();
-  renderOverlayList();
+  const originalLabel = button?.textContent;
+  if (button) {
+    button.disabled = true;
+    button.textContent = 'Removing…';
+  }
+
+  try {
+    await deleteInstructorsFromDb([id]);
+    instructors.splice(index, 1);
+    renderInstructors();
+    renderOverlayList();
+  } catch (err) {
+    console.error('Failed to delete instructor:', err);
+    alert('Failed to delete instructor. Please try again.');
+    if (button) {
+      button.disabled = false;
+      button.textContent = originalLabel;
+    }
+  }
 }
 
 async function fetchInstructorsFromDb() {
-  const supabaseClient = window.supabase;
   if (!supabaseClient) {
     throw new Error('Supabase client not available.');
   }
@@ -177,7 +212,7 @@ async function init() {
   renderMessage('Loading instructors…');
 
   try {
-    await waitForSupabase();
+    supabaseClient = await waitForSupabase();
     instructors = await fetchInstructorsFromDb();
     renderInstructors();
     renderOverlayList();
@@ -204,7 +239,7 @@ selectAllChk?.addEventListener('change', (event) => {
   });
 });
 
-deleteBtn?.addEventListener('click', () => {
+deleteBtn?.addEventListener('click', async () => {
   const selectedIds = Array.from(document.querySelectorAll('.rowChk:checked'))
     .map(chk => chk.dataset.id)
     .filter(Boolean);
@@ -214,9 +249,26 @@ deleteBtn?.addEventListener('click', () => {
     return;
   }
 
-  instructors = instructors.filter(inst => !selectedIds.includes(inst.id));
-  renderInstructors();
-  renderOverlayList();
+  const originalText = deleteBtn.textContent;
+  deleteBtn.disabled = true;
+  deleteBtn.textContent = 'Deleting…';
+
+  try {
+    await deleteInstructorsFromDb(selectedIds);
+    instructors = instructors.filter(inst => !selectedIds.includes(inst.id));
+    renderInstructors();
+    renderOverlayList();
+    overlay.style.display = 'none';
+    if (selectAllChk) {
+      selectAllChk.checked = false;
+    }
+  } catch (err) {
+    console.error('Failed to delete selected instructors:', err);
+    alert('Failed to delete selected instructors. Please try again.');
+  } finally {
+    deleteBtn.disabled = false;
+    deleteBtn.textContent = originalText;
+  }
 });
 
 instructorListEl?.addEventListener('click', (event) => {
@@ -225,7 +277,7 @@ instructorListEl?.addEventListener('click', (event) => {
 
   if (target.classList.contains('delete-btn')) {
     const id = target.dataset.id;
-    removeInstructor(id);
+    removeInstructor(id, { button: target });
   }
 });
 

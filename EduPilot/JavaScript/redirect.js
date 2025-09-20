@@ -18,6 +18,10 @@ function toTCourse() {
     window.location.href = "/EduPilot/html/teacher/tCourse.html";
 }
 
+function toTClassroom() {
+    window.location.href = "/EduPilot/html/teacher/tClassroom.html";
+}
+
 function toLesson() {
     window.location.href = "/EduPilot/html/teacher/lessons.html";
 }

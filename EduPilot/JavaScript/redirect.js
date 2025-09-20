@@ -1,4 +1,31 @@
+const ADMIN_MODE_KEY = 'adminMode';
+
+function setAdminModeFlag() {
+    try {
+        sessionStorage.setItem(ADMIN_MODE_KEY, 'true');
+    } catch (err) {
+        // sessionStorage might be unavailable; ignore
+    }
+}
+
+function clearAdminModeFlag() {
+    try {
+        sessionStorage.removeItem(ADMIN_MODE_KEY);
+    } catch (err) {
+        // no-op when storage is unavailable
+    }
+}
+
+function isAdminModeActive() {
+    try {
+        return sessionStorage.getItem(ADMIN_MODE_KEY) === 'true';
+    } catch (err) {
+        return false;
+    }
+}
+
 function toLogin() {
+    clearAdminModeFlag();
     window.location.href = "/EduPilot/html/login.html";
 }
 
@@ -39,5 +66,21 @@ function toCreateClassroom() {
 }
 
 function toAdmin() {
+    clearAdminModeFlag();
     window.location.href = "/EduPilot/html/admin/adminpage.html";
+}
+
+function toAdminLesson() {
+    setAdminModeFlag();
+    toLesson();
+}
+
+function toAdminCourse() {
+    setAdminModeFlag();
+    toTCourse();
+}
+
+function toAdminClassroom() {
+    setAdminModeFlag();
+    toTClassroom();
 }

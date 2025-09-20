@@ -10,8 +10,8 @@ function toSCourse() {
     window.location.href = "/EduPilot/html/student/sCourse.html";
 }
 
-function toSCourseUnenroll() {
-    window.location.href = "/EduPilot/html/student/sCourse_unenroll.html";
+function toSAvailableCourses() {
+    window.location.href = "/EduPilot/html/student/sCourse_available.html";
 }
 
 function toTCourse() {

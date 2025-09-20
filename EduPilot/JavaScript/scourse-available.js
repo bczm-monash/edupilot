@@ -97,11 +97,43 @@
       console.warn('Failed to load user courses:', error);
       return new Set();
     }
-    const list = data?.users_courses;
-    if (Array.isArray(list)) {
-      return new Set(list.map((item) => (typeof item === 'object' ? String(item.course_id || item.id || '') : String(item || ''))).filter(Boolean));
+    let list = data?.users_courses;
+
+    if (!Array.isArray(list)) {
+      if (typeof list === 'string') {
+        try {
+          const parsed = JSON.parse(list);
+          if (Array.isArray(parsed)) {
+            list = parsed;
+          } else if (parsed) {
+            list = [parsed];
+          }
+        } catch (_) {
+          list = list
+            .split(',')
+            .map((item) => item.trim())
+            .filter(Boolean)
+            .map((item) => item.replace(/^["']|["']$/g, ''));
+        }
+      } else if (list && typeof list === 'object') {
+        list = [list];
+      } else {
+        list = [];
+      }
     }
-    return new Set();
+
+    return new Set(
+      list
+        .map((item) => {
+          if (typeof item === 'string') return item.replace(/^["']|["']$/g, '');
+          if (item && typeof item === 'object') {
+            return item.course_id || item.id || '';
+          }
+          return '';
+        })
+        .map((id) => String(id))
+        .filter(Boolean)
+    );
   }
 
   async function fetchCourses() {
@@ -236,9 +268,11 @@
     selectedIds.forEach((id) => nextSet.add(String(id)));
     const nextArray = Array.from(nextSet);
 
+    const payload = JSON.stringify(nextArray);
+
     const { error } = await supabase
       .from('users')
-      .update({ users_courses: nextArray })
+      .update({ users_courses: payload })
       .eq('users_id', currentUserId);
 
     if (error) {

@@ -56,6 +56,17 @@
     return li;
   }
 
+  const openOverlayBtn = document.getElementById('openUnenrollOverlay');
+  const overlayEl = document.getElementById('unenrollOverlay');
+  const overlayBodyEl = document.getElementById('unenrollOverlayBody');
+  const overlaySelectAllEl = document.getElementById('unenrollSelectAll');
+  const overlayConfirmBtn = document.getElementById('confirmUnenroll');
+  const overlayCancelBtn = document.getElementById('cancelUnenroll');
+
+  let currentUserId = '';
+  let enrolledCourseIds = new Set();
+  let cachedCourses = [];
+
   async function ensureSupabaseReady(retry = 0) {
     if (window.supabase) return window.supabase;
     if (retry > 5) return null;
@@ -176,7 +187,16 @@
       return;
     }
 
+    currentUserId = user.id;
+
     const courseIds = await fetchEnrolledCourseIds(user.id);
+    enrolledCourseIds = new Set(courseIds);
+
+    if (openOverlayBtn) {
+      openOverlayBtn.disabled = courseIds.length === 0;
+      openOverlayBtn.style.opacity = courseIds.length === 0 ? '0.6' : '1';
+    }
+
     if (!courseIds.length) {
       renderEmpty('You are not enrolled in any courses yet.');
       return;
@@ -190,16 +210,150 @@
     }
 
     await resolveTeacherNames(courses);
-
+    cachedCourses = courses;
     const frag = document.createDocumentFragment();
     courses.forEach((course) => frag.appendChild(makeCard(course)));
     listEl.innerHTML = '';
     listEl.appendChild(frag);
   }
 
+  function buildOverlayList() {
+    if (!overlayBodyEl) return;
+    overlayBodyEl.innerHTML = '';
+
+    if (!cachedCourses.length) {
+      const empty = document.createElement('div');
+      empty.className = 'muted';
+      empty.textContent = 'No enrolled courses to display.';
+      overlayBodyEl.appendChild(empty);
+      return;
+    }
+
+    const frag = document.createDocumentFragment();
+    cachedCourses.forEach((course) => {
+      const id = course.course_id;
+      if (!id) return;
+      const row = document.createElement('div');
+      row.className = 'list-row';
+
+      const checkbox = document.createElement('input');
+      checkbox.type = 'checkbox';
+      checkbox.className = 'row-chk';
+      checkbox.dataset.id = id;
+
+      const label = document.createElement('label');
+      label.style.flex = '1';
+      const teacher = course.owner_name ? ` | Teacher: ${course.owner_name}` : '';
+      label.textContent = `${id} - ${course.course_title || 'Untitled course'}${teacher}`;
+
+      row.appendChild(checkbox);
+      row.appendChild(label);
+      frag.appendChild(row);
+    });
+
+    overlayBodyEl.appendChild(frag);
+    if (overlaySelectAllEl) overlaySelectAllEl.checked = false;
+  }
+
+  function openOverlay() {
+    if (!overlayEl) return;
+    overlayEl.style.display = 'flex';
+  }
+
+  function closeOverlay() {
+    if (!overlayEl) return;
+    overlayEl.style.display = 'none';
+    if (overlaySelectAllEl) overlaySelectAllEl.checked = false;
+  }
+
+  function getSelectedCourseIds() {
+    if (!overlayBodyEl) return [];
+    return Array.from(overlayBodyEl.querySelectorAll('input.row-chk:checked'))
+      .map((chk) => chk.dataset.id)
+      .filter(Boolean);
+  }
+
+  async function unenrollSelectedCourses(selectedIds) {
+    if (!selectedIds.length) {
+      alert('Please select at least one course to unenroll.');
+      return;
+    }
+
+    const supabase = await ensureSupabaseReady();
+    if (!supabase) {
+      alert('Supabase not initialized.');
+      return;
+    }
+
+    if (!currentUserId) {
+      alert('Unable to identify current user. Please log in again.');
+      return;
+    }
+
+    const nextSet = new Set(enrolledCourseIds);
+    selectedIds.forEach((id) => nextSet.delete(String(id)));
+    const nextArray = Array.from(nextSet);
+    const payload = JSON.stringify(nextArray);
+
+    const { error } = await supabase
+      .from('users')
+      .update({ users_courses: payload })
+      .eq('users_id', currentUserId);
+
+    if (error) {
+      console.error('Failed to unenroll courses:', error);
+      alert('Failed to unenroll selected courses. Please try again.');
+      return;
+    }
+
+    enrolledCourseIds = nextSet;
+    closeOverlay();
+    alert('Selected courses have been unenrolled.');
+    await load();
+  }
+
+  function attachOverlayEvents() {
+    if (overlaySelectAllEl && overlayBodyEl) {
+      overlaySelectAllEl.addEventListener('change', () => {
+        const checked = overlaySelectAllEl.checked;
+        overlayBodyEl.querySelectorAll('input.row-chk').forEach((chk) => {
+          chk.checked = checked;
+        });
+      });
+    }
+
+    if (overlayCancelBtn) {
+      overlayCancelBtn.addEventListener('click', closeOverlay);
+    }
+
+    if (overlayEl) {
+      overlayEl.addEventListener('click', (event) => {
+        if (event.target === overlayEl) closeOverlay();
+      });
+    }
+
+    if (overlayConfirmBtn) {
+      overlayConfirmBtn.addEventListener('click', async () => {
+        const selected = getSelectedCourseIds();
+        await unenrollSelectedCourses(selected);
+      });
+    }
+
+    if (openOverlayBtn) {
+      openOverlayBtn.addEventListener('click', () => {
+        buildOverlayList();
+        openOverlay();
+      });
+    }
+  }
+
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', load);
+    document.addEventListener('DOMContentLoaded', () => {
+      attachOverlayEvents();
+      load();
+    });
   } else {
+    attachOverlayEvents();
     load();
   }
 })();

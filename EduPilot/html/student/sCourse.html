@@ -25,11 +25,32 @@
     </div>
 
     <div class="toolbar">
-        <a href="#" onclick="toSCourseUnenroll()" class="enroll-course-btn" aria-label="See Unenrolled Course">See Unenrolled Course</a>
+        <a href="#" onclick="toSAvailableCourses()" class="course-action-btn" aria-label="See Available Courses">Available Courses</a>
+        <button type="button" id="openUnenrollOverlay" class="course-action-btn unenroll">Unenroll Courses</button>
     </div>
 
     <h3 style="margin-left: 12px; font-size: 35px;">Course</h3>
-<ul id="CourseList"></ul>
+    <ul id="CourseList"></ul>
+
+    <div id="unenrollOverlay" class="overlay-backdrop" role="dialog" aria-modal="true" aria-labelledby="unenrollOverlayTitle">
+      <div class="overlay-panel">
+        <div class="overlay-header">
+          <h4 id="unenrollOverlayTitle" class="overlay-title">Unenroll Courses</h4>
+          <label class="overlay-select-all">
+            <input type="checkbox" id="unenrollSelectAll">
+            <span>Select All</span>
+          </label>
+        </div>
+        <div id="unenrollOverlayBody" class="overlay-body">
+          <div class="muted">Loading courses...</div>
+        </div>
+        <div class="overlay-actions">
+          <button type="button" id="confirmUnenroll" class="green-btn" style="background-color:#d9534f;">Unenroll Selected</button>
+          <button type="button" id="cancelUnenroll" class="secondary-btn">Cancel</button>
+        </div>
+      </div>
+    </div>
+
     <script src="/EduPilot/JavaScript/sCourse.js"></script>
 </body>
 </html>

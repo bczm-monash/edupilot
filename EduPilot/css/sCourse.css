@@ -1,9 +1,10 @@
+#CourseList,
 #courseList {
   list-style: none;
   margin: 0;
   padding: 12px;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 16px;
 }
 
@@ -11,7 +12,7 @@
   background-color: #ffffff;
   border: 1px solid #000000;
   border-radius: 8px;
-  padding: 16px;
+  padding: 18px;
   display: flex;
   flex-direction: column;
   min-height: 120px;
@@ -38,6 +39,27 @@
   line-height: 1.4;
 }
 
+@media (max-width: 1200px) {
+  #CourseList,
+  #courseList {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 900px) {
+  #CourseList,
+  #courseList {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 600px) {
+  #CourseList,
+  #courseList {
+    grid-template-columns: 1fr;
+  }
+}
+
 .course-card:hover {
   transform: translateY(-2px);
   box-shadow: 0 2px 6px rgba(0,0,0,0.1);
@@ -50,7 +72,7 @@
   justify-content: flex-end; 
 }
 
-.enroll-course-btn {
+.course-action-btn {
   display: inline-block;
   padding: 8px 16px;
   font-size: 20px;
@@ -61,8 +83,17 @@
   border-radius: 8px;
   transition: background-color 0.3s ease;
 }
-.enroll-course-btn:hover {
+.course-action-btn:hover {
   background-color: #3a5f88;
+}
+
+.course-action-btn.unenroll {
+  background-color: #d9534f;
+  border: none;
+}
+
+.course-action-btn.unenroll:hover {
+  background-color: #c23c33;
 }
 
 .overlay-backdrop {
@@ -93,6 +124,14 @@
 .overlay-title {
   margin: 0;
   font-size: 20px;
+}
+
+.overlay-select-all {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  color: #333;
 }
 
 .overlay-body {

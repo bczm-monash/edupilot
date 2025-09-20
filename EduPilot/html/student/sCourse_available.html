@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Unenrolled Course - EduPilot</title>
+    <title>Available Courses - EduPilot</title>
     <link rel="stylesheet" href="../../css/page.css">
-    <link rel="stylesheet" href="../../css/sCourse_unenroll.css">
+    <link rel="stylesheet" href="../../css/sCourse_available.css">
     <script src="/EduPilot/JavaScript/redirect.js"></script>
     <script type="module" src="/EduPilot/JavaScript/supabase-init.js"></script>
     <script src="/EduPilot/JavaScript/search_display_name.js"></script>
@@ -28,7 +28,7 @@
         <button class="back-btn" onclick=toSCourse()>← Back</button>
         <button class="enroll-btn" id="openEnrollOverlay" type="button">Enroll Courses</button>
     </div>
-    <h3 style="margin-left: 12px; font-size: 35px;">Unenrolled Course</h3>
+    <h3 style="margin-left: 12px; font-size: 35px;">Available Courses</h3>
     <ul id="CourseList"></ul>
 
     <div id="enrollOverlay" class="overlay-backdrop" role="dialog" aria-modal="true" aria-labelledby="enrollOverlayTitle">
@@ -50,6 +50,6 @@
       </div>
     </div>
 
-    <script src="/EduPilot/JavaScript/scourse-unenroll.js"></script>
+    <script src="/EduPilot/JavaScript/scourse-available.js"></script>
 </body>
 </html>

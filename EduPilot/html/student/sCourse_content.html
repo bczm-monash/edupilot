@@ -10,6 +10,7 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
   <script src="/EduPilot/JavaScript/redirect.js"></script>
   <script type="module" src="/EduPilot/JavaScript/supabase-init.js"></script>
+  <script src="/EduPilot/JavaScript/search_display_name.js"></script>
 </head>
 <body>
   <div class="navigationBar">
@@ -24,7 +25,7 @@
     </div>
   </div>
 
-  <div class = "wrapper ">
+  <div class = "wrapper side-panel-open">
     <div class="side-panel">
         <div class="page-container">
           <div class="form-card details-card">
@@ -50,10 +51,12 @@
       <span class="material-symbols-outlined sp-icon-close">keyboard_double_arrow_left</span>
     </button>
     <div class="main">
-      <div class="back-bar">
-        <button class="back-btn" onclick=toSCourse()>← Back</button>
+      <div class="header-bar">
+        <button class="back-btn" id="backBtn" type="button">← Back</button>
       </div>
-      <h2>Lesson List</h2>
+      <h1 id="courseHeader" class="course-header-title">Course</h1>
+      <h2 class="lesson-list-title">Lesson List</h2>
+      <ul id="lessonList" class="lesson-list"></ul>
     </div>
   </div>
   
@@ -62,5 +65,6 @@
     document.querySelector(".side-panel-toggle").addEventListener("click", () => 
     {document.querySelector(".wrapper").classList.toggle("side-panel-open");});
   </script>
+  <script src="/EduPilot/JavaScript/sCourse-content.js"></script>
 </body>
 </html>

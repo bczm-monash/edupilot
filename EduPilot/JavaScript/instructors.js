@@ -15,19 +15,20 @@ const instructors = [
   { id: 3, name: "Dr. Fikri", email: "fikri@example.com" }
 ];
 
-// Render instructor cards in main page
+// Render instructor table in main page
 function renderInstructors() {
   const list = document.getElementById("instructorList");
   list.innerHTML = "";
   instructors.forEach(inst => {
-    const li = document.createElement("li");
-    li.className = "instructor-card";
-    li.innerHTML = `
-      <div class="instructor-title">${inst.name}</div>
-      <div class="lesson-meta">Email: ${inst.email}</div>
-      <button class="delete-btn">Remove</button>
+    const row = document.createElement("tr");
+    row.innerHTML = `
+      <td class="instructor-title">${inst.name}</td>
+      <td class="instructor-email">${inst.email}</td>
+      <td>
+        <button class="delete-btn" onclick="removeInstructor(${inst.id})">Remove</button>
+      </td>
     `;
-    list.appendChild(li);
+    list.appendChild(row);
   });
 }
 
@@ -63,17 +64,22 @@ selectAllChk.addEventListener("change", (e) => {
   });
 });
 
-function removeInstructor(button) {
-  // Find the card (or row) that contains this button
-  let card = button.closest(".card"); // or ".instructor-card" depending on your CSS class
-  
-  // Remove the element from the DOM
-  if (card) {
-    card.remove();
+// Remove one instructor (from table)
+function removeInstructor(id) {
+  // Remove from instructors array
+  for (let i = instructors.length - 1; i >= 0; i--) {
+    if (instructors[i].id === id) {
+      instructors.splice(i, 1);
+      break;
+    }
   }
+
+  // Re-render table & overlay
+  renderInstructors();
+  renderOverlayList();
 }
 
-// Delete selected
+// Delete selected (from overlay)
 deleteBtn.addEventListener("click", () => {
   const selectedIds = Array.from(document.querySelectorAll(".rowChk:checked"))
     .map(chk => parseInt(chk.dataset.id));

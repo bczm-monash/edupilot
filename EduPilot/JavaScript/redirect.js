@@ -10,6 +10,10 @@ function toSCourse() {
     window.location.href = "/EduPilot/html/student/sCourse.html";
 }
 
+function toSCourseUnenroll() {
+    window.location.href = "/EduPilot/html/student/sCourse_unenroll.html";
+}
+
 function toTCourse() {
     window.location.href = "/EduPilot/html/teacher/tCourse.html";
 }

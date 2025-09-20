@@ -1,3 +1,11 @@
+.toolbar { 
+  margin: 12px; 
+  display: flex; 
+  gap: 8px; 
+  justify-content: flex-end; 
+}
+
+#CourseList,
 #courseList {
   list-style: none;
   margin: 0;
@@ -17,6 +25,25 @@
   min-height: 120px;
   cursor: pointer;
   transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+
+.course-title {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.course-meta {
+  font-size: 14px;
+  color: #333;
+  margin-bottom: 4px;
+}
+
+.course-desc {
+  margin-top: 8px;
+  font-size: 14px;
+  color: #444;
+  line-height: 1.4;
 }
 
 .course-card:hover {

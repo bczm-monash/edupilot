@@ -3,7 +3,7 @@
   margin: 0;
   padding: 12px;
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: 16px;
 }
 
@@ -17,6 +17,25 @@
   min-height: 120px;
   cursor: pointer;
   transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+
+.course-title {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.course-meta {
+  font-size: 14px;
+  color: #333;
+  margin-bottom: 4px;
+}
+
+.course-desc {
+  margin-top: 8px;
+  font-size: 14px;
+  color: #444;
+  line-height: 1.4;
 }
 
 .course-card:hover {

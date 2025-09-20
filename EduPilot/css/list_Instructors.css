@@ -113,50 +113,49 @@
   font-size: 14px;
 }
 
-#InstructorList {
-  list-style: none;
-  margin: 0;
-  padding: 12px;
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 16px;
+/* General table styling */
+#instructorTable {
+  width: 90%;                 /* occupy most of the page */
+  margin: 20px auto;           /* center horizontally */
+  border-collapse: collapse;   /* merge borders */
+  font-family: Arial, sans-serif;
+  font-size: 16px;
+  background-color: #fff;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
 }
 
-.instructor-card {
-  background-color: #ffffff;
-  border: 1px solid #000000;
-  border-radius: 8px;
-  padding: 16px;
-  display: flex;
-  flex-direction: column;
-  min-height: 120px;
-  cursor: pointer;
-  transition: transform 0.12s ease, box-shadow 0.12s ease;
-}
-
-.instructor-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-}
-
-.instructor-btn {
-  flex: 1;
-  width: 100%;
-  padding: 15px;
-  font-size: 18px;
-  font-weight: bold;
-  background-color: #0a26c6;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  margin-bottom: 10px;
-  transition: background-color 0.3s ease, transform 0.2s ease;
-}
-
-.instructor-btn:hover {
+/* Header styling */
+#instructorTable thead {
   background-color:#0a26c6;
-  transform: scale(1.02);
+  color: white;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+#instructorTable th,
+#instructorTable td {
+  border: 1px solid #ddd;
+  padding: 12px;
+  text-align: center;
+}
+
+/* Row styling */
+#instructorTable tbody tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+#instructorTable tbody tr:hover {
+  background-color: #f1f1f1;
+  transition: 0.3s;
+}
+
+/* Action column buttons */
+#instructorTable td button {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
 }
 
 .delete-btn {
@@ -172,17 +171,6 @@
   background-color: darkred;
 }
 
-.instructor-title {
-  font-size: 24px;
-  font-weight: bold;
-  margin-bottom: 5px;
-}
-
-.lesson-meta {
-  font-size: 14px;
-  font-weight: normal;
-  color: #333;
-}
 
 @media (max-width: 1200px) {
   #lessonList {

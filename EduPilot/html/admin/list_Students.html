@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Instructors - EduPilot</title>
+  <title>Students - EduPilot</title>
   <link rel="stylesheet" href="../../css/page.css">
-  <link rel="stylesheet" href="../../css/list_instructors.css"> <!-- reuse lesson CSS -->
+  <link rel="stylesheet" href="../../css/list_Students.css"> <!-- reuse lesson CSS -->
   <script src="/EduPilot/JavaScript/redirect.js"></script>
 </head>
 <body>
@@ -18,6 +18,8 @@
       <button onclick="toadminPage()">Admin</button>
       <button onclick="toLInstructors()">Instructors</button>
       <button onclick="toLStudents()">Students</button>
+      <button onclick="toLesson()">Lesson</button>
+      <button onclick="toTCourse()">Course</button>
       <button onclick="toLogin()">Log Out</button>
     </div>
   </div>
@@ -28,7 +30,16 @@
   </div>
 
   <h3 style="margin-left: 12px; font-size: 35px;">Students</h3>
-  <ul id="instructorList"></ul>
+  <table id="studentTable" border="1" cellspacing="0" cellpadding="8">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Email</th>
+      <th>Action</th>
+    </tr>
+  </thead>
+  <tbody id="studentList"></tbody>
+</table>
 
   <!-- Overlay for edit mode -->
   <div id="editOverlay" class="overlay-backdrop" role="dialog" aria-modal="true" aria-labelledby="overlayTitle">

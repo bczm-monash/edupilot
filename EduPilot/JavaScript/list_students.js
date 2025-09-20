@@ -1,4 +1,4 @@
-// instructors.js
+// list_students.js
 
 // Get elements
 const editBtn = document.getElementById("editToggle");
@@ -9,37 +9,38 @@ const selectAllChk = document.getElementById("selectAllChk");
 const overlayBody = document.getElementById("overlayBody");
 
 // Mock data (replace later with DB fetch)
-const instructors = [
+const students = [
   { id: 1, name: "Anoushka", email: "anoushka@example.com" },
   { id: 2, name: "Juno", email: "juno@example.com" },
   { id: 3, name: "Min Xuan", email: "minxuan@example.com" }
 ];
 
-// Render instructor cards in main page
-function renderInstructors() {
-  const list = document.getElementById("instructorList");
+// Render student rows in the main table
+function renderStudents() {
+  const list = document.getElementById("studentList");
   list.innerHTML = "";
-  instructors.forEach(inst => {
-    const li = document.createElement("li");
-    li.className = "instructor-card";
-    li.innerHTML = `
-      <div class="instructor-title">${inst.name}</div>
-      <div class="lesson-meta">Email: ${inst.email}</div>
-      <button class="delete-btn">Remove</button>
+  students.forEach(stu => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>${stu.name}</td>
+      <td>${stu.email}</td>
+      <td>
+        <button class="delete-btn" onclick="removeStudent(${stu.id})">Remove</button>
+      </td>
     `;
-    list.appendChild(li);
+    list.appendChild(tr);
   });
 }
 
-// Render instructor list in overlay
+// Render student list in overlay (checkbox list)
 function renderOverlayList() {
   overlayBody.innerHTML = "";
-  instructors.forEach(inst => {
+  students.forEach(stu => {
     const row = document.createElement("div");
     row.className = "list-row";
     row.innerHTML = `
-      <input type="checkbox" class="rowChk" data-id="${inst.id}">
-      <span>${inst.name} (${inst.email})</span>
+      <input type="checkbox" class="rowChk" data-id="${stu.id}">
+      <span>${stu.name} (${stu.email})</span>
     `;
     overlayBody.appendChild(row);
   });
@@ -63,31 +64,30 @@ selectAllChk.addEventListener("change", (e) => {
   });
 });
 
-function removeInstructor(button) {
-  // Find the card (or row) that contains this button
-  let card = button.closest(".card"); // or ".instructor-card" depending on your CSS class
-  
-  // Remove the element from the DOM
-  if (card) {
-    card.remove();
+// Remove a single student by button
+function removeStudent(id) {
+  const index = students.findIndex(s => s.id === id);
+  if (index !== -1) {
+    students.splice(index, 1);
+    renderStudents();
+    renderOverlayList();
   }
 }
 
-// Delete selected
+// Delete selected (from overlay)
 deleteBtn.addEventListener("click", () => {
   const selectedIds = Array.from(document.querySelectorAll(".rowChk:checked"))
     .map(chk => parseInt(chk.dataset.id));
 
-  // Remove from instructors list
-  for (let i = instructors.length - 1; i >= 0; i--) {
-    if (selectedIds.includes(instructors[i].id)) {
-      instructors.splice(i, 1);
+  for (let i = students.length - 1; i >= 0; i--) {
+    if (selectedIds.includes(students[i].id)) {
+      students.splice(i, 1);
     }
   }
 
-  renderInstructors();
+  renderStudents();
   renderOverlayList();
 });
 
 // Initial load
-renderInstructors();
+renderStudents();

@@ -1,6 +1,5 @@
 (function () {
   const listEl = document.getElementById('CourseList') || document.getElementById('courseList');
-  const debugEl = document.getElementById('debugCourses');
 
   function renderEmpty(message) {
     if (!listEl) return;
@@ -25,17 +24,17 @@
     const titlePart = course.course_title || 'Untitled course';
     title.textContent = idPart ? `${idPart} - ${titlePart}` : titlePart;
 
-    const credit = document.createElement('div');
-    credit.className = 'course-meta';
-    if (course.course_credit_points !== undefined && course.course_credit_points !== null) {
-      const creditVal = Number(course.course_credit_points);
-      credit.textContent = `Credit Points: ${Number.isFinite(creditVal) ? creditVal : course.course_credit_points}`;
-    }
+    const meta = document.createElement('div');
+    meta.className = 'course-meta';
+    const teacherName = (course.owner_name || '').trim();
+    const creditVal = course.course_credit_points;
 
-    const teacherMeta = document.createElement('div');
-    teacherMeta.className = 'course-meta';
-    if (course.owner_name) {
-      teacherMeta.textContent = `Teacher: ${course.owner_name}`;
+    if (teacherName && creditVal !== undefined && creditVal !== null) {
+      meta.textContent = `Teacher: ${teacherName} | Credit Points: ${creditVal}`;
+    } else if (teacherName) {
+      meta.textContent = `Teacher: ${teacherName}`;
+    } else if (creditVal !== undefined && creditVal !== null) {
+      meta.textContent = `Credit Points: ${creditVal}`;
     }
 
     const open = () => {
@@ -53,8 +52,7 @@
     });
 
     li.appendChild(title);
-    if (credit.textContent) li.appendChild(credit);
-    if (teacherMeta.textContent) li.appendChild(teacherMeta);
+    if (meta.textContent) li.appendChild(meta);
     return li;
   }
 
@@ -88,14 +86,38 @@
       return [];
     }
 
-    const list = data?.users_courses;
-    if (!Array.isArray(list)) return [];
+    let list = data?.users_courses;
+
+    if (!Array.isArray(list)) {
+      if (typeof list === 'string') {
+        try {
+          const parsed = JSON.parse(list);
+          if (Array.isArray(parsed)) {
+            list = parsed;
+          } else if (parsed) {
+            list = [parsed];
+          }
+        } catch (_) {
+          list = list
+            .split(',')
+            .map((item) => item.trim())
+            .filter(Boolean)
+            .map((item) => item.replace(/^["']|["']$/g, ''));
+        }
+      } else if (list && typeof list === 'object') {
+        list = [list];
+      } else {
+        list = [];
+      }
+    }
+
     return list
       .map((item) => {
+        if (typeof item === 'string') return item.replace(/^["']|["']$/g, '');
         if (item && typeof item === 'object') {
-          return item.course_id || item.id || item;
+          return item.course_id || item.id || '';
         }
-        return item;
+        return '';
       })
       .map((id) => String(id))
       .filter(Boolean);
@@ -115,7 +137,8 @@
       return [];
     }
 
-    return (Array.isArray(data) ? data : []).filter((course) => course.course_status === 'published');
+    const courses = Array.isArray(data) ? data : [];
+    return courses.filter((course) => course.course_status === 'published');
   }
 
   async function resolveTeacherNames(courses) {
@@ -154,16 +177,13 @@
     }
 
     const courseIds = await fetchEnrolledCourseIds(user.id);
-
-    if (debugEl) {
-      debugEl.textContent = `Enrolled course IDs: ${courseIds.length ? courseIds.join(', ') : '(none)'}`;
-    }
     if (!courseIds.length) {
       renderEmpty('You are not enrolled in any courses yet.');
       return;
     }
 
     const courses = await fetchCoursesByIds(courseIds);
+
     if (!courses.length) {
       renderEmpty('You are not enrolled in any published courses.');
       return;

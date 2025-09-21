@@ -29,8 +29,8 @@
         <button type="button" id="editToggle" onclick="toEditClassroom()" class="edit-lesson-btn">Edit</button>
     </div>
 
-    <h3 style="margin-left: 12px; font-size: 35px;">Classroom</h3>
-    <ul id="classroomList"></ul>
+    <h3 class="page-heading">Classrooms</h3>
+    <ul id="classroomList" class="classroom-list"></ul>
 
     <div id="editOverlay" class="overlay-backdrop" role="dialog" aria-modal="true" aria-labelledby="overlayTitle">
         <div class="overlay-panel">
@@ -60,6 +60,7 @@
         document.getElementById("editOverlay").style.display = "none";
     });
     </script>
+    <script src="/EduPilot/JavaScript/classroom-list.js"></script>
     <script src="/EduPilot/JavaScript/admin-nav.js"></script>
 
 </body>

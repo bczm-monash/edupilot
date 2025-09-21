@@ -25,25 +25,24 @@
     </div>
   </div>
 
-  <div class = "wrapper ">
+  <div class = "wrapper side-panel-open">
     <div class="side-panel">
         <div class="page-container">
           <div class="form-card details-card">
             <ul class="details-list">
-              <li id="rowClassName"><span class="details-key">Classroom Name:</span> <span id="valClassName" class="details-value"></span></li>
-              <li id="rowClassID"><span class="details-key">Classroom ID:</span> <span id="valClassID" class="details-value"></span></li>
-              <li id="rowInstructor"><span class="details-key">Instructor:</span> <span id="valInstructor" class="details-value"></span></li>
-              <li id="rowStart"><span class="details-key">Start date:</span> <span id="valStart" class="details-value"></span></li>
-              <li id="rowEnd"><span class="details-key">End date:</span> <span id="valEnd" class="details-value"></span></li>
-              <li id="rowCourseID"><span class="details-key">Course ID:</span> <span id="valCourseID" class="details-value"></span></li>
-              <li id="rowModified"><span class="details-key">Last Modified:</span> <span id="valModified" class="details-value"></span></li>
-              <li id="rowCreated"><span class="details-key">Created Date:</span> <span id="valCreated" class="details-value"></span></li>
+              <li><span class="details-key">Classroom Title:</span> <span id="valTitle" class="details-value"></span></li>
+              <li><span class="details-key">Classroom ID:</span> <span id="valId" class="details-value"></span></li>
+              <li><span class="details-key">Course:</span> <span id="valCourse" class="details-value"></span></li>
+              <li><span class="details-key">Instructor:</span> <span id="valInstructor" class="details-value"></span></li>
+              <li><span class="details-key">Duration (days):</span> <span id="valDuration" class="details-value"></span></li>
+              <li><span class="details-key">Start Date:</span> <span id="valStart" class="details-value"></span></li>
+              <li><span class="details-key">End Date:</span> <span id="valEnd" class="details-value"></span></li>
             </ul>
           </div>
 
           <div class="form-card">
             <h3 class="section-title">Student List</h3>
-            <p id="lessonDesc" class="section-text"></p>
+            <ol id="studentList" class="student-list"></ol>
           </div>
         </div>
     </div>
@@ -53,14 +52,16 @@
     </button>
     <div class="main">
       <div class="toolbar">
-        <a href="#" onclick="toAddLesson()" class="add-lesson-btn" aria-label="Add Lesson">Add</a>
-        <a href="#" onclick="toDeleteLesson()" class="delete-lesson-btn" aria-label="Delete Lesson">Remove</a>
-        <button type="button" id="editToggle" onclick="toEditClassroom()" class="edit-classroom-btn">Edit</button>
+        <a href="#" id="openAddLessons" class="add-lesson-btn" aria-label="Add Lesson">Add</a>
+        <a href="#" id="openRemoveLessons" class="delete-lesson-btn" aria-label="Delete Lesson">Remove</a>
+        <button type="button" id="editClassroomBtn" class="edit-classroom-btn">Edit</button>
       </div>
-      <div class="back-bar">
-        <button class="back-btn" onclick=toTClassroom()>← Back</button>
+      <div class="header-bar">
+        <button class="back-btn" onclick="toTClassroom()">← Back</button>
       </div>
-      <h2>Lesson List</h2>
+      <h1 id="classroomHeader" class="course-header-title">Classroom</h1>
+      <h2 class="lesson-list-title">Lesson List</h2>
+      <ul id="lessonList"></ul>
     </div>
   </div>
   
@@ -83,16 +84,16 @@
         </div>
   </div>
   
-  <div id="editOverlay2" class="overlay-backdrop" role="dialog" aria-modal="true" aria-labelledby="overlayTitle">
+  <div id="editOverlay2" class="overlay-backdrop" role="dialog" aria-modal="true" aria-labelledby="addOverlayTitle">
         <div class="overlay-panel">
             <div class="overlay-header">
-                <h4 id="overlayTitle" class="overlay-title">Add Lessons</h4>
+                <h4 id="addOverlayTitle" class="overlay-title">Add Lessons</h4>
                 <label style="display:flex; align-items:center; gap:6px;">
-                    <input type="checkbox" id="selectAllChk">
+                    <input type="checkbox" id="addSelectAll">
                     <span>Select All</span>
                 </label>
             </div>
-            <div id="overlayBody" class="overlay-body">
+            <div id="addOverlayBody" class="overlay-body">
                 <div class="muted">Loading lessons…</div>
             </div>
             <div class="overlay-actions">
@@ -103,33 +104,11 @@
   </div>
 
   <script>
-    document.querySelector(".side-panel-toggle").addEventListener("click", () => 
-    {document.querySelector(".wrapper").classList.toggle("side-panel-open");});
+    document.querySelector(".side-panel-toggle").addEventListener("click", () => {
+      document.querySelector(".wrapper").classList.toggle("side-panel-open");
+    });
   </script>
-
-  <script>
-  function toAddLesson() {
-    document.getElementById("editOverlay2").style.display = "flex";
-  }
-
-  document.getElementById("closeOverlay2").addEventListener("click", () => {
-    document.getElementById("editOverlay2").style.display = "none";
-  });
-  </script>
-
-  <script>
-  function toDeleteLesson() {
-    document.getElementById("editOverlay").style.display = "flex";
-  }
-
-  document.getElementById("closeOverlay").addEventListener("click", () => {
-    document.getElementById("editOverlay").style.display = "none";
-  });
-
-  function toEditCourse() {
-    window.location.href = "edit_tCourse.html";
-  }
-  </script>
+  <script src="/EduPilot/JavaScript/classroom-content.js"></script>
   <script src="/EduPilot/JavaScript/admin-nav.js"></script>
 </body>
 </html>

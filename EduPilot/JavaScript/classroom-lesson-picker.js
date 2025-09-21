@@ -54,6 +54,17 @@
       state.hiddenEl.setCustomValidity(hasSelection ? '' : requiredMessage || '');
     }
 
+    function syncSelectionFromHidden() {
+      if (!state.hiddenEl) return;
+      const value = state.hiddenEl.value || '';
+      state.selectedIds = value
+        .split(',')
+        .map((id) => normaliseId(id))
+        .filter(Boolean);
+      state.pendingSelection = new Set(state.selectedIds);
+      renderDisplay();
+    }
+
     function renderDisplay() {
       if (!state.displayEl || !state.hiddenEl) return;
 
@@ -321,6 +332,7 @@
       handleCourseChange,
       onSupabaseReady,
       renderDisplay,
+      syncSelectionFromHidden,
       setCurrentCourse(courseId) {
         state.currentCourseId = courseId;
         updateOpenButtonState();
@@ -476,4 +488,12 @@
   }
 
   document.addEventListener('supabase-ready', onSupabaseReady);
+
+  document.addEventListener('classroom-picker-sync', () => {
+    pickers.forEach((picker) => {
+      if (typeof picker.syncSelectionFromHidden === 'function') {
+        picker.syncSelectionFromHidden();
+      }
+    });
+  });
 })();

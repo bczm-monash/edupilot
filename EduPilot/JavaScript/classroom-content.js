@@ -290,9 +290,9 @@
       renderStudentList(data || []);
     } catch (error) {
       console.error('Failed to load students for classroom:', error);
-      renderStudentList([]);
       const listEl = document.getElementById('studentList');
-      if (listEl && !listEl.childElementCount) {
+      if (listEl) {
+        listEl.innerHTML = '';
         const li = document.createElement('li');
         li.textContent = 'Unable to load students.';
         listEl.appendChild(li);

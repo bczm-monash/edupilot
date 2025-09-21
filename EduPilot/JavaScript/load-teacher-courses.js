@@ -35,6 +35,8 @@
     select.disabled = true;
     renderSingleOption(select, 'Loading courses...', { disabled: true });
 
+    const currentValue = select.dataset.currentValue || select.value || '';
+
     let query = client
       .from('course')
       .select('course_id, course_title, course_desc, users_id')
@@ -57,7 +59,7 @@
       placeholder.value = '';
       placeholder.textContent = PLACEHOLDER_TEXT;
       placeholder.disabled = true;
-      placeholder.selected = true;
+      placeholder.selected = !currentValue;
       select.appendChild(placeholder);
 
       if (!courses.length) {
@@ -70,10 +72,17 @@
         option.value = course.course_id;
         const title = course.course_title || course.course_desc || course.course_id || 'Course';
         option.textContent = `${course.course_id} - ${title}`;
+        if (currentValue && option.value === currentValue) {
+          option.selected = true;
+        }
         select.appendChild(option);
       });
 
       select.disabled = false;
+      if (currentValue && select.value !== currentValue) {
+        select.value = currentValue;
+      }
+      select.dataset.currentValue = select.value;
     } catch (err) {
       console.error('Failed to load courses for classroom form:', err);
       renderSingleOption(select, 'Failed to load courses');

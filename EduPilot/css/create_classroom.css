@@ -262,6 +262,7 @@
   padding: 8px 12px;
 }
 
+
 @media (max-width: 720px) {
   .form-grid {
     grid-template-columns: 1fr;

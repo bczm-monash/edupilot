@@ -8,7 +8,6 @@
     <link rel="stylesheet" href="../../css/create_classroom.css" />
     <script type="module" src="/EduPilot/JavaScript/supabase-init.js"></script>
     <script src="/EduPilot/JavaScript/redirect.js"></script>
-    <script src="/EduPilot/JavaScript/create-course.js"></script>
   </head>
   
   <body>
@@ -53,22 +52,28 @@
             </div>
 
             <div class="form-group">
-              <label for="courseID">CourseID</label>
+              <label for="courseID">Course</label>
               <select id = "courseID" name = "courseID" required>
                     <option value ="" disabled selected>--Select course you want to teach--</option>
               </select>
             </div>
 
-            <div class="form-group">
-              <label for="Lessons">Lessons</label>
-              <select id = "Lessons" name = "Lessons" required>
-                    <option value ="" disabled selected>--Select lessons you want to teach--</option>
-              </select>
+            <div class="form-group full-width">
+              <label for="classroomLessonsDisplay">Lessons</label>
+              <div class="selected-lessons-row">
+                <textarea id="classroomLessonsDisplay" placeholder="No lessons selected" readonly></textarea>
+                <button type="button" id="openClassroomLessonOverlay" class="btn-tertiary">Select Lessons</button>
+              </div>
+              <input type="hidden" id="classroomLessons" name="Lessons" />
             </div>
 
             <div class="form-group full-width">
-              <label for="list">List of students</label>
-              <textarea id="list" name="list" placeholder="List of the student" required></textarea>
+              <label for="classroomStudentsDisplay">Students</label>
+              <div class="selected-lessons-row">
+                <textarea id="classroomStudentsDisplay" placeholder="No students selected" readonly></textarea>
+                <button type="button" id="openClassroomStudentOverlay" class="btn-tertiary">Select Students</button>
+              </div>
+              <input type="hidden" id="classroomStudents" name="list" required />
             </div>
 
             <div class="form-actions">
@@ -78,6 +83,40 @@
         </form>
       </div>
     </div>
+
+    <div id="classroomLessonOverlay" class="overlay-backdrop" role="dialog" aria-modal="true" aria-labelledby="classroomLessonOverlayTitle">
+      <div class="overlay-panel">
+        <div class="overlay-header">
+          <h4 id="classroomLessonOverlayTitle" class="overlay-title">Select Lessons</h4>
+          <button type="button" id="closeClassroomLessonOverlay" class="close-overlay-btn" aria-label="Close">&times;</button>
+        </div>
+        <div id="classroomLessonOverlayBody" class="overlay-body">
+          <div class="muted">Select a course to view lessons.</div>
+        </div>
+        <div class="overlay-actions">
+          <button type="button" id="applyClassroomLessonSelection" class="btn-primary">Apply</button>
+          <button type="button" id="cancelClassroomLessonSelection" class="btn-secondary">Cancel</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="classroomStudentOverlay" class="overlay-backdrop" role="dialog" aria-modal="true" aria-labelledby="classroomStudentOverlayTitle">
+      <div class="overlay-panel">
+        <div class="overlay-header">
+          <h4 id="classroomStudentOverlayTitle" class="overlay-title">Select Students</h4>
+          <button type="button" id="closeClassroomStudentOverlay" class="close-overlay-btn" aria-label="Close">&times;</button>
+        </div>
+        <div id="classroomStudentOverlayBody" class="overlay-body">
+          <div class="muted">Select a course to view enrolled students.</div>
+        </div>
+        <div class="overlay-actions">
+          <button type="button" id="applyClassroomStudentSelection" class="btn-primary">Apply</button>
+          <button type="button" id="cancelClassroomStudentSelection" class="btn-secondary">Cancel</button>
+        </div>
+      </div>
+    </div>
+    <script src="/EduPilot/JavaScript/load-teacher-courses.js"></script>
+    <script src="/EduPilot/JavaScript/classroom-lesson-picker.js"></script>
     <script src="/EduPilot/JavaScript/admin-nav.js"></script>
   </body>
   </html>

@@ -134,12 +134,12 @@
     const client = await ensureSupabaseReady();
     if (!client || !ids.length) return [];
 
-    const numericIds = ids.map((id) => Number(id)).filter((n) => Number.isFinite(n));
+    const stringIds = ids.map((id) => String(id).trim()).filter(Boolean);
 
     const { data, error } = await client
       .from('classroom')
       .select('classroom_id, classroom_title, classroom_start_date, classroom_end_date, course_id')
-      .in('classroom_id', numericIds)
+      .in('classroom_id', stringIds)
       .order('classroom_id', { ascending: true });
 
     if (error) {

@@ -104,3 +104,7 @@ function toAdminInstructorList() {
 function toAdminReports() {
     window.location.href = "/EduPilot/html/admin/reports.html";
 }
+
+function toTStudents() {
+    window.location.href = "/EduPilot/html/teacher/tStudents.html";
+}

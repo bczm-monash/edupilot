@@ -53,7 +53,7 @@
       return;
     }
 
-    const classroomId = parseInt(classroomIdEl?.value, 10);
+  const classroomId = (classroomIdEl?.value || '').trim();
     const classroomTitle = (classroomNameEl?.value || '').trim();
     const startIso = startEl?.value || '';
     const endIso = endEl?.value || '';
@@ -61,7 +61,7 @@
     const lessonIds = parseLessonIds(lessonsEl?.value || '');
     const studentIds = parseStudentIds(studentsEl?.value || '');
 
-    if (!Number.isInteger(classroomId)) {
+    if (!classroomId) {
       alert('Please provide a valid classroom ID.');
       classroomIdEl?.focus();
       return;
@@ -110,7 +110,7 @@
       }
 
       const lessonPayload = lessonIds.map((lessonId) => ({
-        classroom_id: String(classroomId),
+        classroom_id: classroomId,
         lesson_id: lessonId,
       }));
 

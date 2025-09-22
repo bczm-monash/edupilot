@@ -229,7 +229,7 @@
           users:users_id (users_fname, users_lname),
           course:course_id (course_title)
         `)
-        .eq('classroom_id', Number(classroomId))
+        .eq('classroom_id', classroomId)
         .maybeSingle();
 
       if (error && error.code !== 'PGRST116') throw error;
@@ -283,7 +283,7 @@
       const { data, error } = await supabase
         .from('classmate')
         .select('users_id, users:users_id (users_fname, users_lname, users_email)')
-        .eq('classroom_id', Number(classroomId));
+        .eq('classroom_id', classroomId);
 
       if (error) throw error;
 

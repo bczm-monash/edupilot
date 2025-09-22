@@ -97,11 +97,11 @@
         return;
       }
 
-      const classroom_id = parseInt(idEl.value, 10);
+  const classroom_id = idEl.value.trim();
       const classroom_name = nameEl.value.trim();
       const course_id = courseEl.value;
       const start_date = startEl.value;
-      const duration_hours = parseInt(durationEl.value, 10) || 0;
+  const duration_hours = parseInt(durationEl.value, 10) || 0;
 
       const end_date = (() => {
         if (!start_date || !duration_hours) return null;
@@ -121,7 +121,7 @@
 
       const nowIso = nowIsoUtcPlus8();
       const payload = {
-        classroom_id,
+        classroom_id, // now a string
         users_id: user.id,
         course_id,
         classroom_name,
@@ -146,7 +146,7 @@
         if (selectedStudents.length > 0) {
           const classmatesPayload = selectedStudents.map((sid) => ({
             users_id: sid,
-            classroom_id,
+            classroom_id, // now a string
           }));
 
           const { error: cmError } = await window.supabase

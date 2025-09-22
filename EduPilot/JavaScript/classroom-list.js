@@ -42,35 +42,31 @@
     const content = document.createElement('div');
     content.className = 'card-content';
 
+    // Title: id - title
     const title = document.createElement('div');
     title.className = 'classroom-title';
-    title.textContent = classroom.classroom_title || 'Untitled classroom';
+    title.textContent = `${classroom.classroom_id || '-'} - ${classroom.classroom_title || 'Untitled classroom'}`;
 
-    const metaId = document.createElement('div');
-    metaId.className = 'classroom-meta';
-    metaId.textContent = `ID: ${classroom.classroom_id || '-'}`;
-
+    // Course
     const course = document.createElement('div');
     course.className = 'classroom-meta';
-    if (classroom.course_id) course.textContent = `Course: ${classroom.course_id}`;
+    course.textContent = classroom.course_id ? `Course: ${classroom.course_id}` : '';
 
+    // Start
     const start = document.createElement('div');
     start.className = 'classroom-meta';
-    if (classroom.classroom_start_date) {
-      start.textContent = `Start: ${normaliseDate(classroom.classroom_start_date)}`;
-    }
+    start.textContent = classroom.classroom_start_date ? `Start: ${normaliseDate(classroom.classroom_start_date)}` : '';
 
+    // End
     const end = document.createElement('div');
     end.className = 'classroom-meta';
-    if (classroom.classroom_end_date) {
-      end.textContent = `End: ${normaliseDate(classroom.classroom_end_date)}`;
-    }
+    end.textContent = classroom.classroom_end_date ? `End: ${normaliseDate(classroom.classroom_end_date)}` : '';
+
 
     content.appendChild(title);
-    content.appendChild(metaId);
-    if (course.textContent) content.appendChild(course);
     if (start.textContent) content.appendChild(start);
     if (end.textContent) content.appendChild(end);
+    if (course.textContent) content.appendChild(course);
 
     function open() {
       if (!classroom.classroom_id) return;
@@ -85,7 +81,7 @@
         open();
       }
     });
-    
+
     li.appendChild(content);
     return li;
   }
@@ -182,9 +178,6 @@
     }
 
     const classroomIdsText = ids.map((id) => String(id));
-    const classroomIdsNum = ids
-      .map((id) => Number(id))
-      .filter((value) => Number.isFinite(value));
 
     try {
       if (classroomIdsText.length) {
@@ -193,19 +186,17 @@
           .delete()
           .in('classroom_id', classroomIdsText);
         if (lessonError) throw lessonError;
-      }
 
-      if (classroomIdsNum.length) {
         const { error: studentError } = await supabase
           .from('classmate')
           .delete()
-          .in('classroom_id', classroomIdsNum);
+          .in('classroom_id', classroomIdsText);
         if (studentError) throw studentError;
 
         const { error: classroomError } = await supabase
           .from('classroom')
           .delete()
-          .in('classroom_id', classroomIdsNum);
+          .in('classroom_id', classroomIdsText);
         if (classroomError) throw classroomError;
       }
 

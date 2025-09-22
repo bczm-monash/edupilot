@@ -53,7 +53,7 @@
     return (data || [])
       .map((row) => row.classroom_id)
       .filter((id) => id !== null && id !== undefined)
-      .map((id) => Number(id));
+      .map((id) => String(id).trim());
   }
 
   async function fetchAvailableClassrooms(excludedIds) {
@@ -266,7 +266,7 @@
     }
 
     const payload = ids.map((id) => ({
-      classroom_id: Number(id),
+      classroom_id: String(id).trim(),
       users_id: currentUserId,
     }));
 

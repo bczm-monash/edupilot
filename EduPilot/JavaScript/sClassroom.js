@@ -35,7 +35,7 @@
     return dateText;
   }
 
-  function makeCard(classroom) {
+  function makeCard(classroom, courseTitleMap) {
     const li = document.createElement('li');
     li.className = 'classroom-card';
     li.dataset.id = classroom.classroom_id ?? '';
@@ -45,17 +45,21 @@
     const content = document.createElement('div');
     content.className = 'card-content';
 
+    // Header: classroom_id - classroom_title
     const titleEl = document.createElement('div');
     titleEl.className = 'classroom-title';
-    titleEl.textContent = classroom.classroom_title || 'Untitled classroom';
+    titleEl.textContent = `${classroom.classroom_id ?? '-'} - ${classroom.classroom_title || 'Untitled classroom'}`;
 
-    const idEl = document.createElement('div');
-    idEl.className = 'classroom-meta';
-    idEl.textContent = `ID: ${classroom.classroom_id ?? '-'}`;
-
+    // Course details: Course: course_id - course_title
+    let courseTitle = '';
+    if (classroom.course_id && courseTitleMap && courseTitleMap[classroom.course_id]) {
+      courseTitle = courseTitleMap[classroom.course_id];
+    }
     const courseEl = document.createElement('div');
     courseEl.className = 'classroom-meta';
-    if (classroom.course_id) courseEl.textContent = `Course: ${classroom.course_id}`;
+    courseEl.textContent = classroom.course_id
+      ? `Course: ${classroom.course_id} - ${courseTitle || 'Untitled course'}`
+      : 'Course: -';
 
     const startEl = document.createElement('div');
     startEl.className = 'classroom-meta';
@@ -70,7 +74,6 @@
     }
 
     content.appendChild(titleEl);
-    content.appendChild(idEl);
     if (courseEl.textContent) content.appendChild(courseEl);
     if (startEl.textContent) content.appendChild(startEl);
     if (endEl.textContent) content.appendChild(endEl);
@@ -150,7 +153,7 @@
     return Array.isArray(data) ? data : [];
   }
 
-  function renderClassrooms(classrooms) {
+  function renderClassrooms(classrooms, courseTitleMap) {
     if (!listEl) return;
     listEl.innerHTML = '';
 
@@ -160,7 +163,7 @@
     }
 
     const frag = document.createDocumentFragment();
-    classrooms.forEach((room) => frag.appendChild(makeCard(room)));
+    classrooms.forEach((room) => frag.appendChild(makeCard(room, courseTitleMap)));
     listEl.appendChild(frag);
   }
 
@@ -316,9 +319,23 @@
       return;
     }
 
+    // Fetch all courses and build a map: course_id -> course_title
+    let courseTitleMap = {};
+    const client = await ensureSupabaseReady();
+    if (client) {
+      const { data: courses, error: courseError } = await client
+        .from('course')
+        .select('course_id, course_title');
+      if (!courseError && Array.isArray(courses)) {
+        courses.forEach((course) => {
+          if (course.course_id) courseTitleMap[course.course_id] = course.course_title || '';
+        });
+      }
+    }
+
     const classrooms = await fetchClassroomsByIds(classroomIds);
     cachedEnrolledClassrooms = classrooms;
-    renderClassrooms(classrooms);
+    renderClassrooms(classrooms, courseTitleMap);
   }
 
   function attachAvailableClassroomsEvent() {

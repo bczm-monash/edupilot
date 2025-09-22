@@ -32,7 +32,7 @@
     return dateText;
   }
 
-  function makeCard(classroom) {
+  function makeCard(classroom, courseTitleMap) {
     const li = document.createElement('li');
     li.className = 'classroom-card';
     li.dataset.id = classroom.classroom_id || '';
@@ -42,15 +42,23 @@
     const content = document.createElement('div');
     content.className = 'card-content';
 
-    // Title: id - title
+    // Get course title from map
+    let courseTitle = '';
+    if (classroom.course_id && courseTitleMap[classroom.course_id]) {
+      courseTitle = courseTitleMap[classroom.course_id];
+    }
+
+    // Header: classroom_id - classroom_title
     const title = document.createElement('div');
     title.className = 'classroom-title';
     title.textContent = `${classroom.classroom_id || '-'} - ${classroom.classroom_title || 'Untitled classroom'}`;
 
-    // Course
+    // Course details: Course: course_id - course_title
     const course = document.createElement('div');
     course.className = 'classroom-meta';
-    course.textContent = classroom.course_id ? `Course: ${classroom.course_id}` : '';
+    course.textContent = classroom.course_id
+      ? `Course: ${classroom.course_id} - ${courseTitle || 'Untitled course'}`
+      : 'Course: -';
 
     // Start
     const start = document.createElement('div');
@@ -62,11 +70,10 @@
     end.className = 'classroom-meta';
     end.textContent = classroom.classroom_end_date ? `End: ${normaliseDate(classroom.classroom_end_date)}` : '';
 
-
-    content.appendChild(title);
-    if (start.textContent) content.appendChild(start);
-    if (end.textContent) content.appendChild(end);
-    if (course.textContent) content.appendChild(course);
+  content.appendChild(title);
+  if (course.textContent) content.appendChild(course);
+  if (start.textContent) content.appendChild(start);
+  if (end.textContent) content.appendChild(end);
 
     function open() {
       if (!classroom.classroom_id) return;
@@ -220,9 +227,23 @@
         return;
       }
 
+      // Fetch all courses and build a map: course_id -> course_title
+      const client = window.supabase;
+      let courseTitleMap = {};
+      if (client) {
+        const { data: courses, error: courseError } = await client
+          .from('course')
+          .select('course_id, course_title');
+        if (!courseError && Array.isArray(courses)) {
+          courses.forEach((course) => {
+            if (course.course_id) courseTitleMap[course.course_id] = course.course_title || '';
+          });
+        }
+      }
+
       const frag = document.createDocumentFragment();
       classrooms.forEach((room) => {
-        frag.appendChild(makeCard(room));
+        frag.appendChild(makeCard(room, courseTitleMap));
       });
       listEl.appendChild(frag);
 

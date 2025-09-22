@@ -147,13 +147,13 @@
 
   function renderCourses() {
     if (!listEl) return;
-    if (!courses.length) {
+    const availableCourses = courses.filter(course => !userCourseIds.has(String(course.course_id)));
+    if (!availableCourses.length) {
       renderEmpty('No published courses available.');
       return;
     }
-
     const frag = document.createDocumentFragment();
-    courses.forEach((course) => frag.appendChild(makeCard(course)));
+    availableCourses.forEach((course) => frag.appendChild(makeCard(course)));
     listEl.innerHTML = '';
     listEl.appendChild(frag);
   }

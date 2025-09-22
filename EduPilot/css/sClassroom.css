@@ -1,3 +1,27 @@
+/* Match course-action-btn styles for classroom-action-btn */
+.classroom-action-btn {
+  display: inline-block;
+  padding: 8px 16px;
+  font-size: 20px;
+  font-weight: bold;
+  color: white;
+  background-color:#0a26c6;
+  text-decoration: none;
+  border-radius: 8px;
+  transition: background-color 0.3s ease;
+}
+.classroom-action-btn:hover {
+  background-color: #3a5f88;
+}
+
+.classroom-action-btn.unenroll {
+  background-color: #d9534f;
+  border: none;
+}
+
+.classroom-action-btn.unenroll:hover {
+  background-color: #c23c33;
+}
 #classroomList,
 .classroom-list {
   list-style: none;

@@ -25,13 +25,11 @@
         </div>
     </div>
 
-    <div class="back-bar">
-        <button class="back-btn" onclick=toSClassroom()>← Back</button>
-    </div>
     <div class="header-row">
-        <h3 style="margin: 0; font-size: 32px;">Available Classrooms</h3>
-        <button type="button" id="enrollSelectedBtn" class="enroll-btn">Enroll Selected</button>
+        <button class="back-btn" onclick=toSClassroom()>← Back</button>
+        <button type="button" id="openEnrollOverlay" class="enroll-btn">Enroll Classrooms</button>
     </div>
+    <h3 style="margin-left: 12px; font-size: 35px;">Available Classrooms</h3>
     <ul id="CourseList"></ul>
 
     <div id="enrollOverlay" class="overlay-backdrop" role="dialog" aria-modal="true" aria-labelledby="availableOverlayTitle">

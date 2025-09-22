@@ -99,6 +99,93 @@
   white-space: pre-wrap;
 }
 
+.student-list {
+  margin: 0;
+  padding-left: 20px;
+  color: #333;
+  line-height: 1.5;
+}
+
+.student-list li {
+  margin-bottom: 6px;
+}
+
+#lessonList {
+  list-style: none;
+  margin: 0;
+  padding: 12px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(220px, 1fr));
+  gap: 16px;
+}
+
+.lesson-card {
+  background-color: #ffffff;
+  border: 1px solid #000000;
+  border-radius: 8px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  min-height: 120px;
+  cursor: pointer;
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+
+.lesson-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.lesson-title {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 6px;
+}
+
+.lesson-meta {
+  font-size: 14px;
+  color: #333;
+  margin-bottom: 4px;
+}
+
+.lesson-desc {
+  margin-top: 8px;
+  font-size: 14px;
+  color: #444;
+  line-height: 1.4;
+}
+
+.toolbar {
+  margin: 12px;
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.course-header-title {
+  margin: 0 12px;
+  font-size: 36px;
+  font-weight: 700;
+  color: #111;
+}
+
+.lesson-list-title {
+  margin: 12px;
+  margin-top: 8px;
+}
+
+@media (max-width: 900px) {
+  #lessonList {
+    grid-template-columns: repeat(2, minmax(220px, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  #lessonList {
+    grid-template-columns: 1fr;
+  }
+}
+
 .list-row { 
   display: flex; 
   align-items: center; 

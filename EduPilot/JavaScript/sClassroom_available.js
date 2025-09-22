@@ -62,7 +62,7 @@
 
     let query = client
       .from('classroom')
-      .select('classroom_id, classroom_title, classroom_start_date, classroom_end_date, course_id')
+      .select('classroom_id, classroom_title, classroom_start_date, classroom_end_date, course_id, users_id')
       .order('classroom_id', { ascending: true })
       .limit(200);
 
@@ -123,6 +123,8 @@
     const li = document.createElement('li');
     li.className = 'course-card';
     li.dataset.id = classroom.classroom_id ?? '';
+    li.tabIndex = 0;
+    li.setAttribute('role', 'button');
 
     const title = document.createElement('div');
     title.className = 'course-title';
@@ -157,6 +159,20 @@
     if (courseMeta.textContent) li.appendChild(courseMeta);
     if (startMeta.textContent) li.appendChild(startMeta);
     if (endMeta.textContent) li.appendChild(endMeta);
+
+    const open = () => {
+      if (!classroom.classroom_id) return;
+      const url = `/EduPilot/html/student/sClassroom_content.html?id=${encodeURIComponent(classroom.classroom_id)}`;
+      window.location.href = url;
+    };
+
+    li.addEventListener('click', open);
+    li.addEventListener('keypress', (event) => {
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        open();
+      }
+    });
 
     return li;
   }

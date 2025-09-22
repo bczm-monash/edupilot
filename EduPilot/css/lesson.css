@@ -114,6 +114,37 @@
   gap: 16px;
 }
 
+.lesson-section-title,
+.lesson-section-placeholder,
+.lesson-section-divider {
+  list-style: none;
+  grid-column: 1 / -1;
+}
+
+.lesson-section-title {
+  font-size: 20px;
+  font-weight: 600;
+  margin: 8px 0 0;
+}
+
+.lesson-section-placeholder {
+  color: #666;
+  font-style: italic;
+  margin: 4px 0 12px;
+}
+
+.lesson-section-divider {
+  padding: 0;
+  margin: 4px 0;
+}
+
+.lesson-divider-line {
+  border: 0;
+  height: 1px;
+  background: #d4d4d4;
+  margin: 8px 0 12px;
+}
+
 .lesson-card {
   background-color: #ffffff;
   border: 1px solid #000000;

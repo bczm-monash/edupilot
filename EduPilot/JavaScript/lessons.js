@@ -98,6 +98,21 @@
     }
     const items = Array.isArray(lesson) ? lesson : [];
 
+    let assignedLessonIds = new Set();
+    try {
+      const { data: units, error: unitsErr } = await window.supabase
+        .from('units')
+        .select('lesson_id')
+        .limit(5000);
+      if (!unitsErr && Array.isArray(units)) {
+        assignedLessonIds = new Set(units
+          .map(row => row.lesson_id)
+          .filter(Boolean));
+      }
+    } catch (e) {
+      console.warn('Failed to resolve unit links', e);
+    }
+
     // Build owner names by looking up users table via users_id
     const userIds = Array.from(new Set(items
       .map(it => it.users_id || it.user_id)
@@ -123,7 +138,35 @@
       }
     }
 
+    items.forEach(it => {
+      const lessonId = it.lesson_id || it.id;
+      it.isAssigned = lessonId ? assignedLessonIds.has(lessonId) : false;
+    });
+
     return items;
+  }
+
+  function makeSectionTitle(text) {
+    const li = document.createElement('li');
+    li.className = 'lesson-section-title';
+    li.textContent = text;
+    return li;
+  }
+
+  function makeDivider() {
+    const li = document.createElement('li');
+    li.className = 'lesson-section-divider';
+    const hr = document.createElement('hr');
+    hr.className = 'lesson-divider-line';
+    li.appendChild(hr);
+    return li;
+  }
+
+  function makePlaceholder(text) {
+    const li = document.createElement('li');
+    li.className = 'lesson-section-placeholder';
+    li.textContent = text;
+    return li;
   }
 
   async function load() {
@@ -137,8 +180,36 @@
         return;
       }
 
+      const assigned = [];
+      const unassigned = [];
+      items.forEach(it => {
+        if (it.isAssigned) {
+          assigned.push(it);
+        } else {
+          unassigned.push(it);
+        }
+      });
+
       const frag = document.createDocumentFragment();
-      for (const it of items) frag.appendChild(makeCard(it));
+      const hasUnassigned = unassigned.length > 0;
+      const hasAssigned = assigned.length > 0;
+
+      frag.appendChild(makeSectionTitle('Unassigned Lessons'));
+      if (hasUnassigned) {
+        unassigned.forEach(it => frag.appendChild(makeCard(it)));
+      } else {
+        frag.appendChild(makePlaceholder('No unassigned lessons.'));
+      }
+
+      frag.appendChild(makeDivider());
+
+      frag.appendChild(makeSectionTitle('Assigned Lessons'));
+      if (hasAssigned) {
+        assigned.forEach(it => frag.appendChild(makeCard(it)));
+      } else {
+        frag.appendChild(makePlaceholder('No assigned lessons.'));
+      }
+
       listEl.appendChild(frag);
     } catch (e) {
       console.error('Failed loading lessons', e);

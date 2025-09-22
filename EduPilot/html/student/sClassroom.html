@@ -6,6 +6,7 @@
     <title>Classroom - EduPilot</title>
     <link rel="stylesheet" href="../../css/page.css">
     <link rel="stylesheet" href="../../css/sClassroom.css">
+    <script type="module" src="/EduPilot/JavaScript/supabase-init.js"></script>
     <script src="/EduPilot/JavaScript/redirect.js"></script>
 </head>
 <body>
@@ -17,18 +18,18 @@
         </span>
         <div class="menu">
             <button onclick="toSCourse()">Course</button>
-            <button>Classroom</button>
+            <button onclick="toSClassroom()">Classroom</button>
             <button onclick="toLogin()">Log Out</button>
         </div>
     </div>
 
     <div class="toolbar">
-        <a href="#" onclick="toUnenrolledClassroom()" class="enroll-classroom-btn" aria-label="See Unenrolled Classroom">See Unenrolled Classroom</a>
-        <a href="#" onclick="toEnrollClassroom()" class="enroll-classroom-btn" aria-label="Enroll Classroom">Enroll Classroom</a>
+        <a href="#" id="viewAvailableBtn" class="enroll-classroom-btn" aria-label="Available Classrooms">Available Classrooms</a>
+        <a href="#" id="openEnrollOverlay" class="enroll-classroom-btn" aria-label="Enroll Classroom">Enroll Classroom</a>
     </div>
 
     <h3 style="margin-left: 12px; font-size: 35px;">Classroom</h3>
-    <ul id="ClassroomList"></ul>
+    <ul id="classroomList" class="classroom-list"></ul>
 
     <div id="editOverlay" class="overlay-backdrop" role="dialog" aria-modal="true" aria-labelledby="overlayTitle">
         <div class="overlay-panel">
@@ -49,14 +50,6 @@
         </div>
   </div>
 
-  <script>
-  function toEnrollClassroom() {
-    document.getElementById("editOverlay").style.display = "flex";
-  }
-
-  document.getElementById("closeOverlay").addEventListener("click", () => {
-    document.getElementById("editOverlay").style.display = "none";
-  });
-  </script>
+  <script src="/EduPilot/JavaScript/sClassroom.js"></script>
 </body>
 </html>

@@ -1,6 +1,6 @@
 (function () {
-  const enrolledBtn = document.getElementById('enrollSelectedBtn');
-  const listEl = document.getElementById('availableClassroomList');
+  const openOverlayBtn = document.getElementById('openEnrollOverlay');
+  const listEl = document.getElementById('CourseList') || document.getElementById('availableClassroomList');
   const overlayEl = document.getElementById('enrollOverlay');
   const overlayBodyEl = document.getElementById('availableOverlayBody');
   const selectAllEl = document.getElementById('availableSelectAll');
@@ -80,6 +80,34 @@
     return Array.isArray(data) ? data : [];
   }
 
+  async function resolveTeacherNames(items) {
+    const fetchNames = typeof window.fetchUserDisplayNames === 'function'
+      ? window.fetchUserDisplayNames
+      : null;
+
+    if (!fetchNames) return;
+
+    const ids = items
+      .map((cls) => cls.users_id)
+      .filter(Boolean)
+      .map((id) => String(id));
+
+    if (!ids.length) return;
+
+    const unique = Array.from(new Set(ids));
+    try {
+      const names = await fetchNames(unique);
+      items.forEach((cls) => {
+        const key = cls.users_id ? String(cls.users_id) : '';
+        if (key && names.has(key)) {
+          cls.instructor_name = names.get(key);
+        }
+      });
+    } catch (err) {
+      console.warn('Failed to resolve instructor names:', err);
+    }
+  }
+
   function normaliseDate(dateText) {
     if (!dateText) return '';
     const parts = String(dateText).split(/[-/]/);
@@ -91,43 +119,47 @@
     return dateText;
   }
 
-function makeCard(classroom) {
-  const li = document.createElement('li');
-  li.className = 'classroom-card';
-  li.dataset.id = classroom.classroom_id ?? '';
+  function makeCard(classroom) {
+    const li = document.createElement('li');
+    li.className = 'course-card';
+    li.dataset.id = classroom.classroom_id ?? '';
 
-  const content = document.createElement('div');
-  content.className = 'card-content';
+    const title = document.createElement('div');
+    title.className = 'course-title';
+    const idPart = classroom.classroom_id ?? '';
+    const titlePart = classroom.classroom_title || 'Untitled classroom';
+    title.textContent = idPart ? `${idPart} - ${titlePart}` : titlePart;
 
-  const title = document.createElement('div');
-  title.className = 'classroom-title';
-  title.textContent = classroom.classroom_title || 'Untitled classroom';
+    const instructorMeta = document.createElement('div');
+    instructorMeta.className = 'course-meta';
+    if (classroom.instructor_name) {
+      instructorMeta.textContent = `Instructor: ${classroom.instructor_name}`;
+    }
 
-  const metaId = document.createElement('div');
-  metaId.className = 'classroom-meta';
-  metaId.textContent = `ID: ${classroom.classroom_id ?? '-'}`;
+    const courseMeta = document.createElement('div');
+    courseMeta.className = 'course-meta';
+    if (classroom.course_id) courseMeta.textContent = `Course: ${classroom.course_id}`;
 
-  const metaCourse = document.createElement('div');
-  metaCourse.className = 'classroom-meta';
-  if (classroom.course_id) metaCourse.textContent = `Course: ${classroom.course_id}`;
+    const startMeta = document.createElement('div');
+    startMeta.className = 'course-meta';
+    if (classroom.classroom_start_date) {
+      startMeta.textContent = `Start: ${normaliseDate(classroom.classroom_start_date)}`;
+    }
 
-  const metaStart = document.createElement('div');
-  metaStart.className = 'classroom-meta';
-  if (classroom.classroom_start_date) metaStart.textContent = `Start: ${normaliseDate(classroom.classroom_start_date)}`;
+    const endMeta = document.createElement('div');
+    endMeta.className = 'course-meta';
+    if (classroom.classroom_end_date) {
+      endMeta.textContent = `End: ${normaliseDate(classroom.classroom_end_date)}`;
+    }
 
-  const metaEnd = document.createElement('div');
-  metaEnd.className = 'classroom-meta';
-  if (classroom.classroom_end_date) metaEnd.textContent = `End: ${normaliseDate(classroom.classroom_end_date)}`;
+    li.appendChild(title);
+    if (instructorMeta.textContent) li.appendChild(instructorMeta);
+    if (courseMeta.textContent) li.appendChild(courseMeta);
+    if (startMeta.textContent) li.appendChild(startMeta);
+    if (endMeta.textContent) li.appendChild(endMeta);
 
-  content.appendChild(title);
-  content.appendChild(metaId);
-  if (metaCourse.textContent) content.appendChild(metaCourse);
-  if (metaStart.textContent) content.appendChild(metaStart);
-  if (metaEnd.textContent) content.appendChild(metaEnd);
-
-  li.appendChild(content);
-  return li;
-}
+    return li;
+  }
 
   function renderAvailableClassrooms() {
     if (!listEl) return;
@@ -173,8 +205,13 @@ function makeCard(classroom) {
       chk.dataset.id = String(room.classroom_id);
 
       const label = document.createElement('label');
-      label.textContent = room.classroom_title || room.classroom_id;
       label.style.flex = '1';
+      const parts = [];
+      parts.push(room.classroom_id ? `ID: ${room.classroom_id}` : 'Classroom');
+      if (room.classroom_title) parts.push(`Title: ${room.classroom_title}`);
+      if (room.course_id) parts.push(`Course: ${room.course_id}`);
+      if (room.instructor_name) parts.push(`Instructor: ${room.instructor_name}`);
+      label.textContent = parts.join(' | ');
 
       row.appendChild(chk);
       row.appendChild(label);
@@ -228,10 +265,10 @@ function makeCard(classroom) {
       renderAvailableClassrooms();
       buildOverlayList();
 
-      if (enrolledBtn) {
+      if (openOverlayBtn) {
         const hasAvailable = availableClassrooms.length > 0;
-        enrolledBtn.disabled = !hasAvailable;
-        enrolledBtn.style.opacity = hasAvailable ? '1' : '0.6';
+        openOverlayBtn.disabled = !hasAvailable;
+        openOverlayBtn.style.opacity = hasAvailable ? '1' : '0.6';
       }
 
       closeOverlay();
@@ -257,14 +294,16 @@ function makeCard(classroom) {
     currentUserId = user.id;
     const enrolledIds = await fetchEnrolledIds(user.id);
     availableClassrooms = await fetchAvailableClassrooms(enrolledIds);
+    await resolveTeacherNames(availableClassrooms);
 
     renderAvailableClassrooms();
     buildOverlayList();
 
-    if (enrolledBtn) {
-      enrolledBtn.disabled = !availableClassrooms.length;
-      enrolledBtn.style.opacity = availableClassrooms.length ? '1' : '0.6';
-      enrolledBtn.addEventListener('click', async () => {
+    if (openOverlayBtn) {
+      openOverlayBtn.disabled = !availableClassrooms.length;
+      openOverlayBtn.style.opacity = availableClassrooms.length ? '1' : '0.6';
+      openOverlayBtn.addEventListener('click', (event) => {
+        event.preventDefault();
         if (!availableClassrooms.length) return;
         buildOverlayList();
         openOverlay();

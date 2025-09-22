@@ -1,4 +1,5 @@
-#classroomList {
+#classroomList,
+.classroom-list {
   list-style: none;
   margin: 0;
   padding: 12px;
@@ -22,6 +23,23 @@
 .classroom-card:hover {
   transform: translateY(-2px);
   box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.card-content {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  height: 100%;
+}
+
+.classroom-title {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.classroom-meta {
+  font-size: 14px;
+  color: #333;
 }
 
 .toolbar { 

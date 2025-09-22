@@ -41,6 +41,14 @@ function toSAvailableCourses() {
     window.location.href = "/EduPilot/html/student/sCourse_available.html";
 }
 
+function toSClassroom() {
+    window.location.href = "/EduPilot/html/student/sClassroom.html";
+}
+
+function toAvailableClassrooms() {
+    window.location.href = "/EduPilot/html/student/sClassroom_available.html";
+}
+
 function toTCourse() {
     window.location.href = "/EduPilot/html/teacher/tCourse.html";
 }

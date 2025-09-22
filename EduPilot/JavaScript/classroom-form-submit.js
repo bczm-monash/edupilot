@@ -89,11 +89,6 @@
       return;
     }
 
-    if (!studentIds.length) {
-      alert('Please select at least one student.');
-      return;
-    }
-
     const classroomPayload = {
       classroom_id: classroomId,
       classroom_title: classroomTitle,
@@ -129,12 +124,12 @@
         }
       }
 
-      const studentPayload = studentIds.map((studentId) => ({
-        classroom_id: classroomId,
-        users_id: studentId,
-      }));
+      if (studentIds.length) {
+        const studentPayload = studentIds.map((studentId) => ({
+          classroom_id: classroomId,
+          users_id: studentId,
+        }));
 
-      if (studentPayload.length) {
         const { error: studentError } = await window.supabase
           .from('classmate')
           .insert(studentPayload);

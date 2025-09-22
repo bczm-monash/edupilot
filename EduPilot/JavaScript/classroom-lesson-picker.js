@@ -417,7 +417,7 @@
       emptyCourseMessage: 'Select a course to view enrolled students.',
       emptyItemsMessage: 'No students enrolled in this course.',
       loadingMessage: 'Loading students...',
-      requiredMessage: 'Please select at least one student.',
+      requiredMessage: '',
       rowClassName: 'student-row',
       fetchItems: async (client, courseId) => {
         const { data, error } = await client

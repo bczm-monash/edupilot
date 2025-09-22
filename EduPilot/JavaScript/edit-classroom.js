@@ -238,11 +238,6 @@
         return;
       }
 
-      if (!studentIds.length) {
-        alert('Please select at least one student.');
-        return;
-      }
-
       const classroom_start_date = formatStorageDate(startIso);
       const classroom_end_date = formatStorageDate(endIso);
 

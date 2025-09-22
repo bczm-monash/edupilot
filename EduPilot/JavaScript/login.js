@@ -47,8 +47,10 @@ async function signIn(event) {
       toTCourse();
     } else if (role === 'Admin') {
       toAdmin();
-    } else {
+    } else if (role == 'Student'){
       toSCourse();
+    } else {
+      alert("You have been banned!")
     }
     return true;
   } catch (e) {

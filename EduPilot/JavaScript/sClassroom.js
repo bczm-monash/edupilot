@@ -35,6 +35,26 @@
     return dateText;
   }
 
+  function parseDateDMY(dateStr) {
+    // Expects dd/mm/yyyy
+    if (!dateStr) return null;
+    const parts = dateStr.split('/');
+    if (parts.length !== 3) return null;
+    const [dd, mm, yyyy] = parts.map((p) => parseInt(p, 10));
+    if (isNaN(dd) || isNaN(mm) || isNaN(yyyy)) return null;
+    return new Date(yyyy, mm - 1, dd);
+  }
+
+  function getDuration(startText, endText) {
+    const startDate = parseDateDMY(startText);
+    const endDate = parseDateDMY(endText);
+    if (!startDate || !endDate) return '';
+    const diffMs = endDate - startDate;
+    if (diffMs < 0) return '';
+    const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+    return `${diffDays} day${diffDays !== 1 ? 's' : ''}`;
+  }
+
   function makeCard(classroom, courseTitleMap) {
     const li = document.createElement('li');
     li.className = 'classroom-card';
@@ -77,6 +97,13 @@
     if (courseEl.textContent) content.appendChild(courseEl);
     if (startEl.textContent) content.appendChild(startEl);
     if (endEl.textContent) content.appendChild(endEl);
+    // Duration
+    const durationEl = document.createElement('div');
+    durationEl.className = 'classroom-meta';
+    durationEl.textContent = (classroom.classroom_start_date && classroom.classroom_end_date)
+      ? `Duration: ${getDuration(classroom.classroom_start_date, classroom.classroom_end_date)}`
+      : '';
+    if (durationEl.textContent) content.appendChild(durationEl);
 
     function open() {
       if (!classroom.classroom_id) return;

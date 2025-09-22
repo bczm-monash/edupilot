@@ -5,9 +5,11 @@
 DROP TABLE IF EXISTS classmate;
 DROP TABLE IF EXISTS classroom;
 DROP TABLE IF EXISTS enrolment;
+DROP TABLE IF EXISTS units;
 DROP TABLE IF EXISTS course;
 DROP TABLE IF EXISTS lesson;
 DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS classroom_lesson;
 
 CREATE TABLE users (
     users_id         uuid primary key references auth.users(id) on delete cascade,
@@ -44,7 +46,8 @@ CREATE TABLE course (
     course_desc            Text NOT NULL,
     course_date_created    TIMESTAMP NOT NULL,
     course_modified        TIMESTAMP NOT NULL,
-    course_credit_points   INT NOT NULL
+    course_credit_points   INT NOT NULL,
+    course_status          Text
 );
 
 COMMENT ON COLUMN course.course_id IS 'course id';
@@ -54,6 +57,7 @@ COMMENT ON COLUMN course.course_desc IS 'course desciption';
 COMMENT ON COLUMN course.course_date_created IS 'course created date';
 COMMENT ON COLUMN course.course_modified IS 'course last modified date';
 COMMENT ON COLUMN course.course_credit_points IS 'course credit points';
+COMMENT ON COLUMN course.course_status IS 'course credit points';
 
 ALTER TABLE course ADD CONSTRAINT course_pk PRIMARY KEY (course_id);
 ALTER TABLE course ADD CONSTRAINT course_user_fk FOREIGN KEY (users_id) REFERENCES users(users_id);
@@ -116,22 +120,42 @@ ALTER TABLE enrolment ADD CONSTRAINT enrolment_user_fk FOREIGN KEY (user_id) REF
 ALTER TABLE enrolment ADD CONSTRAINT enrolment_course_fk FOREIGN KEY (course_id) REFERENCES course(course_id);
 
 CREATE TABLE classroom(
-    classroom_id            INT NOT NULL,
+    classroom_id            Text NOT NULL,
+    classroom_title         Text,
     users_id                UUID NOT NULL,
-    classroom_duration      TIMESTAMP  NOT NULL
+    classroom_end_date      Text,
+    course_id               Text,
+    classroom_start_date    Text
 );
-
 
 COMMENT ON COLUMN classroom.classroom_id IS 'classroom id';
 COMMENT ON COLUMN classroom.users_id IS 'creator id (teacher)';
-COMMENT ON COLUMN classroom.classroom_duration IS 'classroom duration';
+COMMENT ON COLUMN classroom.classroom_end_date IS 'classroom end date';
+COMMENT ON COLUMN classroom.course_id IS 'course id';
+COMMENT ON COLUMN classroom.classroom_start_date IS 'start date of classroom';
+
 
 ALTER TABLE classroom ADD CONSTRAINT classroom_pk PRIMARY KEY (classroom_id);
 ALTER TABLE classroom ADD CONSTRAINT classroom_user_fk FOREIGN KEY (users_id) REFERENCES users(users_id);
+ALTER TABLE classroom ADD CONSTRAINT classroom_course_fk FOREIGN KEY (course_id) REFERENCES course(course_id);
+
+CREATE TABLE classroom_lesson (
+    classroom_id     Text,
+    lesson_id        Text
+);
+
+COMMENT ON COLUMN classroom_lesson.lesson_id IS 'lesson id thats being taught';
+COMMENT ON COLUMN classroom_lesson.classroom_id IS 'classroom id';
+
+ALTER TABLE classroom_lesson ADD CONSTRAINT classroom_lesson_pk PRIMARY KEY (lesson_id,classroom_id);
+
+ALTER TABLE classroom_lesson ADD CONSTRAINT classroom_lesson_classroom_fk FOREIGN KEY (classroom_id) REFERENCES classroom(classroom_id);
+ALTER TABLE classroom_lesson ADD CONSTRAINT classroom_lesson_lesson_fk FOREIGN KEY (lesson_id) REFERENCES lesson(lesson_id);
+
 
 CREATE TABLE classmate (
     users_id         UUID,
-    classroom_id     INT
+    classroom_id     Text
 );
 
 COMMENT ON COLUMN classmate.users_id IS 'class students id';
@@ -141,6 +165,6 @@ ALTER TABLE classmate ADD CONSTRAINT classmate_pk PRIMARY KEY (users_id,classroo
 ALTER TABLE classmate ADD CONSTRAINT classmate_user_fk FOREIGN KEY (users_id) REFERENCES users(users_id);
 ALTER TABLE classmate ADD CONSTRAINT classmate_classroom_fk FOREIGN KEY (classroom_id) REFERENCES classroom(classroom_id);
 
-INSERT into public.users (users_id, users_title, users_fname, users_lname, users_email, users_role) VALUES ('a76d4b0a-2e53-4957-b843-c902977570cb',null,'Admin',null,'edupilot123@gmail.com','Admin');
+INSERT into public.users (users_id, users_title, users_fname, users_lname, users_email, users_role) VALUES ('bc25c85e-2798-4dec-9041-45a5f6c78e4f',null,'Admin',null,'edupilot123@gmail.com','Admin');
 
 COMMIT;

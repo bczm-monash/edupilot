@@ -101,14 +101,13 @@
   }
 
   async function populateForm(client, classroomId) {
-    const idNumber = Number(classroomId);
     const idText = String(classroomId);
 
     const [{ data: classroom, error: classroomError }] = await Promise.all([
       client
         .from('classroom')
         .select('classroom_id, classroom_title, classroom_start_date, classroom_end_date, course_id, users_id')
-        .eq('classroom_id', idNumber)
+        .eq('classroom_id', idText)
         .maybeSingle(),
     ]);
 
@@ -123,7 +122,7 @@
     const studentsPromise = client
       .from('classmate')
       .select('users_id')
-      .eq('classroom_id', idNumber);
+      .eq('classroom_id', idText);
 
     const [lessonRes, studentRes] = await Promise.all([lessonsPromise, studentsPromise]);
 
@@ -208,7 +207,7 @@
       const startEl = document.getElementById('start');
       const endEl = document.getElementById('Duration');
 
-      const classroom_id = Number(idEl?.value || classroomId);
+  const classroom_id = (idEl?.value || classroomId || '').trim();
       const classroom_title = (nameEl?.value || '').trim();
       const course_id = courseEl?.value || '';
       const startIso = startEl?.value || '';
@@ -271,14 +270,14 @@
           const { error } = await client
             .from('classroom_lesson')
             .delete()
-            .eq('classroom_id', String(classroom_id))
+            .eq('classroom_id', classroom_id)
             .in('lesson_id', lessonsToRemove);
           if (error) throw error;
         }
 
         if (lessonsToAdd.length) {
           const payload = lessonsToAdd.map((lessonId) => ({
-            classroom_id: String(classroom_id),
+            classroom_id: classroom_id,
             lesson_id: lessonId,
           }));
           const { error } = await client
@@ -298,7 +297,7 @@
 
         if (studentsToAdd.length) {
           const payload = studentsToAdd.map((studentId) => ({
-            classroom_id,
+            classroom_id: classroom_id,
             users_id: studentId,
           }));
           const { error } = await client
@@ -307,8 +306,8 @@
           if (error) throw error;
         }
 
-        alert('Classroom updated successfully.');
-        window.location.href = `/EduPilot/html/teacher/classroom_content.html?id=${encodeURIComponent(classroom_id)}`;
+  alert('Classroom updated successfully.');
+  window.location.href = `/EduPilot/html/teacher/classroom_content.html?id=${encodeURIComponent(classroom_id)}`;
       } catch (error) {
         console.error('Failed to update classroom:', error);
         alert(error?.message || 'Failed to update classroom.');

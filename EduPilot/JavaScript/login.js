@@ -58,3 +58,12 @@ async function signIn(event) {
     return false;
   }
 }
+
+document.addEventListener('keydown', function(event) {
+  if (event.key === 'Enter') {
+    const target = event.target;
+    if (target.id === 'email' || target.id === 'password') {
+      signIn();
+    }
+  }
+});

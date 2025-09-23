@@ -53,13 +53,10 @@ h1{
     text-align: center;
 }
 
-/*  */
 
 .menu button:hover {
-    background-color: #222; /* hover effect */
+    background-color: #222;
 }
-
-/* font-family covered globally above */
 
 
 .site-title {
@@ -72,15 +69,12 @@ nav {
     margin: 20px 0;
 }
 
-/* Lesson-specific and form-specific styles moved to lesson.css and create_lesson.css */
 
-/* Global responsive media + utilities */
 img, video, svg {
   max-width: 100%;
   height: auto;
 }
 
-/* Responsive navigation */
 @media (max-width: 900px) {
   .navigationBar {
     flex-direction: column;

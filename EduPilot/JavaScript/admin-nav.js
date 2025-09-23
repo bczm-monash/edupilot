@@ -27,7 +27,6 @@
       try {
         sessionStorage.removeItem('adminMode');
       } catch (err) {
-        /* ignore */
       }
     }
 

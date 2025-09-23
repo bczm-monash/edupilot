@@ -82,7 +82,7 @@
     return res;
   }
 
-  async function resolveCreator(users_id) {
+  async function Creator(users_id) {
     if (!users_id || !window.supabase) return '';
     const { data, error } = await window.supabase
       .from('users')
@@ -156,10 +156,10 @@
       const modified = data?.lesson_modified ? fmtDate(data?.lesson_modified) : '';
       const created = data?.lesson_date_created ? fmtDate(data?.lesson_date_created) : '';
 
-      // Resolve creator name
-      const creatorName = await resolveCreator(data?.users_id || data?.user_id);
+      // creator name
+      const creatorName = await Creator(data?.users_id || data?.user_id);
 
-      // Resolve prerequisite display as "id - title"
+      // prerequisite display as "id - title"
       if (prereq !== '' && prereq !== null && prereq !== undefined && window.supabase) {
         try {
           const { data: pre, error: preErr } = await window.supabase

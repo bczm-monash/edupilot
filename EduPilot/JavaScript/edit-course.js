@@ -23,7 +23,6 @@
           return parsed.map((id) => String(id).trim()).filter(Boolean);
         }
       } catch (_) {
-        // fall through
       }
       return input.split(',').map((id) => id.trim()).filter(Boolean);
     }

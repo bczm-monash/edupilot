@@ -121,7 +121,7 @@
 
       const nowIso = nowIsoUtcPlus8();
       const payload = {
-        classroom_id, // now a string
+        classroom_id,
         users_id: user.id,
         course_id,
         classroom_name,
@@ -146,7 +146,7 @@
         if (selectedStudents.length > 0) {
           const classmatesPayload = selectedStudents.map((sid) => ({
             users_id: sid,
-            classroom_id, // now a string
+            classroom_id,
           }));
 
           const { error: cmError } = await window.supabase

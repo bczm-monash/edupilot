@@ -78,7 +78,7 @@
       .maybeSingle();
   }
 
-  async function resolveCreator(users_id) {
+  async function Creator(users_id) {
     if (!users_id) return '';
 
     if (typeof window.fetchUserDisplayName === 'function') {
@@ -149,7 +149,7 @@
     const titleVal = lesson.lesson_title || lesson.title || lesson.lesson_desc || 'Lesson';
     setHeader(displayId, titleVal);
 
-    const creatorName = await resolveCreator(lesson.users_id || lesson.user_id);
+    const creatorName = await Creator(lesson.users_id || lesson.user_id);
 
     showRow(rowPrereq, valPrereq, lesson.lesson_prereq || '');
     showRow(rowCreator, valCreator, creatorName || '-');

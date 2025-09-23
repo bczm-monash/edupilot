@@ -81,7 +81,6 @@
           return parsed.map(String).map((id) => id.trim()).filter(Boolean);
         }
       } catch (err) {
-        // fall through to splitting by comma
       }
       return raw
         .split(',')

@@ -25,7 +25,7 @@
     li.tabIndex = 0;
     li.setAttribute('role', 'button');
 
-    // Resolve key fields
+    // key fields
     const idVal = item.id || item.lesson_id || '';
     const titleVal = item.title || item.lesson_title || item.name || item.lesson_desc || 'Lesson';
     const ownerVal = item.owner_name || item.owner || item.user_id || item.users_id || '';

@@ -144,6 +144,29 @@ async function deleteStudentsFromDb(ids) {
     return;
   }
 
+  // Unenroll from classrooms (delete from classmate table)
+  const { error: classmateError } = await supabaseClient
+    .from('classmate')
+    .delete()
+    .in('users_id', ids);
+
+  if (classmateError) {
+    console.error('Failed to unenroll students from classrooms:', classmateError);
+    throw classmateError;
+  }
+
+  // Unenroll from courses (delete from enrolment table)
+  const { error: enrolmentError } = await supabaseClient
+    .from('enrolment')
+    .delete()
+    .in('user_id', ids);
+
+  if (enrolmentError) {
+    console.error('Failed to unenroll students from courses:', enrolmentError);
+    throw enrolmentError;
+  }
+
+  // Delete from users table
   const { error } = await supabaseClient
     .from('users')
     .delete()
@@ -154,11 +177,45 @@ async function deleteStudentsFromDb(ids) {
   }
 }
 
+async function fetchStudentEnrollments(studentId) {
+  if (!supabaseClient) {
+    throw new Error('Supabase client not available.');
+  }
+
+  // Fetch classrooms
+  const { data: classrooms, error: classroomError } = await supabaseClient
+    .from('classmate')
+    .select('classroom_id, classroom!inner(classroom_title)')
+    .eq('users_id', studentId);
+
+  if (classroomError) {
+    console.error('Failed to fetch classrooms:', classroomError);
+    throw classroomError;
+  }
+
+  // Fetch courses
+  const { data: courses, error: courseError } = await supabaseClient
+    .from('enrolment')
+    .select('course_id, course!inner(course_title)')
+    .eq('user_id', studentId);
+
+  if (courseError) {
+    console.error('Failed to fetch courses:', courseError);
+    throw courseError;
+  }
+
+  return {
+    classrooms: classrooms || [],
+    courses: courses || []
+  };
+}
+
 async function removeStudent(id, { button } = {}) {
   if (!id) return;
   const index = students.findIndex(s => s.id === id);
   if (index === -1) return;
 
+  const student = students[index];
   const originalLabel = button?.textContent;
   if (button) {
     button.disabled = true;
@@ -166,6 +223,35 @@ async function removeStudent(id, { button } = {}) {
   }
 
   try {
+    // Fetch enrollments for confirmation
+    const enrollments = await fetchStudentEnrollments(id);
+
+    let confirmationMessage = `Are you sure you want to remove student "${student.name}"?\n\n`;
+
+    if (enrollments.classrooms.length > 0) {
+      const classroomNames = enrollments.classrooms.map(c => c.classroom.classroom_title).join(', ');
+      confirmationMessage += `Enrolled Classrooms: ${classroomNames}\n`;
+    } else {
+      confirmationMessage += 'Enrolled Classrooms: None\n';
+    }
+
+    if (enrollments.courses.length > 0) {
+      const courseNames = enrollments.courses.map(c => c.course.course_title).join(', ');
+      confirmationMessage += `Enrolled Courses: ${courseNames}\n`;
+    } else {
+      confirmationMessage += 'Enrolled Courses: None\n';
+    }
+
+    confirmationMessage += '\nThis will unenroll the student from all classrooms and courses.';
+
+    if (!confirm(confirmationMessage)) {
+      if (button) {
+        button.disabled = false;
+        button.textContent = originalLabel;
+      }
+      return;
+    }
+
     await deleteStudentsFromDb([id]);
     students.splice(index, 1);
     renderStudents();
@@ -254,6 +340,47 @@ deleteBtn?.addEventListener('click', async () => {
   deleteBtn.textContent = 'Deleting…';
 
   try {
+    // Fetch enrollments for confirmation
+    const enrollmentPromises = selectedIds.map(async (id) => {
+      try {
+        const enrollments = await fetchStudentEnrollments(id);
+        const student = students.find(s => s.id === id);
+        return { id, name: student?.name || 'Unknown', enrollments };
+      } catch (err) {
+        console.error(`Failed to fetch enrollments for student ${id}:`, err);
+        return { id, name: 'Unknown', enrollments: { classrooms: [], courses: [] } };
+      }
+    });
+
+    const enrollmentDetails = await Promise.all(enrollmentPromises);
+
+    let confirmationMessage = `Are you sure you want to remove the following ${selectedIds.length} student(s)?\n\n`;
+
+    enrollmentDetails.forEach((detail, index) => {
+      confirmationMessage += `${index + 1}. ${detail.name}\n`;
+      if (detail.enrollments.classrooms.length > 0) {
+        const classroomNames = detail.enrollments.classrooms.map(c => c.classroom.classroom_title).join(', ');
+        confirmationMessage += `   Enrolled Classrooms: ${classroomNames}\n`;
+      } else {
+        confirmationMessage += '   Enrolled Classrooms: None\n';
+      }
+      if (detail.enrollments.courses.length > 0) {
+        const courseNames = detail.enrollments.courses.map(c => c.course.course_title).join(', ');
+        confirmationMessage += `   Enrolled Courses: ${courseNames}\n`;
+      } else {
+        confirmationMessage += '   Enrolled Courses: None\n';
+      }
+      confirmationMessage += '\n';
+    });
+
+    confirmationMessage += 'This will unenroll the students from their classrooms and courses.';
+
+    if (!confirm(confirmationMessage)) {
+      deleteBtn.disabled = false;
+      deleteBtn.textContent = originalText;
+      return;
+    }
+
     await deleteStudentsFromDb(selectedIds);
     students = students.filter(stu => !selectedIds.includes(stu.id));
     renderStudents();

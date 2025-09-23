@@ -223,6 +223,14 @@
       return;
     }
     try {
+      // First, delete related records from units table
+      const { error: unitsError } = await window.supabase
+        .from('units')
+        .delete()
+        .in('course_id', ids);
+      if (unitsError) throw unitsError;
+
+      // Then, delete the courses
       const { error } = await window.supabase
         .from('course')
         .delete()

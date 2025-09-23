@@ -13,8 +13,10 @@ async function signIn(event) {
   // Handle Remember Me functionality
   if (rememberMe) {
     localStorage.setItem('rememberedEmail', email);
+    localStorage.setItem('rememberedPassword', password);
   } else {
     localStorage.removeItem('rememberedEmail');
+    localStorage.removeItem('rememberedPassword');
   }
 
   if (!window.supabase) {
@@ -76,11 +78,15 @@ document.addEventListener('keydown', function(event) {
   }
 });
 
-// Pre-fill email if remembered
+// Pre-fill email and password if remembered
 document.addEventListener('DOMContentLoaded', function() {
   const rememberedEmail = localStorage.getItem('rememberedEmail');
+  const rememberedPassword = localStorage.getItem('rememberedPassword');
   if (rememberedEmail) {
     document.getElementById('email').value = rememberedEmail;
     document.getElementById('rememberMe').checked = true;
+  }
+  if (rememberedPassword) {
+    document.getElementById('password').value = rememberedPassword;
   }
 });

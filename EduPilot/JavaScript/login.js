@@ -3,10 +3,18 @@ async function signIn(event) {
 
   const email = document.getElementById('email').value.trim();
   const password = document.getElementById('password').value;
+  const rememberMe = document.getElementById('rememberMe').checked;
 
   if (!email || !password) {
     alert('Please enter email and password.');
     return false;
+  }
+
+  // Handle Remember Me functionality
+  if (rememberMe) {
+    localStorage.setItem('rememberedEmail', email);
+  } else {
+    localStorage.removeItem('rememberedEmail');
   }
 
   if (!window.supabase) {
@@ -65,5 +73,14 @@ document.addEventListener('keydown', function(event) {
     if (target.id === 'email' || target.id === 'password') {
       signIn();
     }
+  }
+});
+
+// Pre-fill email if remembered
+document.addEventListener('DOMContentLoaded', function() {
+  const rememberedEmail = localStorage.getItem('rememberedEmail');
+  if (rememberedEmail) {
+    document.getElementById('email').value = rememberedEmail;
+    document.getElementById('rememberMe').checked = true;
   }
 });

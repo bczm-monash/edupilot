@@ -54,6 +54,14 @@
 
     <script src="/EduPilot/JavaScript/lessons.js"></script>
     <script src="/EduPilot/JavaScript/admin-nav.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const studentsButton = document.querySelector('button[onclick="toTStudents()"]');
+            if (studentsButton && isAdminModeActive()) {
+                studentsButton.style.display = 'none';
+            }
+        });
+    </script>
 
 </body>
 </html>

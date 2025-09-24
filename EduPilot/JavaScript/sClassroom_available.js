@@ -282,15 +282,7 @@
 
       const label = document.createElement('label');
       label.style.flex = '1';
-      const parts = [];
-      parts.push(room.classroom_id ? `ID: ${room.classroom_id}` : 'Classroom');
-      if (room.classroom_title) parts.push(`Title: ${room.classroom_title}`);
-      if (room.course_id) {
-        let courseTitle = courseTitleMap[room.course_id] || 'Untitled course';
-        parts.push(`Course: ${room.course_id} - ${courseTitle}`);
-      }
-      if (room.instructor_name) parts.push(`Instructor: ${room.instructor_name}`);
-      label.textContent = parts.join(' | ');
+      label.textContent = `${room.classroom_id} - ${room.classroom_title} | Teacher: ${room.instructor_name || 'Unknown'}`;
 
       row.appendChild(chk);
       row.appendChild(label);

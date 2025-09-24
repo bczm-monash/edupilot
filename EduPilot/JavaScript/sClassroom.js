@@ -13,6 +13,7 @@
   let currentUserId = '';
   let enrolledClassroomIds = new Set();
   let cachedEnrolledClassrooms = [];
+  let cachedCourseTeacherMap = {};
 
   function renderEmpty(message) {
     if (!listEl) return;
@@ -201,7 +202,7 @@
     listEl.appendChild(frag);
   }
 
-  function buildUnenrollOverlayList() {
+  function buildUnenrollOverlayList(courseTeacherMap = {}) {
     if (!unenrollOverlayBodyEl) return;
     unenrollOverlayBodyEl.innerHTML = '';
 
@@ -227,7 +228,10 @@
 
       const label = document.createElement('label');
       label.style.flex = '1';
-      label.textContent = `${id} - ${room.classroom_title || 'Untitled classroom'}`;
+      
+      const classroomTitle = room.classroom_title || 'Untitled classroom';
+      const teacherName = courseTeacherMap[room.course_id] || 'Unknown Teacher';
+      label.textContent = `${id} - ${classroomTitle} | Teacher: ${teacherName}`;
 
       row.appendChild(checkbox);
       row.appendChild(label);
@@ -240,7 +244,7 @@
 
   function openUnenrollOverlay() {
     if (!unenrollOverlayEl) return;
-    buildUnenrollOverlayList();
+    buildUnenrollOverlayList(cachedCourseTeacherMap);
     unenrollOverlayEl.style.display = 'flex';
   }
 
@@ -325,7 +329,7 @@
 
     if (openUnenrollOverlayBtn) {
       openUnenrollOverlayBtn.addEventListener('click', () => {
-        buildUnenrollOverlayList();
+        buildUnenrollOverlayList(cachedCourseTeacherMap);
         openUnenrollOverlay();
       });
     }
@@ -353,22 +357,33 @@
       return;
     }
 
-    // Fetch all courses and build a map: course_id -> course_title
+    // Fetch all courses and build a map: course_id -> course_title and course_id -> teacher_name
     let courseTitleMap = {};
+    let courseTeacherMap = {};
     const client = await ensureSupabaseReady();
     if (client) {
       const { data: courses, error: courseError } = await client
         .from('course')
-        .select('course_id, course_title');
+        .select('course_id, course_title, users:users_id (users_fname, users_lname)');
       if (!courseError && Array.isArray(courses)) {
         courses.forEach((course) => {
-          if (course.course_id) courseTitleMap[course.course_id] = course.course_title || '';
+          if (course.course_id) {
+            courseTitleMap[course.course_id] = course.course_title || '';
+            // Extract teacher name from users relation
+            if (course.users && typeof course.users === 'object') {
+              const fname = course.users.users_fname || '';
+              const lname = course.users.users_lname || '';
+              const teacherName = [fname, lname].filter(Boolean).join(' ') || 'Unknown Teacher';
+              courseTeacherMap[course.course_id] = teacherName;
+            }
+          }
         });
       }
     }
 
     const classrooms = await fetchClassroomsByIds(classroomIds);
     cachedEnrolledClassrooms = classrooms;
+    cachedCourseTeacherMap = courseTeacherMap;
     renderClassrooms(classrooms, courseTitleMap);
   }
 

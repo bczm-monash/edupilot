@@ -1,4 +1,4 @@
-.back-bar {
+title.back-bar {
   margin: 12px;
 }
 
@@ -13,7 +13,7 @@
 
 .lesson-header {
   margin: 12px;
-  font-size: 36px;
+  font-size: 20px;
   font-weight: bold;
   text-align: center; /* aligned the header */
 }

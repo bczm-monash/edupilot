@@ -68,10 +68,15 @@
       courseTitle = courseTitleMap[classroom.course_id];
     }
 
-    // Header: classroom_id - classroom_title
+    // ID
+    const metaId = document.createElement('div');
+    metaId.className = 'classroom-meta';
+    metaId.textContent = `ID: ${classroom.classroom_id || '-'}`;
+
+    // Title
     const title = document.createElement('div');
     title.className = 'classroom-title';
-    title.textContent = `${classroom.classroom_id || '-'} - ${classroom.classroom_title || 'Untitled classroom'}`;
+    title.textContent = classroom.classroom_title || 'Untitled classroom';
 
     // Course details: Course: course_id - course_title
     const course = document.createElement('div');
@@ -90,16 +95,18 @@
     end.className = 'classroom-meta';
     end.textContent = classroom.classroom_end_date ? `End: ${normaliseDate(classroom.classroom_end_date)}` : '';
 
-    content.appendChild(title);
-    if (course.textContent) content.appendChild(course);
-    if (start.textContent) content.appendChild(start);
-    if (end.textContent) content.appendChild(end);
     // Duration
     const duration = document.createElement('div');
     duration.className = 'classroom-meta';
     duration.textContent = (classroom.classroom_start_date && classroom.classroom_end_date)
       ? `Duration: ${getDuration(classroom.classroom_start_date, classroom.classroom_end_date)}`
       : '';
+
+    content.appendChild(metaId);
+    content.appendChild(title);
+    if (course.textContent) content.appendChild(course);
+    if (start.textContent) content.appendChild(start);
+    if (end.textContent) content.appendChild(end);
     if (duration.textContent) content.appendChild(duration);
 
     function open() {

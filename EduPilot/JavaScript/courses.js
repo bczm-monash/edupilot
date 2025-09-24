@@ -38,11 +38,9 @@
 
     const title = document.createElement('div');
     title.className = 'course-title';
-    title.textContent = course.course_title || 'Untitled course';
-
-    const metaId = document.createElement('div');
-    metaId.className = 'course-meta';
-    metaId.textContent = `ID: ${course.course_id || '-'}`;
+    const idPart = course.course_id || '';
+    const titlePart = course.course_title || 'Untitled course';
+    title.textContent = idPart ? `${idPart} - ${titlePart}` : titlePart;
 
     const owner = document.createElement('div');
     owner.className = 'course-meta';
@@ -55,7 +53,6 @@
     if (creditVal !== undefined) credit.textContent = `Credit Points: ${creditVal}`;
 
     content.appendChild(title);
-    content.appendChild(metaId);
     if (ownerName) content.appendChild(owner);
     if (credit.textContent) content.appendChild(credit);
 

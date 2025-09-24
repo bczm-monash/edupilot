@@ -65,10 +65,15 @@
     const content = document.createElement('div');
     content.className = 'card-content';
 
-    // Header: classroom_id - classroom_title
+    // ID
+    const metaId = document.createElement('div');
+    metaId.className = 'classroom-meta';
+    metaId.textContent = `ID: ${classroom.classroom_id ?? '-'}`;
+
+    // Title
     const titleEl = document.createElement('div');
     titleEl.className = 'classroom-title';
-    titleEl.textContent = `${classroom.classroom_id ?? '-'} - ${classroom.classroom_title || 'Untitled classroom'}`;
+    titleEl.textContent = classroom.classroom_title || 'Untitled classroom';
 
     // Course details: Course: course_id - course_title
     let courseTitle = '';
@@ -93,16 +98,18 @@
       endEl.textContent = `End: ${normaliseDate(classroom.classroom_end_date)}`;
     }
 
-    content.appendChild(titleEl);
-    if (courseEl.textContent) content.appendChild(courseEl);
-    if (startEl.textContent) content.appendChild(startEl);
-    if (endEl.textContent) content.appendChild(endEl);
     // Duration
     const durationEl = document.createElement('div');
     durationEl.className = 'classroom-meta';
     durationEl.textContent = (classroom.classroom_start_date && classroom.classroom_end_date)
       ? `Duration: ${getDuration(classroom.classroom_start_date, classroom.classroom_end_date)}`
       : '';
+
+    content.appendChild(metaId);
+    content.appendChild(titleEl);
+    if (courseEl.textContent) content.appendChild(courseEl);
+    if (startEl.textContent) content.appendChild(startEl);
+    if (endEl.textContent) content.appendChild(endEl);
     if (durationEl.textContent) content.appendChild(durationEl);
 
     function open() {

@@ -18,24 +18,23 @@
     li.tabIndex = 0;
     li.setAttribute('role', 'button');
 
+    const metaId = document.createElement('div');
+    metaId.className = 'course-meta';
+    metaId.textContent = `ID: ${course.course_id || '-'}`;
+
     const title = document.createElement('div');
     title.className = 'course-title';
-    const idPart = course.course_id || '';
-    const titlePart = course.course_title || 'Untitled course';
-    title.textContent = idPart ? `${idPart} - ${titlePart}` : titlePart;
+    title.textContent = course.course_title || 'Untitled course';
 
-    const meta = document.createElement('div');
-    meta.className = 'course-meta';
+    const owner = document.createElement('div');
+    owner.className = 'course-meta';
     const teacherName = (course.owner_name || '').trim();
-    const creditVal = course.course_credit_points;
+    if (teacherName) owner.textContent = `Owner: ${teacherName}`;
 
-    if (teacherName && creditVal !== undefined && creditVal !== null) {
-      meta.textContent = `Teacher: ${teacherName} | Credit Points: ${creditVal}`;
-    } else if (teacherName) {
-      meta.textContent = `Teacher: ${teacherName}`;
-    } else if (creditVal !== undefined && creditVal !== null) {
-      meta.textContent = `Credit Points: ${creditVal}`;
-    }
+    const credit = document.createElement('div');
+    credit.className = 'course-meta';
+    const creditVal = course.course_credit_points;
+    if (creditVal !== undefined && creditVal !== null) credit.textContent = `Credit Points: ${creditVal}`;
 
     const open = () => {
       if (course.course_id) {
@@ -51,8 +50,10 @@
       }
     });
 
+    li.appendChild(metaId);
     li.appendChild(title);
-    if (meta.textContent) li.appendChild(meta);
+    if (owner.textContent) li.appendChild(owner);
+    if (credit.textContent) li.appendChild(credit);
     return li;
   }
 

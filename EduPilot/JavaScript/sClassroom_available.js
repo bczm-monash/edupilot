@@ -119,6 +119,26 @@
     return dateText;
   }
 
+  function parseDateDMY(dateStr) {
+    // Expects dd/mm/yyyy
+    if (!dateStr) return null;
+    const parts = dateStr.split('/');
+    if (parts.length !== 3) return null;
+    const [dd, mm, yyyy] = parts.map((p) => parseInt(p, 10));
+    if (isNaN(dd) || isNaN(mm) || isNaN(yyyy)) return null;
+    return new Date(yyyy, mm - 1, dd);
+  }
+
+  function getDuration(startText, endText) {
+    const startDate = parseDateDMY(startText);
+    const endDate = parseDateDMY(endText);
+    if (!startDate || !endDate) return '';
+    const diffMs = endDate - startDate;
+    if (diffMs < 0) return '';
+    const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+    return `${diffDays} day${diffDays !== 1 ? 's' : ''}`;
+  }
+
   function makeCard(classroom) {
     const li = document.createElement('li');
     li.className = 'course-card';
@@ -126,39 +146,48 @@
     li.tabIndex = 0;
     li.setAttribute('role', 'button');
 
+    // ID
+    const metaId = document.createElement('div');
+    metaId.className = 'course-meta';
+    metaId.textContent = `ID: ${classroom.classroom_id ?? '-'}`;
+
+    // Title
     const title = document.createElement('div');
     title.className = 'course-title';
-    const idPart = classroom.classroom_id ?? '';
-    const titlePart = classroom.classroom_title || 'Untitled classroom';
-    title.textContent = idPart ? `${idPart} - ${titlePart}` : titlePart;
+    title.textContent = classroom.classroom_title || 'Untitled classroom';
 
-    const instructorMeta = document.createElement('div');
-    instructorMeta.className = 'course-meta';
-    if (classroom.instructor_name) {
-      instructorMeta.textContent = `Instructor: ${classroom.instructor_name}`;
-    }
-
+    // Course
     const courseMeta = document.createElement('div');
     courseMeta.className = 'course-meta';
     if (classroom.course_id) courseMeta.textContent = `Course: ${classroom.course_id}`;
 
+    // Start
     const startMeta = document.createElement('div');
     startMeta.className = 'course-meta';
     if (classroom.classroom_start_date) {
       startMeta.textContent = `Start: ${normaliseDate(classroom.classroom_start_date)}`;
     }
 
+    // End
     const endMeta = document.createElement('div');
     endMeta.className = 'course-meta';
     if (classroom.classroom_end_date) {
       endMeta.textContent = `End: ${normaliseDate(classroom.classroom_end_date)}`;
     }
 
+    // Duration
+    const durationMeta = document.createElement('div');
+    durationMeta.className = 'course-meta';
+    durationMeta.textContent = (classroom.classroom_start_date && classroom.classroom_end_date)
+      ? `Duration: ${getDuration(classroom.classroom_start_date, classroom.classroom_end_date)}`
+      : '';
+
+    li.appendChild(metaId);
     li.appendChild(title);
-    if (instructorMeta.textContent) li.appendChild(instructorMeta);
     if (courseMeta.textContent) li.appendChild(courseMeta);
     if (startMeta.textContent) li.appendChild(startMeta);
     if (endMeta.textContent) li.appendChild(endMeta);
+    if (durationMeta.textContent) li.appendChild(durationMeta);
 
     const open = () => {
       if (!classroom.classroom_id) return;

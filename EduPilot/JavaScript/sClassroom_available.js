@@ -10,6 +10,7 @@
   let supabaseClient = null;
   let currentUserId = '';
   let availableClassrooms = [];
+  let courseTitleMap = {};
 
   function ensureSupabaseReady(retry = 0) {
     return new Promise((resolve) => {
@@ -108,6 +109,30 @@
     }
   }
 
+  async function fetchCourseTitles() {
+    const client = supabaseClient;
+    if (!client) return {};
+
+    const { data, error } = await client
+      .from('course')
+      .select('course_id, course_title');
+
+    if (error) {
+      console.error('Failed to load course titles:', error);
+      return {};
+    }
+
+    const courseTitleMap = {};
+    if (Array.isArray(data)) {
+      data.forEach((course) => {
+        if (course.course_id) {
+          courseTitleMap[course.course_id] = course.course_title || 'Untitled course';
+        }
+      });
+    }
+    return courseTitleMap;
+  }
+
   function normaliseDate(dateText) {
     if (!dateText) return '';
     const parts = String(dateText).split(/[-/]/);
@@ -139,7 +164,7 @@
     return `${diffDays} day${diffDays !== 1 ? 's' : ''}`;
   }
 
-  function makeCard(classroom) {
+  function makeCard(classroom, courseTitleMap) {
     const li = document.createElement('li');
     li.className = 'course-card';
     li.dataset.id = classroom.classroom_id ?? '';
@@ -159,7 +184,13 @@
     // Course
     const courseMeta = document.createElement('div');
     courseMeta.className = 'course-meta';
-    if (classroom.course_id) courseMeta.textContent = `Course: ${classroom.course_id}`;
+    let courseTitle = '';
+    if (classroom.course_id && courseTitleMap && courseTitleMap[classroom.course_id]) {
+      courseTitle = courseTitleMap[classroom.course_id];
+    }
+    courseMeta.textContent = classroom.course_id
+      ? `Course: ${classroom.course_id} - ${courseTitle || 'Untitled course'}`
+      : 'Course: -';
 
     // Start
     const startMeta = document.createElement('div');
@@ -221,7 +252,7 @@
 
     const frag = document.createDocumentFragment();
     availableClassrooms.forEach((room) => {
-      frag.appendChild(makeCard(room));
+      frag.appendChild(makeCard(room, courseTitleMap));
     });
     listEl.appendChild(frag);
   }
@@ -254,7 +285,10 @@
       const parts = [];
       parts.push(room.classroom_id ? `ID: ${room.classroom_id}` : 'Classroom');
       if (room.classroom_title) parts.push(`Title: ${room.classroom_title}`);
-      if (room.course_id) parts.push(`Course: ${room.course_id}`);
+      if (room.course_id) {
+        let courseTitle = courseTitleMap[room.course_id] || 'Untitled course';
+        parts.push(`Course: ${room.course_id} - ${courseTitle}`);
+      }
       if (room.instructor_name) parts.push(`Instructor: ${room.instructor_name}`);
       label.textContent = parts.join(' | ');
 
@@ -340,6 +374,7 @@
     const enrolledIds = await fetchEnrolledIds(user.id);
     availableClassrooms = await fetchAvailableClassrooms(enrolledIds);
     await resolveTeacherNames(availableClassrooms);
+    courseTitleMap = await fetchCourseTitles();
 
     renderAvailableClassrooms();
     buildOverlayList();

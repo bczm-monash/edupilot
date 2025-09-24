@@ -47,7 +47,7 @@
     const owner = document.createElement('div');
     owner.className = 'course-meta';
     const ownerName = course.owner_name || '';
-    if (ownerName) owner.textContent = `Owner: ${ownerName}`;
+    if (ownerName) owner.textContent = `Instructor: ${ownerName}`;
 
     const credit = document.createElement('div');
     credit.className = 'course-meta';

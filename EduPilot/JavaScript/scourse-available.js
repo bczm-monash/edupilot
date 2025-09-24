@@ -42,7 +42,7 @@
     const ownerDiv = document.createElement('div');
     ownerDiv.className = 'course-owner';
     const ownerName = (course.owner_name || '').trim();
-    ownerDiv.textContent = ownerName ? `Owner: ${ownerName}` : 'Owner: N/A';
+    ownerDiv.textContent = ownerName ? `Instructor: ${ownerName}` : 'Instructor: N/A';
 
     // Credit Point
     const creditDiv = document.createElement('div');
@@ -191,7 +191,7 @@
 
       const label = document.createElement('label');
       label.style.flex = '1';
-      const teacher = course.owner_name ? ` | Teacher: ${course.owner_name}` : '';
+      const teacher = course.owner_name ? ` | Instructor: ${course.owner_name}` : '';
       label.textContent = `${course.course_id} - ${course.course_title || 'Untitled course'}${teacher}`;
 
       row.appendChild(checkbox);

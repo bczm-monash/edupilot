@@ -107,7 +107,7 @@
 
     const owner = document.createElement('div');
     owner.className = 'lesson-meta';
-    if (lesson.owner_name) owner.textContent = `Owner: ${lesson.owner_name}`;
+    if (lesson.owner_name) owner.textContent = `Instructor: ${lesson.owner_name}`;
 
     const credit = document.createElement('div');
     credit.className = 'lesson-meta';

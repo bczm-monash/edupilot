@@ -231,7 +231,7 @@
       
       const classroomTitle = room.classroom_title || 'Untitled classroom';
       const teacherName = courseTeacherMap[room.course_id] || 'Unknown Teacher';
-      label.textContent = `${id} - ${classroomTitle} | Teacher: ${teacherName}`;
+      label.textContent = `${id} - ${classroomTitle} | Instructor: ${teacherName}`;
 
       row.appendChild(checkbox);
       row.appendChild(label);

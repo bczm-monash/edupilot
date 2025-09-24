@@ -282,7 +282,7 @@
 
       const label = document.createElement('label');
       label.style.flex = '1';
-      label.textContent = `${room.classroom_id} - ${room.classroom_title} | Teacher: ${room.instructor_name || 'Unknown'}`;
+      label.textContent = `${room.classroom_id} - ${room.classroom_title} | Instructor: ${room.instructor_name || 'Unknown'}`;
 
       row.appendChild(chk);
       row.appendChild(label);

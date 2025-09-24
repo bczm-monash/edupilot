@@ -29,7 +29,7 @@
     const owner = document.createElement('div');
     owner.className = 'course-meta';
     const teacherName = (course.owner_name || '').trim();
-    if (teacherName) owner.textContent = `Owner: ${teacherName}`;
+    if (teacherName) owner.textContent = `Instructor: ${teacherName}`;
 
     const credit = document.createElement('div');
     credit.className = 'course-meta';
@@ -211,7 +211,7 @@
 
       const label = document.createElement('label');
       label.style.flex = '1';
-      const teacher = course.owner_name ? ` | Teacher: ${course.owner_name}` : '';
+      const teacher = course.owner_name ? ` | Instructor: ${course.owner_name}` : '';
       label.textContent = `${id} - ${course.course_title || 'Untitled course'}${teacher}`;
 
       row.appendChild(checkbox);

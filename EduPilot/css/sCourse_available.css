@@ -191,3 +191,20 @@
   background-color: #26833a;
   transform: translateY(-1px);
 }
+
+.course-id {
+  font-size: 14px;
+  margin-bottom: 4px;
+}
+
+.course-owner {
+  font-size: 14px;
+  color: #333;
+  margin-bottom: 4px;
+}
+
+.course-credit {
+  font-size: 14px;
+  color: #333;
+  margin-bottom: 4px;
+}

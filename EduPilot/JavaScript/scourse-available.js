@@ -28,44 +28,51 @@
     li.tabIndex = 0;
     li.setAttribute('role', 'button');
 
-    const title = document.createElement('div');
-    title.className = 'course-title';
-    const idPart = course.course_id || '';
-    const titlePart = course.course_title || 'Untitled course';
-    title.textContent = idPart ? `${idPart} - ${titlePart}` : titlePart;
+    // ID
+    const idDiv = document.createElement('div');
+    idDiv.className = 'course-id';
+    idDiv.textContent = `ID: ${course.course_id || 'N/A'}`;
 
-    const credit = document.createElement('div');
-    credit.className = 'course-meta';
+    // Title
+    const titleDiv = document.createElement('div');
+    titleDiv.className = 'course-title';
+    titleDiv.textContent = `${course.course_title || 'Untitled course'}`;
+
+    // Owner
+    const ownerDiv = document.createElement('div');
+    ownerDiv.className = 'course-owner';
+    const ownerName = (course.owner_name || '').trim();
+    ownerDiv.textContent = ownerName ? `Owner: ${ownerName}` : 'Owner: N/A';
+
+    // Credit Point
+    const creditDiv = document.createElement('div');
+    creditDiv.className = 'course-credit';
     const creditVal = course.course_credit_points;
     if (creditVal !== undefined && creditVal !== null) {
-      const num = Number(creditVal);
-      credit.textContent = `Credit Points: ${Number.isFinite(num) ? num : creditVal}`;
-    }
-
-    const teacherMeta = document.createElement('div');
-    teacherMeta.className = 'course-meta';
-    const teacherName = (course.owner_name || '').trim();
-    if (teacherName) {
-      teacherMeta.textContent = `Teacher: ${teacherName}`;
+        const num = Number(creditVal);
+        creditDiv.textContent = `Credit Points: ${Number.isFinite(num) ? num : creditVal}`;
+    } else {
+        creditDiv.textContent = 'Credit Points: N/A';
     }
 
     const open = () => {
-      if (course.course_id) {
-        window.location.href = `/EduPilot/html/student/sCourse_content.html?id=${encodeURIComponent(course.course_id)}`;
-      }
+        if (course.course_id) {
+            window.location.href = `/EduPilot/html/student/sCourse_content.html?id=${encodeURIComponent(course.course_id)}`;
+        }
     };
 
     li.addEventListener('click', open);
     li.addEventListener('keypress', (event) => {
-      if (event.key === 'Enter' || event.key === ' ') {
-        event.preventDefault();
-        open();
-      }
+        if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault();
+            open();
+        }
     });
 
-    li.appendChild(title);
-    if (credit.textContent) li.appendChild(credit);
-    if (teacherMeta.textContent) li.appendChild(teacherMeta);
+    li.appendChild(idDiv);
+    li.appendChild(titleDiv);
+    li.appendChild(ownerDiv);
+    li.appendChild(creditDiv);
 
     return li;
   }

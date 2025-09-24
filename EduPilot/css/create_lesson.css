@@ -143,10 +143,113 @@
   cursor: pointer;
 }
 
+.btn-tertiary {
+  background-color: #6c757d;
+  color: #fff;
+  border: 1px solid #6c757d;
+  border-radius: 8px;
+  padding: 12px 18px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.btn-tertiary:hover {
+  background-color: #5a6268;
+  transform: translateY(-1px);
+}
+
 @media (max-width: 720px) {
   .form-grid {
     grid-template-columns: 1fr;
   }
+}
+
+/* Overlay styles for ownership change */
+.overlay-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.overlay-panel {
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  max-width: 500px;
+  width: 90%;
+  max-height: 80vh;
+  overflow-y: auto;
+  padding: 20px;
+}
+
+.overlay-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.overlay-title {
+  margin: 0;
+  font-size: 20px;
+  font-weight: bold;
+  color: #333;
+}
+
+.close-overlay-btn {
+  background: transparent;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: #666;
+  line-height: 1;
+}
+
+.close-overlay-btn:hover {
+  color: #333;
+}
+
+.overlay-body {
+  margin-top: 12px;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.overlay-body .muted {
+  color: #666;
+  font-style: italic;
+  text-align: center;
+  padding: 20px;
+}
+
+.list-row {
+  display: flex;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.list-row:last-child {
+  border-bottom: none;
+}
+
+.rowRadio {
+  margin-right: 12px;
+}
+
+.overlay-actions {
+  margin-top: 20px;
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
 }
 
 @media (max-width: 520px) {
@@ -156,7 +259,14 @@
   .form-actions {
     flex-direction: column;
   }
-  .btn-primary, .btn-secondary {
+  .btn-primary, .btn-secondary, .btn-tertiary {
     width: 100%;
+  }
+  .overlay-panel {
+    width: 95%;
+    padding: 16px;
+  }
+  .overlay-actions {
+    flex-direction: column;
   }
 }

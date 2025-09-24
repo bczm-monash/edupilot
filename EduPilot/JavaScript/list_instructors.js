@@ -154,6 +154,64 @@ async function deleteInstructorsFromDb(ids) {
   }
 }
 
+async function getCurrentAdminId() {
+  if (!supabaseClient) {
+    throw new Error('Supabase client not available.');
+  }
+
+  const { data: { user }, error } = await supabaseClient.auth.getUser();
+  if (error || !user) {
+    throw new Error('Admin not authenticated.');
+  }
+
+  return user.id;
+}
+
+async function transferCourseOwnership(instructorId, adminId) {
+  if (!supabaseClient) {
+    throw new Error('Supabase client not available.');
+  }
+
+  const { error } = await supabaseClient
+    .from('course')
+    .update({ users_id: adminId })
+    .eq('users_id', instructorId);
+
+  if (error) {
+    throw error;
+  }
+}
+
+async function transferClassroomOwnership(instructorId, adminId) {
+  if (!supabaseClient) {
+    throw new Error('Supabase client not available.');
+  }
+
+  const { error } = await supabaseClient
+    .from('classroom')
+    .update({ users_id: adminId })
+    .eq('users_id', instructorId);
+
+  if (error) {
+    throw error;
+  }
+}
+
+async function transferLessonOwnership(instructorId, adminId) {
+  if (!supabaseClient) {
+    throw new Error('Supabase client not available.');
+  }
+
+  const { error } = await supabaseClient
+    .from('lesson')
+    .update({ users_id: adminId })
+    .eq('users_id', instructorId);
+
+  if (error) {
+    throw error;
+  }
+}
+
 async function removeInstructor(id, { button } = {}) {
   if (!id) return;
   const index = instructors.findIndex(inst => inst.id === id);
@@ -166,6 +224,13 @@ async function removeInstructor(id, { button } = {}) {
   }
 
   try {
+    const adminId = await getCurrentAdminId();
+
+    // Transfer ownership before deletion
+    await transferCourseOwnership(id, adminId);
+    await transferClassroomOwnership(id, adminId);
+    await transferLessonOwnership(id, adminId);
+
     await deleteInstructorsFromDb([id]);
     instructors.splice(index, 1);
     renderInstructors();
@@ -254,6 +319,15 @@ deleteBtn?.addEventListener('click', async () => {
   deleteBtn.textContent = 'Deleting…';
 
   try {
+    const adminId = await getCurrentAdminId();
+
+    // Transfer ownership for all selected instructors before deletion
+    for (const instructorId of selectedIds) {
+      await transferCourseOwnership(instructorId, adminId);
+      await transferClassroomOwnership(instructorId, adminId);
+      await transferLessonOwnership(instructorId, adminId);
+    }
+
     await deleteInstructorsFromDb(selectedIds);
     instructors = instructors.filter(inst => !selectedIds.includes(inst.id));
     renderInstructors();

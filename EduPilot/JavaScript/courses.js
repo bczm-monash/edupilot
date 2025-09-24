@@ -36,11 +36,13 @@
     const content = document.createElement('div');
     content.className = 'card-content';
 
+    const metaId = document.createElement('div');
+    metaId.className = 'course-meta';
+    metaId.textContent = `ID: ${course.course_id || '-'}`;
+
     const title = document.createElement('div');
     title.className = 'course-title';
-    const idPart = course.course_id || '';
-    const titlePart = course.course_title || 'Untitled course';
-    title.textContent = idPart ? `${idPart} - ${titlePart}` : titlePart;
+    title.textContent = course.course_title || 'Untitled course';
 
     const owner = document.createElement('div');
     owner.className = 'course-meta';
@@ -52,6 +54,7 @@
     const creditVal = normaliseCredit(course);
     if (creditVal !== undefined) credit.textContent = `Credit Points: ${creditVal}`;
 
+    content.appendChild(metaId);
     content.appendChild(title);
     if (ownerName) content.appendChild(owner);
     if (credit.textContent) content.appendChild(credit);

@@ -11,6 +11,7 @@ body{
     background-color: gainsboro;
     margin: 0;
     padding: 0;
+    padding-top: 75px;
 }
 
 h1{
@@ -37,6 +38,9 @@ h1{
     height:75px;
     padding: 0px 0px;
     align-items: center;
+    position: fixed;
+    top: 0;
+    z-index: 1000;
 }
 
 .menu button{
@@ -76,10 +80,13 @@ img, video, svg {
 }
 
 @media (max-width: 900px) {
+  body {
+    padding-top: 150px;
+  }
   .navigationBar {
     flex-direction: column;
     align-items: stretch;
-    height: auto;
+    height: 150px;
     padding: 8px 0;
     gap: 8px;
   }
@@ -104,6 +111,12 @@ img, video, svg {
 }
 
 @media (max-width: 600px) {
+  body {
+    padding-top: 120px;
+  }
+  .navigationBar {
+    height: 120px;
+  }
   .menu button {
     min-width: 100px;
     height: 48px;

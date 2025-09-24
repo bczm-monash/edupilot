@@ -28,18 +28,11 @@
     li.tabIndex = 0;
     li.setAttribute('role', 'button');
 
-    const metaId = document.createElement('div');
-    metaId.className = 'course-meta';
-    metaId.textContent = `ID: ${course.course_id || '-'}`;
-
     const title = document.createElement('div');
     title.className = 'course-title';
-    title.textContent = course.course_title || 'Untitled course';
-
-    const owner = document.createElement('div');
-    owner.className = 'course-meta';
-    const teacherName = (course.owner_name || '').trim();
-    if (teacherName) owner.textContent = `Owner: ${teacherName}`;
+    const idPart = course.course_id || '';
+    const titlePart = course.course_title || 'Untitled course';
+    title.textContent = idPart ? `${idPart} - ${titlePart}` : titlePart;
 
     const credit = document.createElement('div');
     credit.className = 'course-meta';
@@ -47,6 +40,13 @@
     if (creditVal !== undefined && creditVal !== null) {
       const num = Number(creditVal);
       credit.textContent = `Credit Points: ${Number.isFinite(num) ? num : creditVal}`;
+    }
+
+    const teacherMeta = document.createElement('div');
+    teacherMeta.className = 'course-meta';
+    const teacherName = (course.owner_name || '').trim();
+    if (teacherName) {
+      teacherMeta.textContent = `Teacher: ${teacherName}`;
     }
 
     const open = () => {

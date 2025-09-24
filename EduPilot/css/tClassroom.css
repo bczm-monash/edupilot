@@ -109,7 +109,7 @@
 .classroom-list {
   list-style: none;
   margin: 0;
-  padding: 12px;
+  padding: 35px 12px 12px 12px;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 16px;

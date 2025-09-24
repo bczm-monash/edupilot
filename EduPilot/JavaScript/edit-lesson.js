@@ -68,6 +68,108 @@
     return Number.isNaN(n) ? null : n;
   }
 
+  // Ownership change functionality
+  let instructors = [];
+  let selectedOwnerId = null;
+
+  async function fetchInstructors() {
+    if (!window.supabase) throw new Error('Supabase not available.');
+    const { data: users, error } = await window.supabase
+      .from('users')
+      .select('users_id, users_title, users_fname, users_lname, users_email, users_role')
+      .order('users_fname', { ascending: true });
+
+    if (error) throw error;
+
+    return (users || [])
+      .filter(user => {
+        const role = (user?.users_role || '').toLowerCase();
+        return role === 'teacher' || role === 'instructor';
+      })
+      .map(user => ({
+        id: user.users_id,
+        name: [user.users_title, user.users_fname, user.users_lname]
+          .filter(Boolean)
+          .join(' '),
+        email: user.users_email || '',
+      }));
+  }
+
+  function renderOwnershipOverlay() {
+    const overlayBody = document.getElementById('ownershipOverlayBody');
+    if (!overlayBody) return;
+
+    overlayBody.innerHTML = '';
+
+    if (!instructors.length) {
+      overlayBody.innerHTML = '<div class="muted">No instructors available.</div>';
+      return;
+    }
+
+    const fragment = document.createDocumentFragment();
+    instructors.forEach(inst => {
+      const row = document.createElement('div');
+      row.className = 'list-row';
+
+      const radio = document.createElement('input');
+      radio.type = 'radio';
+      radio.name = 'ownerSelection';
+      radio.value = inst.id;
+      radio.className = 'rowRadio';
+
+      const label = document.createElement('span');
+      label.textContent = `${inst.name} (${inst.email})`;
+
+      row.appendChild(radio);
+      row.appendChild(label);
+      fragment.appendChild(row);
+    });
+
+    overlayBody.appendChild(fragment);
+  }
+
+  function showOwnershipOverlay() {
+    const overlay = document.getElementById('ownershipOverlay');
+    if (overlay) {
+      overlay.style.display = 'flex';
+      renderOwnershipOverlay();
+    }
+  }
+
+  function hideOwnershipOverlay() {
+    const overlay = document.getElementById('ownershipOverlay');
+    if (overlay) {
+      overlay.style.display = 'none';
+    }
+  }
+
+  async function applyOwnershipChange(lessonId) {
+    if (!selectedOwnerId) {
+      alert('Please select an owner.');
+      return;
+    }
+
+    if (!window.supabase) {
+      alert('Supabase not initialized.');
+      return;
+    }
+
+    try {
+      const { error } = await window.supabase
+        .from('lesson')
+        .update({ users_id: selectedOwnerId })
+        .eq('lesson_id', lessonId);
+
+      if (error) throw error;
+
+      alert('Ownership updated successfully.');
+      hideOwnershipOverlay();
+    } catch (error) {
+      console.error('Failed to update ownership:', error);
+      alert('Failed to update ownership.');
+    }
+  }
+
   async function load() {
     function nowIsoUtcPlus8() {
       const now = new Date();
@@ -117,6 +219,13 @@
       }
 
       await loadPrerequisites(idVal, data.lesson_prereq ?? '');
+
+      // Fetch instructors for ownership change
+      try {
+        instructors = await fetchInstructors();
+      } catch (error) {
+        console.error('Failed to fetch instructors:', error);
+      }
 
       if (form) {
         form.addEventListener('submit', async (e) => {
@@ -171,6 +280,30 @@
           }
         });
       }
+
+      // Ownership change event listeners
+      const changeOwnershipBtn = document.getElementById('changeOwnershipBtn');
+      const closeOwnershipOverlayBtn = document.getElementById('closeOwnershipOverlay');
+      const cancelOwnershipSelectionBtn = document.getElementById('cancelOwnershipSelection');
+      const applyOwnershipSelectionBtn = document.getElementById('applyOwnershipSelection');
+
+      changeOwnershipBtn?.addEventListener('click', () => {
+        selectedOwnerId = null;
+        showOwnershipOverlay();
+      });
+
+      closeOwnershipOverlayBtn?.addEventListener('click', hideOwnershipOverlay);
+      cancelOwnershipSelectionBtn?.addEventListener('click', hideOwnershipOverlay);
+
+      applyOwnershipSelectionBtn?.addEventListener('click', async () => {
+        const selectedRadio = document.querySelector('input[name="ownerSelection"]:checked');
+        if (selectedRadio) {
+          selectedOwnerId = selectedRadio.value;
+          await applyOwnershipChange(idVal);
+        } else {
+          alert('Please select an owner.');
+        }
+      });
     } catch (e) {
       console.error('Unexpected error loading lesson:', e);
       alert('Unexpected error loading lesson.');

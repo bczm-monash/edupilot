@@ -81,8 +81,25 @@
         <div class="form-actions">
           <button type="submit" class="btn-primary">Update Lesson</button>
           <button type="button" class="btn-secondary" onclick="history.back()">Cancel</button>
+          <button type="button" id="changeOwnershipBtn" class="btn-tertiary">Change Ownership</button>
         </div>
       </form>
+    </div>
+  </div>
+
+  <div id="ownershipOverlay" class="overlay-backdrop" role="dialog" aria-modal="true" aria-labelledby="ownershipOverlayTitle">
+    <div class="overlay-panel">
+      <div class="overlay-header">
+        <h4 id="ownershipOverlayTitle" class="overlay-title">Select New Owner</h4>
+        <button type="button" id="closeOwnershipOverlay" class="close-overlay-btn" aria-label="Close">&times;</button>
+      </div>
+      <div id="ownershipOverlayBody" class="overlay-body">
+        <div class="muted">Loading instructors...</div>
+      </div>
+      <div class="overlay-actions">
+        <button type="button" id="applyOwnershipSelection" class="btn-primary">Apply</button>
+        <button type="button" id="cancelOwnershipSelection" class="btn-secondary">Cancel</button>
+      </div>
     </div>
   </div>
   <script src="/EduPilot/JavaScript/admin-nav.js"></script>

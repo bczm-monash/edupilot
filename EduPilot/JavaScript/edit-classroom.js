@@ -174,13 +174,27 @@
     }
   }
 
-  async function applyOwnershipChange(client, classroomId) {
+  async function applyOwnershipChange(client, classroomId, userId) {
     if (!selectedOwnerId) {
       alert('Please select an owner.');
       return;
     }
 
     try {
+      // Check if current user is the owner
+      const { data: classroom, error: fetchError } = await client
+        .from('classroom')
+        .select('users_id')
+        .eq('classroom_id', classroomId)
+        .maybeSingle();
+
+      if (fetchError) throw fetchError;
+      if (!classroom) throw new Error('Classroom not found');
+      if (classroom.users_id !== userId) {
+        alert('Only the current owner can transfer ownership.');
+        return;
+      }
+
       const { error } = await client
         .from('classroom')
         .update({ users_id: selectedOwnerId })
@@ -348,7 +362,6 @@
         course_id,
         classroom_start_date,
         classroom_end_date,
-        users_id: user.id,
       };
 
       const lessonSetInitial = new Set(initialLessonIds);
@@ -438,7 +451,12 @@
       selectedOwnerId = selectedRadio.value;
       const classroomId = getClassroomId();
       const client = await ensureSupabase();
-      await applyOwnershipChange(client, classroomId);
+      const { user } = await ensureAuth(client);
+      if (!user) {
+        alert('Please log in first.');
+        return;
+      }
+      await applyOwnershipChange(client, classroomId, user.id);
     } else {
       alert('Please select an owner.');
     }

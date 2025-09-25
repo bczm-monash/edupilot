@@ -143,7 +143,7 @@
     }
   }
 
-  async function applyOwnershipChange(lessonId) {
+  async function applyOwnershipChange(lessonId, userId) {
     if (!selectedOwnerId) {
       alert('Please select an owner.');
       return;
@@ -155,6 +155,20 @@
     }
 
     try {
+      // Check if current user is the owner
+      const { data: lesson, error: fetchError } = await window.supabase
+        .from('lesson')
+        .select('users_id')
+        .eq('lesson_id', lessonId)
+        .maybeSingle();
+
+      if (fetchError) throw fetchError;
+      if (!lesson) throw new Error('Lesson not found');
+      if (lesson.users_id !== userId) {
+        alert('Only the current owner can transfer ownership.');
+        return;
+      }
+
       const { error } = await window.supabase
         .from('lesson')
         .update({ users_id: selectedOwnerId })
@@ -299,7 +313,12 @@
         const selectedRadio = document.querySelector('input[name="ownerSelection"]:checked');
         if (selectedRadio) {
           selectedOwnerId = selectedRadio.value;
-          await applyOwnershipChange(idVal);
+          const { user } = await ensureAuth();
+          if (!user) {
+            alert('Please log in first.');
+            return;
+          }
+          await applyOwnershipChange(idVal, user.id);
         } else {
           alert('Please select an owner.');
         }

@@ -212,19 +212,75 @@ async function transferLessonOwnership(instructorId, adminId) {
   }
 }
 
+async function getInstructorCourses(instructorId) {
+  const { data, error } = await supabaseClient
+    .from('course')
+    .select('course_title')
+    .eq('users_id', instructorId);
+
+  if (error) throw error;
+  return data || [];
+}
+
+async function getInstructorLessons(instructorId) {
+  const { data, error } = await supabaseClient
+    .from('lesson')
+    .select('lesson_title')
+    .eq('users_id', instructorId);
+
+  if (error) throw error;
+  return data || [];
+}
+
+async function getInstructorClassrooms(instructorId) {
+  const { data, error } = await supabaseClient
+    .from('classroom')
+    .select('classroom_title')
+    .eq('users_id', instructorId);
+
+  if (error) throw error;
+  return data || [];
+}
+
+async function getCurrentUserName() {
+  const { data: { user }, error } = await supabaseClient.auth.getUser();
+  if (error || !user) throw error;
+
+  const { data, error: err } = await supabaseClient
+    .from('users')
+    .select('users_fname, users_lname')
+    .eq('users_id', user.id)
+    .single();
+
+  if (err) throw err;
+  return `${data.users_fname} ${data.users_lname}`;
+}
+
 async function removeInstructor(id, { button } = {}) {
   if (!id) return;
   const index = instructors.findIndex(inst => inst.id === id);
   if (index === -1) return;
 
-  const originalLabel = button?.textContent;
-  if (button) {
-    button.disabled = true;
-    button.textContent = 'Removing…';
-  }
-
   try {
     const adminId = await getCurrentAdminId();
+    const username = await getCurrentUserName();
+    const courses = await getInstructorCourses(id);
+    const lessons = await getInstructorLessons(id);
+    const classrooms = await getInstructorClassrooms(id);
+
+    const courseList = courses.map(c => c.course_title).join(', ') || 'None';
+    const lessonList = lessons.map(l => l.lesson_title).join(', ') || 'None';
+    const classroomList = classrooms.map(cl => cl.classroom_title).join(', ') || 'None';
+
+    const message = `Are you sure you want to remove this instructor?\n\nCourses: ${courseList}\nLessons: ${lessonList}\nClassrooms: ${classroomList}\n\nOwnership of these will be transferred to ${username}.`;
+
+    if (!confirm(message)) return;
+
+    const originalLabel = button?.textContent;
+    if (button) {
+      button.disabled = true;
+      button.textContent = 'Removing…';
+    }
 
     // Transfer ownership before deletion
     await transferCourseOwnership(id, adminId);
@@ -240,7 +296,7 @@ async function removeInstructor(id, { button } = {}) {
     alert('Failed to delete instructor. Please try again.');
     if (button) {
       button.disabled = false;
-      button.textContent = originalLabel;
+      button.textContent = button?.dataset?.originalLabel || 'Remove';
     }
   }
 }
@@ -314,12 +370,30 @@ deleteBtn?.addEventListener('click', async () => {
     return;
   }
 
-  const originalText = deleteBtn.textContent;
-  deleteBtn.disabled = true;
-  deleteBtn.textContent = 'Deleting…';
-
   try {
     const adminId = await getCurrentAdminId();
+    const username = await getCurrentUserName();
+
+    let totalCourses = 0;
+    let totalLessons = 0;
+    let totalClassrooms = 0;
+
+    for (const id of selectedIds) {
+      const courses = await getInstructorCourses(id);
+      const lessons = await getInstructorLessons(id);
+      const classrooms = await getInstructorClassrooms(id);
+      totalCourses += courses.length;
+      totalLessons += lessons.length;
+      totalClassrooms += classrooms.length;
+    }
+
+    const message = `Are you sure you want to remove ${selectedIds.length} instructor(s)?\n\nTotal Courses: ${totalCourses}\nTotal Lessons: ${totalLessons}\nTotal Classrooms: ${totalClassrooms}\n\nOwnership of these will be transferred to ${username}.`;
+
+    if (!confirm(message)) return;
+
+    const originalText = deleteBtn.textContent;
+    deleteBtn.disabled = true;
+    deleteBtn.textContent = 'Deleting…';
 
     // Transfer ownership for all selected instructors before deletion
     for (const instructorId of selectedIds) {
@@ -341,7 +415,7 @@ deleteBtn?.addEventListener('click', async () => {
     alert('Failed to delete selected instructors. Please try again.');
   } finally {
     deleteBtn.disabled = false;
-    deleteBtn.textContent = originalText;
+    deleteBtn.textContent = deleteBtn?.dataset?.originalText || 'Delete Selected';
   }
 });
 

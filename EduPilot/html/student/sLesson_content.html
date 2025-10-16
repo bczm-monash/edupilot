@@ -25,6 +25,7 @@
 
   <div class="back-bar">
     <button class="back-btn" id="backBtn">← Back</button>
+    <button class="done-btn" id="doneBtn">Mark as Done</button>
   </div>
 
   <div class="lesson-header" id="lessonHeader">Lesson</div>
@@ -63,5 +64,15 @@
   </div>
 
   <script src="/EduPilot/JavaScript/sLesson-content.js"></script>
+  <script>
+  const doneBtn = document.querySelector('.done-btn');
+
+  doneBtn.addEventListener('click', () => {
+    doneBtn.classList.toggle('done');
+    doneBtn.textContent = doneBtn.classList.contains('done')
+    ? 'Done'
+    : 'Mark as Done';
+  });
+  </script>
 </body>
 </html>

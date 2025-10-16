@@ -11,6 +11,7 @@ body{
     background-color: gainsboro;
     margin: 0;
     padding: 0;
+    padding-top: 75px;
 }
 
 h1{
@@ -37,6 +38,9 @@ h1{
     height:75px;
     padding: 0px 0px;
     align-items: center;
+    position: fixed;
+    top: 0;
+    z-index: 1000;
 }
 
 .menu button{
@@ -53,13 +57,10 @@ h1{
     text-align: center;
 }
 
-/*  */
 
 .menu button:hover {
-    background-color: #222; /* hover effect */
+    background-color: #222;
 }
-
-/* font-family covered globally above */
 
 
 .site-title {
@@ -72,20 +73,20 @@ nav {
     margin: 20px 0;
 }
 
-/* Lesson-specific and form-specific styles moved to lesson.css and create_lesson.css */
 
-/* Global responsive media + utilities */
 img, video, svg {
   max-width: 100%;
   height: auto;
 }
 
-/* Responsive navigation */
 @media (max-width: 900px) {
+  body {
+    padding-top: 150px;
+  }
   .navigationBar {
     flex-direction: column;
     align-items: stretch;
-    height: auto;
+    height: 150px;
     padding: 8px 0;
     gap: 8px;
   }
@@ -110,6 +111,12 @@ img, video, svg {
 }
 
 @media (max-width: 600px) {
+  body {
+    padding-top: 120px;
+  }
+  .navigationBar {
+    height: 120px;
+  }
   .menu button {
     min-width: 100px;
     height: 48px;
@@ -122,4 +129,99 @@ img, video, svg {
   .logo h1 {
     font-size: 28px;
   }
+}
+
+.admin-dashboard {
+  padding: 48px 32px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.admin-dashboard h2 {
+  margin: 0 0 16px;
+  font-size: 20px;
+  color: #1a1a1a;
+}
+
+.admin-dashboard p.page-subtitle {
+  margin: 0 0 32px;
+  font-size: 14px;
+  color: #4a4a4a;
+}
+
+.secondary-btn {
+  background-color: #f0f0f0;
+  color: #333;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 10px 14px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.secondary-btn:hover {
+  background-color: #e2e2e2;
+}
+
+.admin-back {
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: 24px;
+}
+
+.card-grid {
+  display: grid;
+  gap: 16px;
+  padding: 12px 0;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+}
+
+.admin-card {
+  background: #ffffff;
+  border: 1px solid #0d0d0d;
+  border-radius: 8px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-height: 110px;
+  cursor: pointer;
+  transition: transform 0.12s ease, box-shadow 0.12s ease, border-color 0.12s ease;
+}
+
+.admin-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+  border-color: #0a26c6;
+}
+
+.admin-card h3 {
+  margin: 0;
+  font-size: 20px;
+  color: #0f172a;
+}
+
+.admin-card p {
+  color: #475569;
+  line-height: 1.4;
+  font-size: 14px;
+}
+
+@media (max-width: 768px) {
+  .admin-dashboard {
+    padding: 32px 20px;
+  }
+
+  .admin-dashboard h2 {
+    font-size: 30px;
+  }
+
+  .admin-card {
+    padding: 8px;
+    min-height: 100px;
+  }
+}
+
+.report-placeholder {
+  max-width: 560px;
 }

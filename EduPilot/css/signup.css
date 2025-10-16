@@ -9,7 +9,6 @@ textarea {
 
 body{
     background-color: gainsboro;
-    /* Allow page to scroll on small screens */
     overflow: auto;
 }
 

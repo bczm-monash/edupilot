@@ -1,9 +1,10 @@
+#CourseList,
 #courseList {
   list-style: none;
   margin: 0;
   padding: 12px;
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 16px;
 }
 
@@ -11,7 +12,7 @@
   background-color: #ffffff;
   border: 1px solid #000000;
   border-radius: 8px;
-  padding: 16px;
+  padding: 18px;
   display: flex;
   flex-direction: column;
   min-height: 120px;
@@ -19,27 +20,164 @@
   transition: transform 0.12s ease, box-shadow 0.12s ease;
 }
 
+.course-title {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.course-meta {
+  font-size: 14px;
+  color: #333;
+  margin-bottom: 4px;
+}
+
+.course-desc {
+  margin-top: 8px;
+  font-size: 14px;
+  color: #444;
+  line-height: 1.4;
+}
+
+@media (max-width: 1200px) {
+  #CourseList,
+  #courseList {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 900px) {
+  #CourseList,
+  #courseList {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 600px) {
+  #CourseList,
+  #courseList {
+    grid-template-columns: 1fr;
+  }
+}
+
 .course-card:hover {
   transform: translateY(-2px);
   box-shadow: 0 2px 6px rgba(0,0,0,0.1);
 }
 
-.course-btn {
-  flex: 1;
-  width: 100%;
-  padding: 15px;
-  font-size: 18px;
-  font-weight: bold;
-  background-color: #0a26c6;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  margin-bottom: 10px;
-  transition: background-color 0.3s ease, transform 0.2s ease;
+.toolbar { 
+  margin: 12px; 
+  display: flex; 
+  gap: 8px; 
+  justify-content: flex-end; 
 }
 
-.course-btn:hover {
+.course-action-btn {
+  display: inline-block;
+  padding: 8px 16px;
+  font-size: 20px;
+  font-weight: bold;
+  color: white;
   background-color:#0a26c6;
-  transform: scale(1.02);
+  text-decoration: none;
+  border-radius: 8px;
+  transition: background-color 0.3s ease;
+}
+.course-action-btn:hover {
+  background-color: #3a5f88;
+}
+
+.course-action-btn.unenroll {
+  background-color: #d9534f;
+  border: none;
+}
+
+.course-action-btn.unenroll:hover {
+  background-color: #c23c33;
+}
+
+.overlay-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+.overlay-panel {
+  background: #fff;
+  width: min(700px, 92vw);
+  max-height: 80vh;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+}
+.overlay-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.overlay-title {
+  margin: 0;
+  font-size: 20px;
+}
+
+.overlay-select-all {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  color: #333;
+}
+
+.overlay-body {
+  margin-top: 12px;
+  overflow: auto;
+  border: 1px solid #eee;
+  border-radius: 8px;
+  padding: 8px;
+}
+
+.overlay-actions {
+  margin-top: 12px;
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.list-row { 
+  display: flex; 
+  align-items: center; 
+  gap: 8px; 
+  padding: 8px; 
+  border-bottom: 1px solid #f2f2f2; 
+}
+.list-row:last-child {
+  border-bottom: 0;
+}
+
+.green-btn { 
+  background-color: green; 
+  color: #fff; 
+  border: none; 
+  border-radius: 8px; 
+  padding: 10px 14px; 
+  font-weight: bold; 
+  cursor: pointer; 
+}
+.green-btn:hover {
+  background-color: darkgreen;
+}
+
+.secondary-btn { 
+  background-color: #f0f0f0; 
+  color: #333; 
+  border: 1px solid #ddd; 
+  border-radius: 8px; 
+  padding: 10px 14px; 
+  cursor: pointer; 
 }

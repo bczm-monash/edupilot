@@ -1,0 +1,166 @@
+.classroom-action-btn {
+  display: inline-block;
+  padding: 8px 16px;
+  font-size: 20px;
+  font-weight: bold;
+  color: white;
+  background-color:#0a26c6;
+  text-decoration: none;
+  border-radius: 8px;
+  transition: background-color 0.3s ease;
+}
+.classroom-action-btn:hover {
+  background-color: #3a5f88;
+}
+
+.classroom-action-btn.unenroll {
+  background-color: #d9534f;
+  border: none;
+}
+
+.classroom-action-btn.unenroll:hover {
+  background-color: #c23c33;
+}
+#classroomList,
+.classroom-list {
+  list-style: none;
+  margin: 0;
+  padding: 12px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+
+.classroom-card {
+  background-color: #ffffff;
+  border: 1px solid #000000;
+  border-radius: 8px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  min-height: 120px;
+  cursor: pointer;
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+
+.classroom-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.card-content {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  height: 100%;
+}
+
+.classroom-title {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.classroom-meta {
+  font-size: 14px;
+  color: #333;
+}
+
+.toolbar { 
+  margin: 12px; 
+  display: flex; 
+  gap: 8px; 
+  justify-content: flex-end; 
+}
+
+.enroll-classroom-btn {
+  display: inline-block;
+  padding: 8px 16px;
+  font-size: 20px;
+  font-weight: bold;
+  color: white;
+  background-color:#0a26c6;
+  text-decoration: none;
+  border-radius: 8px;
+  transition: background-color 0.3s ease;
+}
+.enroll-classroom-btn:hover {
+  background-color: #3a5f88;
+}
+
+.overlay-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+.overlay-panel {
+  background: #fff;
+  width: min(700px, 92vw);
+  max-height: 80vh;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+}
+.overlay-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.overlay-title {
+  margin: 0;
+  font-size: 20px;
+}
+
+.overlay-body {
+  margin-top: 12px;
+  overflow: auto;
+  border: 1px solid #eee;
+  border-radius: 8px;
+  padding: 8px;
+}
+
+.overlay-actions {
+  margin-top: 12px;
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.list-row { 
+  display: flex; 
+  align-items: center; 
+  gap: 8px; 
+  padding: 8px; 
+  border-bottom: 1px solid #f2f2f2; 
+}
+.list-row:last-child {
+  border-bottom: 0;
+}
+
+.green-btn { 
+  background-color: green; 
+  color: #fff; 
+  border: none; 
+  border-radius: 8px; 
+  padding: 10px 14px; 
+  font-weight: bold; 
+  cursor: pointer; 
+}
+.green-btn:hover {
+  background-color: darkgreen;
+}
+
+.secondary-btn { 
+  background-color: #f0f0f0; 
+  color: #333; 
+  border: 1px solid #ddd; 
+  border-radius: 8px; 
+  padding: 10px 14px; 
+  cursor: pointer; 
+}

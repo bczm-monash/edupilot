@@ -3,10 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Teacher's Course</title>
+    <title>Course (Teacher) - EduPilot</title>
     <link rel="stylesheet" href="../../css/page.css">
     <link rel="stylesheet" href="../../css/tCourse.css">
     <script src="/EduPilot/JavaScript/redirect.js"></script>
+    <script type="module" src="/EduPilot/JavaScript/supabase-init.js"></script>
 </head>
 <body>
 
@@ -16,15 +17,16 @@
             <h1>EduPilot</h1>
         </span>
         <div class="menu">
+            <button onclick="toTStudents()">Students</button>
             <button onclick="toLesson()">Lesson</button>
             <button onclick="toTCourse()">Course</button>
-            <button>Classroom</button>
+            <button onclick="toTClassroom()">Classroom</button>
             <button onclick="toLogin()">Log Out</button>
         </div>
     </div>
-     <div class="toolbar">
-        <a href="#" onclick="toCreateCourse()" class="add-course-btn" aria-label="Create Course">+</a>
-        <button type="button" id="editToggle" onclick="toEditCourse()" class="edit-course-btn">Edit</button>
+    <div class="toolbar">
+        <a href="create_tCourse.html" class="add-course-btn" aria-label="Create Course">+</a>
+        <button type="button" id="editToggle" class="edit-course-btn">Edit</button>
     </div>
 
     <h3 style="margin-left: 12px; font-size: 35px;">Course</h3>
@@ -40,7 +42,7 @@
                 </label>
             </div>
             <div id="overlayBody" class="overlay-body">
-                <div class="muted">Loading courses…</div>
+                <div class="muted">Loading courses...</div>
             </div>
             <div class="overlay-actions">
                 <button type="button" id="deleteSelected" class="danger-btn">Delete Selected</button>
@@ -50,18 +52,14 @@
     </div>
 
     <script src="/EduPilot/JavaScript/courses.js"></script>
+    <script src="/EduPilot/JavaScript/admin-nav.js"></script>
     <script>
-    function toEditCourse() {
-        document.getElementById("editOverlay").style.display = "flex";
-    }
-
-    document.getElementById("closeOverlay").addEventListener("click", () => {
-        document.getElementById("editOverlay").style.display = "none";
-    });
-
-    function toCreateCourse() {
-    window.location.href = "create_tCourse.html";
-    }
+        document.addEventListener('DOMContentLoaded', function() {
+            const studentsButton = document.querySelector('button[onclick="toTStudents()"]');
+            if (studentsButton && isAdminModeActive()) {
+                studentsButton.style.display = 'none';
+            }
+        });
     </script>
 </body>
 </html>

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Create Course</title>
+    <title>Create Course - EduPilot </title>
     <link rel="stylesheet" href="../../css/page.css" />
     <link rel="stylesheet" href="../../css/create_course.css" />
     <script type="module" src="/EduPilot/JavaScript/supabase-init.js"></script>
@@ -20,7 +20,7 @@
       <div class="menu">
         <button onclick="toLesson()">Lesson</button>
         <button onclick="toTCourse()">Course</button>
-        <button>Classroom</button>
+        <button onclick="toTClassroom()">Classroom</button>
         <button onclick="toLogin()">Log Out</button>
       </div>
     </div>
@@ -33,41 +33,68 @@
         <form id="createCourseForm">
           <div class="form-grid">
             <div class="form-group">
-              <label for="lessonId">Course ID</label>
-              <input type="text" id="lessonId" name="lessonId" placeholder="Course ID" required />
+              <label for="courseId">Course ID</label>
+              <input type="text" id="courseId" name="courseId" placeholder="Course ID" required />
             </div>
 
             <div class="form-group">
-              <label for="title">Title</label>
-              <input type="text" id="title" name="title" placeholder="What is this course?" required />
+              <label for="courseTitle">Title</label>
+              <input type="text" id="courseTitle" name="courseTitle" placeholder="What is this course?" required />
             </div>
 
             <div class="form-group full-width">
-              <label for="description">Description</label>
-              <textarea id="description" name="description" placeholder="What is the course about?" required></textarea>
+              <label for="courseDescription">Description</label>
+              <textarea id="courseDescription" name="courseDescription" placeholder="What is the course about?" required></textarea>
+            </div>
+
+            <div class="form-group full-width">
+              <label for="selectedLessonsDisplay">Lessons</label>
+              <div class="selected-lessons-row">
+                <textarea id="selectedLessonsDisplay" placeholder="No lessons selected" readonly></textarea>
+                <button type="button" id="openLessonOverlay" class="btn-tertiary">Add Lessons</button>
+              </div>
+              <input type="hidden" id="courseLessons" name="courseLessons" />
+              <input type="hidden" id="courseTotalCreditPoints" name="courseTotalCreditPoints" />
             </div>
 
             <div class="form-group">
-              <label for="status">Status</label>
-              <select id = "status" name = "status" required>
-                    <option value ="" disabled selected>--Select course's status--</option>
-                    <option value = "Student">Publish</option>
-                    <option value = "Teacher">Draft</option>
-                    <option value = "Teacher">Archive</option>
+              <label for="courseStatus">Status</label>
+              <select id="courseStatus" name="courseStatus" required>
+                    <option value="" disabled selected>--Select course's status--</option>
+                    <option value="draft">Draft</option>
+                    <option value="published">Publish</option>
+                    <option value="archived">Archive</option>
               </select>
             </div>
 
             <div class="form-group">
-              <label for="initialCreditPoints">Credit Points</label>
-              <input type="number" id="initialCreditPoints" name="creditPoints" min="0" step="1" value="0" readonly/>
+              <label for="courseCreditPoints">Credit Points</label>
+              <input type="number" id="courseCreditPoints" name="courseCreditPoints" min="0" step="1" value="0" readonly />
             </div>
 
           <div class="form-actions">
             <button type="submit" class="btn-primary">Create Course</button>
-            <button type="button" class="btn-secondary" onclick="">Cancel</button>
+            <button type="button" class="btn-secondary" onclick="toTCourse()">Cancel</button>
           </div>
         </form>
       </div>
     </div>
+
+    <div id="lessonOverlay" class="overlay-backdrop" role="dialog" aria-modal="true" aria-labelledby="lessonOverlayTitle">
+      <div class="overlay-panel">
+        <div class="overlay-header">
+          <h4 id="lessonOverlayTitle" class="overlay-title">Add Lessons</h4>
+          <button type="button" id="closeLessonOverlay" class="close-overlay-btn" aria-label="Close">&times;</button>
+        </div>
+        <div id="lessonOverlayBody" class="overlay-body">
+          <div class="muted">Loading lessons...</div>
+        </div>
+        <div class="overlay-actions">
+          <button type="button" id="applyLessonSelection" class="btn-primary">Add Selected</button>
+          <button type="button" id="cancelLessonSelection" class="btn-secondary">Cancel</button>
+        </div>
+      </div>
+    </div>
+    <script src="/EduPilot/JavaScript/admin-nav.js"></script>
   </body>
   </html>

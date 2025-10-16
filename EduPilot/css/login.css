@@ -77,6 +77,24 @@ button{
 
 }
 
+.remember-me {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    margin-bottom: 20px;
+    font-size: 14px;
+    color: grey;
+}
+
+.remember-me input[type="checkbox"] {
+    margin-right: 8px;
+    transform: scale(1.2);
+}
+
+.remember-me label {
+    cursor: pointer;
+}
+
 @media (max-width: 480px) {
   body {
     padding: 12px;

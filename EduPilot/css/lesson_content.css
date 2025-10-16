@@ -1,5 +1,5 @@
 .back-bar {
-  margin: 12px;
+  margin: 30px;
 }
 
 .back-btn {
@@ -13,7 +13,7 @@
 
 .lesson-header {
   margin: 12px;
-  font-size: 36px;
+  font-size: 30px;
   font-weight: bold;
   text-align: center; /* aligned the header */
 }
@@ -66,9 +66,9 @@
   margin: 0;
   color: #333;
   line-height: 1.5;
+  white-space: pre-wrap;
 }
 
-/* Ensure details list typography and spacing feel consistent */
 .details-list {
   margin-top: 0;
 }

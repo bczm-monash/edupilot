@@ -17,7 +17,40 @@
   // Sections
   const descEl = document.getElementById('lessonDesc');
   const objEl = document.getElementById('lessonObjective');
+  const readingCard = document.getElementById('readingCard');
+  const assignmentCard = document.getElementById('assignmentCard');
+  const readingEl = document.getElementById('lessonReading');
+  const assignmentEl = document.getElementById('lessonAssignment');
   const editBtn = document.getElementById('editBtn');
+  const backBtn = document.getElementById('backBtn');
+
+  const referrer = document.referrer || '';
+  const editPagePattern = /\/edit[^/]*\.html/i;
+  let backDestination = '';
+
+  if (referrer && !editPagePattern.test(referrer)) {
+    try {
+      const url = new URL(referrer, window.location.href);
+      if (url.origin === window.location.origin) {
+        const samePage = url.pathname === window.location.pathname && url.search === window.location.search;
+        if (!samePage) backDestination = url.href;
+      }
+    } catch (err) {
+      console.warn('Unable to parse referrer for back navigation:', err);
+    }
+  }
+
+  if (backBtn) {
+    backBtn.addEventListener('click', () => {
+      if (backDestination) {
+        window.location.href = backDestination;
+      } else if (typeof toLesson === 'function') {
+        toLesson();
+      } else {
+        window.location.href = '/EduPilot/html/teacher/lessons.html';
+      }
+    });
+  }
 
   function getQueryId() {
     const p = new URLSearchParams(window.location.search);
@@ -49,7 +82,7 @@
     return res;
   }
 
-  async function resolveCreator(users_id) {
+  async function Creator(users_id) {
     if (!users_id || !window.supabase) return '';
     const { data, error } = await window.supabase
       .from('users')
@@ -67,6 +100,18 @@
     } else {
       valEl.textContent = String(value);
       rowEl.style.display = '';
+    }
+  }
+
+  function setSection(cardEl, textEl, value) {
+    if (!cardEl || !textEl) return;
+    const str = value === null || value === undefined ? '' : String(value);
+    if (str.trim() === '') {
+      cardEl.style.display = 'none';
+      textEl.textContent = '';
+    } else {
+      textEl.textContent = str;
+      cardEl.style.display = '';
     }
   }
 
@@ -111,10 +156,10 @@
       const modified = data?.lesson_modified ? fmtDate(data?.lesson_modified) : '';
       const created = data?.lesson_date_created ? fmtDate(data?.lesson_date_created) : '';
 
-      // Resolve creator name
-      const creatorName = await resolveCreator(data?.users_id || data?.user_id);
+      // creator name
+      const creatorName = await Creator(data?.users_id || data?.user_id);
 
-      // Resolve prerequisite display as "id - title"
+      // prerequisite display as "id - title"
       if (prereq !== '' && prereq !== null && prereq !== undefined && window.supabase) {
         try {
           const { data: pre, error: preErr } = await window.supabase
@@ -143,6 +188,8 @@
       // Sections
       if (descEl) descEl.textContent = data?.lesson_desc || '';
       if (objEl) objEl.textContent = data?.lesson_objective || '';
+      setSection(readingCard, readingEl, data?.lesson_reading_list);
+      setSection(assignmentCard, assignmentEl, data?.lesson_assignment_list);
     } catch (e) {
       console.error('Unexpected error', e);
       setHeader(queryId, 'Lesson');

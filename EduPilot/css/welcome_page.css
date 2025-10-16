@@ -1,0 +1,183 @@
+:root,
+body,
+button,
+input,
+select,
+textarea {
+  font-family: Arial, sans-serif;
+}
+body{
+    background-image: url("../Images/welcomePageBackground.png");
+    margin: 0;
+    padding: 0;
+    padding-top: 75px;
+}
+
+h1{
+    color: white;
+    font-weight: bold;
+}
+
+.container{
+    font-family: "Times New Roman", sans-serif;
+    color: black;
+    font-weight: bold;
+    font-size: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.container1 {
+  text-align: center;
+  max-width: 900px;
+  color: #000;
+  padding: 30px;
+}
+
+.container1 h1 {
+  font-size: 80px;
+  font-weight: 800;
+  margin: 0;
+  line-height: 1.2;
+  color: black;
+}
+
+.container1 p {
+  font-size: 24px;
+  margin: 10px 0 40px;
+}
+
+.motivation{
+    font-weight: bold;
+    text-align: center;
+    font-size: 80px;
+}
+
+.logo{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.logo h1{
+    margin:0;
+    font-size: 60px;
+}
+
+.navigationBar{
+    display: flex;
+    justify-content: space-between;
+    background-color: black;
+    box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    height:75px;
+    padding: 0px 0px;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    z-index: 1000;
+}
+
+.menu button{
+    height: 75px;
+    width:150px;
+    background-color:black;
+    color: white;
+    font-size: 20px;
+    font-weight: bold;
+    border-left: 1px solid white;
+    border-top: 0;
+    border-bottom: 0;
+    border-right: 0;
+    text-align: center;
+}
+
+
+.menu button:hover {
+    background-color: #222;
+}
+
+
+.site-title {
+    font-size: 45px;
+    font-weight: bold;
+    color: #333;
+}
+
+nav {
+    margin: 20px 0;
+}
+
+.continueButton{
+    display: flex;
+    justify-content: center;
+}
+
+.continueButton button{
+    width: 15%;
+    padding: 10px;
+    margin-top: 5px;
+    background-color: darkblue;
+    border-radius: 10px;
+    color: white;
+    font-size: 20px;
+    font-weight: bold;
+    text-align: center;
+}
+
+img, video, svg {
+  max-width: 100%;
+  height: auto;
+}
+
+@media (max-width: 900px) {
+  body {
+    padding-top: 150px;
+  }
+  .navigationBar {
+    flex-direction: column;
+    align-items: stretch;
+    height: 150px;
+    padding: 8px 0;
+    gap: 8px;
+  }
+  .logo {
+    padding: 0 12px;
+  }
+  .logo h1 {
+    font-size: 36px;
+  }
+  .menu {
+    display: flex;
+    gap: 0;
+    overflow-x: auto;
+  }
+  .menu button {
+    flex: 1 0 auto;
+    min-width: 120px;
+    height: 56px;
+    font-size: 16px;
+    border-left: 1px solid white;
+  }
+}
+
+@media (max-width: 600px) {
+  body {
+    padding-top: 120px;
+  }
+  .navigationBar {
+    height: 120px;
+  }
+  .menu button {
+    min-width: 100px;
+    height: 48px;
+    font-size: 14px;
+  }
+  .logo img {
+    width: 72px;
+    height: auto;
+  }
+  .logo h1 {
+    font-size: 28px;
+  }
+}

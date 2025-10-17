@@ -27,8 +27,8 @@
 
     <div class="toolbar">
         <a href="#" onclick="toCreateClassroom()" class="add-lesson-btn" aria-label="Create Lesson">+</a>
-        <button type="button" id="viewArchivedClassrooms" class="edit-lesson-btn" onclick="toTeacherArchivedClassrooms()">Archived</button>
-        <button type="button" id="editToggle" onclick="toEditClassroom()" class="edit-lesson-btn">Edit</button>
+        <button type="button" id="viewArchivedClassrooms" class="flat-btn" onclick="toTeacherArchivedClassrooms()">Archived</button>
+        <button type="button" id="editToggle" onclick="toEditClassroom()" class="danger-outline-btn">Delete</button>
     </div>
 
     <h3 class="page-heading">Classrooms</h3>
@@ -37,7 +37,7 @@
     <div id="editOverlay" class="overlay-backdrop" role="dialog" aria-modal="true" aria-labelledby="overlayTitle">
         <div class="overlay-panel">
             <div class="overlay-header">
-                <h4 id="overlayTitle" class="overlay-title">Edit Classroom</h4>
+                <h4 id="overlayTitle" class="overlay-title">Delete Classrooms</h4>
                 <label style="display:flex; align-items:center; gap:6px;">
                     <input type="checkbox" id="selectAllChk">
                     <span>Select All</span>

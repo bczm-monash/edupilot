@@ -72,14 +72,28 @@
     if (!Array.isArray(rows) || !rows.length || !client) return rows;
     const now = new Date();
     const idsToArchive = [];
+    const idsToActivate = [];
+
     rows.forEach((row) => {
       if (!row || !row.classroom_id) return;
-      const status = normaliseStatus(row.classroom_status);
-      if (status === 'archived') return;
       const endDate = parseDateValue(row.classroom_end_date);
+      const status = normaliseStatus(row.classroom_status);
+
       if (endDate && endDate < now) {
-        idsToArchive.push(row.classroom_id);
-        row.classroom_status = 'archived';
+        if (status !== 'archived') {
+          idsToArchive.push(row.classroom_id);
+          row.classroom_status = 'archived';
+        } else {
+          row.classroom_status = 'archived';
+        }
+      } else if (endDate && endDate >= now) {
+        if (status === 'archived') {
+          idsToActivate.push(row.classroom_id);
+          row.classroom_status = 'active';
+        }
+      } else if (!endDate && status === 'archived') {
+        idsToActivate.push(row.classroom_id);
+        row.classroom_status = 'active';
       }
     });
 
@@ -94,6 +108,20 @@
         }
       } catch (err) {
         console.error('Unexpected error auto-archiving classrooms:', err);
+      }
+    }
+
+    if (idsToActivate.length) {
+      try {
+        const { error } = await client
+          .from('classroom')
+          .update({ classroom_status: 'active' })
+          .in('classroom_id', idsToActivate);
+        if (error) {
+          console.error('Failed to reactivate classrooms:', error);
+        }
+      } catch (err) {
+        console.error('Unexpected error reactivating classrooms:', err);
       }
     }
     return rows;

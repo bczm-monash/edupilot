@@ -47,6 +47,30 @@
     return `${diffDays} day${diffDays !== 1 ? 's' : ''}`;
   }
 
+  function parseDateValue(raw) {
+    if (!raw) return null;
+    const direct = new Date(raw);
+    if (!Number.isNaN(direct.getTime())) return direct;
+    const trimmed = String(raw).trim();
+    if (!trimmed) return null;
+    const dateOnly = trimmed.includes('T') ? trimmed.split('T')[0] : trimmed;
+    const parts = dateOnly.split(/[-/]/);
+    if (parts.length === 3) {
+      const [a, b, c] = parts;
+      if (a.length === 4) {
+        return parseDateDMY(`${c}/${b}/${a}`);
+      }
+      if (c.length === 4) {
+        return parseDateDMY(`${a}/${b}/${c}`);
+      }
+    }
+    return null;
+  }
+
+  function normaliseStatus(value) {
+    return typeof value === 'string' ? value.trim().toLowerCase() : '';
+  }
+
   function makeCard(classroom, courseTitleMap) {
     const li = document.createElement('li');
     li.className = 'classroom-card';
@@ -127,6 +151,37 @@
     return ensureSupabaseReady(retry + 1);
   }
 
+  async function updateStatuses(rows, client) {
+    if (!Array.isArray(rows) || !rows.length || !client) return rows;
+    const now = new Date();
+    const idsToActivate = [];
+    rows.forEach((row) => {
+      if (!row || !row.classroom_id) return;
+      const endDate = parseDateValue(row.classroom_end_date);
+      const status = normaliseStatus(row.classroom_status);
+      if (endDate && endDate >= now && status === 'archived') {
+        idsToActivate.push(row.classroom_id);
+        row.classroom_status = 'active';
+      }
+    });
+
+    if (idsToActivate.length) {
+      try {
+        const { error } = await client
+          .from('classroom')
+          .update({ classroom_status: 'active' })
+          .in('classroom_id', idsToActivate);
+        if (error) {
+          console.error('Failed to reactivate classrooms from archived view:', error);
+        }
+      } catch (err) {
+        console.error('Unexpected error reactivating classrooms from archived view:', err);
+      }
+    }
+
+    return rows.filter((row) => normaliseStatus(row.classroom_status) === 'archived');
+  }
+
   async function fetchArchivedClassrooms() {
     const supabase = await ensureSupabaseReady();
     if (!supabase) throw new Error('Supabase not initialized.');
@@ -152,7 +207,8 @@
 
     const { data, error } = await query;
     if (error) throw error;
-    return Array.isArray(data) ? data : [];
+    const rows = Array.isArray(data) ? data : [];
+    return updateStatuses(rows, supabase);
   }
 
   async function buildCourseTitleMap(courseIds) {

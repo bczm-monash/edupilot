@@ -26,6 +26,10 @@
     return undefined;
   }
 
+  function normaliseStatus(value) {
+    return typeof value === 'string' ? value.trim().toLowerCase() : '';
+  }
+
   function makeCard(course) {
     const li = document.createElement('li');
     li.className = 'course-card';
@@ -124,7 +128,8 @@
       }
     }
 
-    return courses;
+    const filtered = courses.filter((item) => normaliseStatus(item.course_status) !== 'archived');
+    return filtered;
   }
 
   async function loadCourses() {

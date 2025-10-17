@@ -6,6 +6,8 @@
   const deleteBtnEl = document.getElementById('deleteSelected');
   const closeOverlayBtnEl = document.getElementById('closeOverlay');
   const editToggleBtnEl = document.getElementById('editToggle');
+  const adminMode = typeof isAdminModeActive === 'function' && isAdminModeActive();
+  let currentUserId = null;
 
   function renderEmpty(message) {
     if (!listEl) return;
@@ -40,6 +42,61 @@
     const [dd, mm, yyyy] = parts.map((p) => parseInt(p, 10));
     if (isNaN(dd) || isNaN(mm) || isNaN(yyyy)) return null;
     return new Date(yyyy, mm - 1, dd);
+  }
+
+  function parseDateValue(raw) {
+    if (!raw) return null;
+    const direct = new Date(raw);
+    if (!Number.isNaN(direct.getTime())) return direct;
+    const trimmed = String(raw).trim();
+    if (!trimmed) return null;
+    const dateOnly = trimmed.includes('T') ? trimmed.split('T')[0] : trimmed;
+    const parts = dateOnly.split(/[-/]/);
+    if (parts.length === 3) {
+      const [a, b, c] = parts;
+      if (a.length === 4) {
+        return parseDateDMY(`${c}/${b}/${a}`);
+      }
+      if (c.length === 4) {
+        return parseDateDMY(`${a}/${b}/${c}`);
+      }
+    }
+    return null;
+  }
+
+  function normaliseStatus(value) {
+    return typeof value === 'string' ? value.trim().toLowerCase() : '';
+  }
+
+  async function archiveExpiredClassrooms(rows, client) {
+    if (!Array.isArray(rows) || !rows.length || !client) return rows;
+    const now = new Date();
+    const idsToArchive = [];
+    rows.forEach((row) => {
+      if (!row || !row.classroom_id) return;
+      const status = normaliseStatus(row.classroom_status);
+      if (status === 'archived') return;
+      const endDate = parseDateValue(row.classroom_end_date);
+      if (endDate && endDate < now) {
+        idsToArchive.push(row.classroom_id);
+        row.classroom_status = 'archived';
+      }
+    });
+
+    if (idsToArchive.length) {
+      try {
+        const { error } = await client
+          .from('classroom')
+          .update({ classroom_status: 'archived' })
+          .in('classroom_id', idsToArchive);
+        if (error) {
+          console.error('Failed to auto-archive classrooms:', error);
+        }
+      } catch (err) {
+        console.error('Unexpected error auto-archiving classrooms:', err);
+      }
+    }
+    return rows;
   }
 
   function getDuration(startText, endText) {
@@ -134,11 +191,32 @@
       return [];
     }
 
-    const { data, error } = await client
+    if (!adminMode) {
+      try {
+        const { data: auth, error: authError } = await client.auth.getUser();
+        if (authError || !auth?.user) {
+          renderEmpty('Please log in to view classrooms.');
+          return [];
+        }
+        currentUserId = auth.user.id;
+      } catch (err) {
+        console.error('Failed to resolve current user:', err);
+        renderEmpty('Unable to load classrooms.');
+        return [];
+      }
+    }
+
+    let query = client
       .from('classroom')
       .select('*')
       .order('classroom_id', { ascending: true })
-      .limit(100);
+      .limit(200);
+
+    if (!adminMode && currentUserId) {
+      query = query.eq('users_id', currentUserId);
+    }
+
+    const { data, error } = await query;
 
     if (error) {
       console.error('Error fetching classrooms:', error);
@@ -146,7 +224,9 @@
       return [];
     }
 
-    return Array.isArray(data) ? data : [];
+    let rows = Array.isArray(data) ? data : [];
+    rows = await archiveExpiredClassrooms(rows, client);
+    return rows.filter((row) => normaliseStatus(row.classroom_status) !== 'archived');
   }
 
   function getRenderedClassrooms() {
@@ -265,9 +345,13 @@
       const client = window.supabase;
       let courseTitleMap = {};
       if (client) {
-        const { data: courses, error: courseError } = await client
+        let courseQuery = client
           .from('course')
           .select('course_id, course_title');
+        if (!adminMode && currentUserId) {
+          courseQuery = courseQuery.eq('users_id', currentUserId);
+        }
+        const { data: courses, error: courseError } = await courseQuery;
         if (!courseError && Array.isArray(courses)) {
           courses.forEach((course) => {
             if (course.course_id) courseTitleMap[course.course_id] = course.course_title || '';

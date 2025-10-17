@@ -116,3 +116,11 @@ function toTeacherAdmin() {
 function toTeacherReports() {
     window.location.href = "/EduPilot/html/teacher/teacher_CourseReport.html";
 }
+
+function toTeacherArchivedCourses() {
+    window.location.href = "/EduPilot/html/teacher/archived_courses.html";
+}
+
+function toTeacherArchivedClassrooms() {
+    window.location.href = "/EduPilot/html/teacher/archived_classrooms.html";
+}

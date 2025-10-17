@@ -43,7 +43,7 @@
 
     const open = () => {
       if (course.course_id) {
-        window.location.href = `/EduPilot/html/student/sCourse_content.html?id=${encodeURIComponent(course.course_id)}`;
+        window.location.href = `/EduPilot/html/teacher/course_content.html?id=${encodeURIComponent(course.course_id)}`;
       }
     };
 
@@ -73,11 +73,30 @@
     const supabase = await ensureSupabaseReady();
     if (!supabase) throw new Error('Supabase not initialized');
 
-    const { data, error } = await supabase
+    const { data: auth, error: authError } = await supabase.auth.getUser();
+    if (authError) {
+      console.error('Failed to resolve current user:', authError);
+    }
+    const currentUser = auth?.user || null;
+    const adminMode = typeof isAdminModeActive === 'function' && isAdminModeActive();
+
+    if (!currentUser && !adminMode) {
+      throw new Error('Please log in to view archived courses.');
+    }
+
+    const statusFilter = ['archived', 'Archived', 'ARCHIVED'];
+
+    let query = supabase
       .from('course')
       .select('course_id, course_title, course_credit_points, users_id, course_status')
-      .eq('course_status', 'archived')
+      .in('course_status', statusFilter)
       .order('course_title', { ascending: true });
+
+    if (!adminMode && currentUser) {
+      query = query.eq('users_id', currentUser.id);
+    }
+
+    const { data, error } = await query;
 
     if (error) throw error;
     return Array.isArray(data) ? data : [];
@@ -137,7 +156,7 @@
       renderCourses(courses);
     } catch (err) {
       console.error('Failed to load archived courses:', err);
-      renderEmpty('Failed to load archived courses.');
+      renderEmpty(err?.message ? String(err.message) : 'Failed to load archived courses.');
     }
   }
 

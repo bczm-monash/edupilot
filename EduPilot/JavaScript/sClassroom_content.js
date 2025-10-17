@@ -14,7 +14,7 @@
   const addCloseBtn = document.getElementById('closeOverlay2');
 
   const openAddBtn = document.getElementById('openAddLessons');
-  const openRemoveBtn = document.getElementById('openRemoveLessons');
+   const openRemoveBtn = document.getElementById('openRemoveLessons');
   const editClassroomBtn = document.getElementById('editClassroomBtn');
   const headerTitleEl = document.getElementById('classroomHeader');
 

@@ -15,6 +15,7 @@
 
   const openAddBtn = document.getElementById('openAddLessons');
   const openRemoveBtn = document.getElementById('openRemoveLessons');
+  const gradesBtn = document.getElementById('openGrades');
   const editClassroomBtn = document.getElementById('editClassroomBtn');
   const headerTitleEl = document.getElementById('classroomHeader');
 
@@ -268,6 +269,13 @@
       if (headerTitleEl) {
         const title = currentClassroom.classroom_title ? `${currentClassroom.classroom_title}` : 'Classroom';
         headerTitleEl.textContent = title;
+      }
+
+      if (gradesBtn) {
+        gradesBtn.onclick = () => {
+          const url = `/EduPilot/html/teacher/classroom_grades.html?id=${encodeURIComponent(classroomId)}`;
+          window.location.href = url;
+        };
       }
     } catch (error) {
       console.error('Failed to load classroom details:', error);

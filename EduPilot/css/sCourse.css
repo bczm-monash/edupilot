@@ -160,6 +160,10 @@
   border-bottom: 0;
 }
 
+.list-row.disabled-row {
+  opacity: 0.6;
+}
+
 .green-btn { 
   background-color: green; 
   color: #fff; 

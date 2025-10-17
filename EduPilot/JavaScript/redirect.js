@@ -124,3 +124,8 @@ function toTeacherArchivedCourses() {
 function toTeacherArchivedClassrooms() {
     window.location.href = "/EduPilot/html/teacher/archived_classrooms.html";
 }
+
+function toTeacherClassroomGrades(id) {
+    if (!id) return;
+    window.location.href = `/EduPilot/html/teacher/classroom_grades.html?id=${encodeURIComponent(id)}`;
+}

@@ -335,6 +335,7 @@
       overlaySelectAllEl.addEventListener('change', () => {
         const checked = overlaySelectAllEl.checked;
         overlayBodyEl.querySelectorAll('input.row-chk').forEach((chk) => {
+          if (chk.disabled) return;
           chk.checked = checked;
         });
       });

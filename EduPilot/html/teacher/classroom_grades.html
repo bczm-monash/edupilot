@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Classroom Grades - EduPilot</title>
+  <link rel="stylesheet" href="../../css/page.css">
+  <link rel="stylesheet" href="../../css/grades.css">
+  <script src="/EduPilot/JavaScript/redirect.js"></script>
+  <script type="module" src="/EduPilot/JavaScript/supabase-init.js"></script>
+</head>
+<body>
+  <div class="navigationBar">
+    <span class="logo">
+      <img src="../../Images/logo.webp" alt="EduPilot logo" width="100">
+      <h1>EduPilot</h1>
+    </span>
+    <div class="menu">
+      <button onclick="toLesson()">Lesson</button>
+      <button onclick="toTCourse()">Course</button>
+      <button onclick="toTClassroom()">Classroom</button>
+      <button onclick="toLogin()">Log Out</button>
+    </div>
+  </div>
+
+  <main class="grades-page">
+    <div class="grades-header">
+      <button type="button" class="secondary-btn" id="backBtn">← Back</button>
+      <div class="grades-heading">
+        <h2 id="classroomTitle">Classroom Grades</h2>
+        <p id="classroomMeta" class="muted"></p>
+      </div>
+    </div>
+
+    <section class="grades-card" aria-labelledby="overallProgressTitle">
+      <h3 id="overallProgressTitle">Overall Progression</h3>
+      <table class="grades-table">
+        <thead>
+          <tr>
+            <th scope="col">Student</th>
+            <th scope="col">Progress</th>
+            <th scope="col">Pass Rate</th>
+          </tr>
+        </thead>
+        <tbody id="progressTableBody">
+          <tr>
+            <td colspan="3" class="muted">Loading…</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="lessonGradesContainer" class="lesson-grades-container" aria-live="polite">
+      <div class="grades-card">
+        <h3>Lessons</h3>
+        <p class="muted">Loading lessons…</p>
+      </div>
+    </section>
+  </main>
+
+  <script src="/EduPilot/JavaScript/teacher-classroom-grades.js"></script>
+  <script src="/EduPilot/JavaScript/admin-nav.js"></script>
+</body>
+</html>

@@ -234,6 +234,10 @@
   background-color: #3a5f88;
 }
 
+.flat-btn:hover {
+  background-color: #5a6268;
+}
+
 .edit-classroom-btn {
   display: inline-block;
   padding: 8px 16px;

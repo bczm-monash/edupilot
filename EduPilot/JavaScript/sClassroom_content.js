@@ -17,6 +17,8 @@
    const openRemoveBtn = document.getElementById('openRemoveLessons');
   const editClassroomBtn = document.getElementById('editClassroomBtn');
   const headerTitleEl = document.getElementById('classroomHeader');
+  const gradeProgressEl = document.getElementById('studentProgressValue');
+  const gradeListEl = document.getElementById('studentGradeList');
 
   let classroomId = '';
   let classroomIdText = '';
@@ -24,6 +26,7 @@
   let currentLessons = [];
   let currentLessonIds = new Set();
   const availableLessonsCache = new Map();
+  let currentUser = null;
 
   function getClassroomId() {
     const params = new URLSearchParams(window.location.search);
@@ -74,6 +77,33 @@
       month: 'short',
       day: 'numeric',
     });
+  }
+
+  async function fetchCurrentUser() {
+    const supabase = supabaseClient();
+    if (!supabase) return null;
+    const { data, error } = await supabase.auth.getUser();
+    if (error || !data?.user) return null;
+    return data.user;
+  }
+
+  function gradeClassName(value) {
+    switch ((value || '').toLowerCase()) {
+      case 'pass':
+        return 'pass';
+      case 'fail':
+        return 'fail';
+      default:
+        return 'pending';
+    }
+  }
+
+  function normaliseGrade(value) {
+    if (!value) return 'Not Graded';
+    const normalised = value.trim().toLowerCase();
+    if (normalised === 'pass') return 'Pass';
+    if (normalised === 'fail') return 'Fail';
+    return 'Not Graded';
   }
 
   function renderStudentList(students) {
@@ -338,9 +368,90 @@
 
       await enrichLessonOwners(lessons);
       renderLessons(lessons);
+      await loadStudentGrades();
     } catch (error) {
       console.error('Failed to load classroom lessons:', error);
       renderLessons([]);
+      if (gradeProgressEl) {
+        gradeProgressEl.textContent = 'Unable to load grades.';
+        gradeProgressEl.classList.add('muted');
+      }
+    }
+  }
+
+  async function loadStudentGrades() {
+    if (!gradeProgressEl || !gradeListEl) return;
+
+    if (!currentLessons.length) {
+      gradeProgressEl.textContent = 'No lessons assigned yet.';
+      gradeProgressEl.classList.add('muted');
+      gradeListEl.innerHTML = '';
+      return;
+    }
+
+    if (!currentUser) {
+      gradeProgressEl.textContent = 'Log in to view your grades.';
+      gradeProgressEl.classList.add('muted');
+      gradeListEl.innerHTML = '';
+      return;
+    }
+
+    const supabase = supabaseClient();
+    if (!supabase || !classroomIdText) {
+      gradeProgressEl.textContent = 'Unable to load grades.';
+      gradeProgressEl.classList.add('muted');
+      gradeListEl.innerHTML = '';
+      return;
+    }
+
+    try {
+      const { data, error } = await supabase
+        .from('grades')
+        .select('lesson_id, grade')
+        .eq('classroom_id', classroomIdText)
+        .eq('users_id', currentUser.id);
+
+      if (error) throw error;
+
+      const gradeByLesson = new Map();
+      (data || []).forEach((row) => {
+        if (!row) return;
+        gradeByLesson.set(row.lesson_id, row.grade || 'Not Graded');
+      });
+
+      let passCount = 0;
+      gradeListEl.innerHTML = '';
+
+      currentLessons.forEach((lesson) => {
+        const gradeRaw = gradeByLesson.get(lesson.lesson_id) || 'Not Graded';
+        const normalised = normaliseGrade(gradeRaw);
+        if (normalised.toLowerCase() === 'pass') passCount += 1;
+
+        const li = document.createElement('li');
+        li.className = 'grade-item';
+
+        const title = document.createElement('span');
+        title.className = 'grade-lesson-title';
+        title.textContent = lesson.lesson_title || lesson.lesson_id;
+
+        const value = document.createElement('span');
+        value.className = `grade-value ${gradeClassName(normalised)}`;
+        value.textContent = normalised;
+
+        li.appendChild(title);
+        li.appendChild(value);
+        gradeListEl.appendChild(li);
+      });
+
+      const total = currentLessons.length;
+      const percent = total ? Math.round((passCount / total) * 100) : 0;
+      gradeProgressEl.textContent = `${passCount}/${total} lessons (${percent}%)`;
+      gradeProgressEl.classList.remove('muted');
+    } catch (error) {
+      console.error('Failed to load student grades:', error);
+      gradeProgressEl.textContent = 'Unable to load grades.';
+      gradeProgressEl.classList.add('muted');
+      gradeListEl.innerHTML = '';
     }
   }
 
@@ -589,6 +700,7 @@
       return;
     }
 
+    currentUser = await fetchCurrentUser();
     classroomIdText = String(classroomId);
 
     await loadClassroomDetails();

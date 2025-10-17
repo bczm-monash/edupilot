@@ -110,6 +110,45 @@
   margin-bottom: 6px;
 }
 
+.grade-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.grade-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 8px 12px;
+}
+
+.grade-lesson-title {
+  font-weight: 500;
+  color: #1f2937;
+}
+
+.grade-value {
+  font-weight: 600;
+}
+
+.grade-value.pass {
+  color: #1b5e20;
+}
+
+.grade-value.fail {
+  color: #b71c1c;
+}
+
+.grade-value.pending {
+  color: #6b7280;
+}
+
 #lessonList {
   list-style: none;
   margin: 0;

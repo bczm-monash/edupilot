@@ -7,8 +7,9 @@
   <link rel="stylesheet" href="../../css/page.css" />
   <link rel="stylesheet" href="../../css/reports.css">
   <script src="/EduPilot/JavaScript/redirect.js"></script>
+  <script type="module" src="/EduPilot/JavaScript/supabase-init.js"></script>
 </head>
-<body>
+<body data-reports-role="admin">
   <div class="navigationBar">
     <span class="logo">
       <img src="../../Images/logo.webp" alt="EduPilot logo" width="100" />
@@ -19,6 +20,8 @@
       <button onclick="toAdminLesson()">Lesson</button>
       <button onclick="toAdminCourse()">Course</button>
       <button onclick="toAdminClassroom()">Classroom</button>
+      <button onclick="toAdminStudentList()">Students</button>
+      <button onclick="toAdminInstructorList()">Instructors</button>
       <button onclick="toLogin()">Log Out</button>
     </div>
   </div>
@@ -26,18 +29,108 @@
     <div class="admin-back">
       <button type="button" class="secondary-btn" onclick="toAdmin()">Back</button>
     </div>
-    <h2>Reports</h2>
-    <ul id="reportsList">
-      <li class="report-card">
-        <button class="report-btn">Course Report</button>
-        <p>Analyze course engagement and completion rates.</p>
-      </li>
+    <h2>Platform Reports</h2>
+    <section class="reports-layout" aria-live="polite">
+      <article class="report-section" id="courseReport" aria-labelledby="courseReportTitle">
+        <h3 id="courseReportTitle">Course Report</h3>
+        <div class="metric-grid">
+          <div class="metric-card">
+            <span class="metric-label">Total Users</span>
+            <span class="metric-value" data-metric="course-total-users">–</span>
+          </div>
+          <div class="metric-card">
+            <span class="metric-label">Active Courses</span>
+            <span class="metric-value" data-metric="course-active">–</span>
+            <span class="metric-subtext">Includes courses marked active or published</span>
+          </div>
+          <div class="metric-card">
+            <span class="metric-label">Draft Courses</span>
+            <span class="metric-value" data-metric="course-draft">–</span>
+          </div>
+          <div class="metric-card">
+            <span class="metric-label">Archived Courses</span>
+            <span class="metric-value" data-metric="course-archived">–</span>
+          </div>
+          <div class="metric-card">
+            <span class="metric-label">Avg Credit / Lesson</span>
+            <span class="metric-value" data-metric="course-avg-credit">–</span>
+          </div>
+        </div>
+      </article>
 
-      <li class="report-card">
-        <button class="report-btn">Classroom Report</button>
-        <p>Evaluate instructor activities and course feedback.</p>
-      </li>
-    </ul>
+      <article class="report-section" id="classroomReport" aria-labelledby="classroomReportTitle">
+        <h3 id="classroomReportTitle">Classroom Report</h3>
+        <div class="metric-grid">
+          <div class="metric-card">
+            <span class="metric-label">Total Classrooms</span>
+            <span class="metric-value" data-metric="classroom-total">–</span>
+          </div>
+          <div class="metric-card">
+            <span class="metric-label">Ongoing Classrooms</span>
+            <span class="metric-value" data-metric="classroom-ongoing">–</span>
+          </div>
+          <div class="metric-card">
+            <span class="metric-label">Completed Classrooms</span>
+            <span class="metric-value" data-metric="classroom-completed">–</span>
+          </div>
+          <div class="metric-card">
+            <span class="metric-label">Avg Students / Classroom</span>
+            <span class="metric-value" data-metric="classroom-avg-students">–</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="report-section" id="lessonReport" aria-labelledby="lessonReportTitle">
+        <h3 id="lessonReportTitle">Lesson Report</h3>
+        <div class="metric-grid">
+          <div class="metric-card">
+            <span class="metric-label">Total Lessons</span>
+            <span class="metric-value" data-metric="lesson-total">–</span>
+          </div>
+          <div class="metric-card">
+            <span class="metric-label">Assigned Lessons</span>
+            <span class="metric-value" data-metric="lesson-assigned">–</span>
+          </div>
+          <div class="metric-card">
+            <span class="metric-label">Unassigned Lessons</span>
+            <span class="metric-value" data-metric="lesson-unassigned">–</span>
+          </div>
+          <div class="metric-card">
+            <span class="metric-label">Avg Credit Points</span>
+            <span class="metric-value" data-metric="lesson-avg-credit">–</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="report-section" id="systemReport" aria-labelledby="systemReportTitle">
+        <h3 id="systemReportTitle">System Report</h3>
+        <div class="metric-grid">
+          <div class="metric-card">
+            <span class="metric-label">Instructors</span>
+            <span class="metric-value" data-metric="system-instructors">–</span>
+          </div>
+          <div class="metric-card">
+            <span class="metric-label">Students</span>
+            <span class="metric-value" data-metric="system-students">–</span>
+          </div>
+          <div class="metric-card">
+            <span class="metric-label">Lessons</span>
+            <span class="metric-value" data-metric="system-lessons">–</span>
+          </div>
+          <div class="metric-card">
+            <span class="metric-label">Courses</span>
+            <span class="metric-value" data-metric="system-courses">–</span>
+          </div>
+          <div class="metric-card">
+            <span class="metric-label">Classrooms</span>
+            <span class="metric-value" data-metric="system-classrooms">–</span>
+          </div>
+        </div>
+      </article>
+
+      <p class="empty-state" data-metric="reports-status" hidden>Loading reports…</p>
+    </section>
   </main>
+  <script src="/EduPilot/JavaScript/admin-reports.js"></script>
 </body>
 </html>

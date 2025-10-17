@@ -9,7 +9,7 @@
   <script src="/EduPilot/JavaScript/redirect.js"></script>
   <script type="module" src="/EduPilot/JavaScript/supabase-init.js"></script>
 </head>
-<body>
+<body data-students-context="teacher">
   <div class="navigationBar">
     <span class="logo">
       <img src="../../Images/logo.webp" alt="EduPilot logo" width="100">
@@ -27,6 +27,7 @@
   <!-- Toolbar -->
   <div class="toolbar">
     <button type="button" class="secondary-btn back-btn" onclick="toTCourse()">Back</button>
+    <button type="button" id="editToggle" class="edit-btn">Edit</button>
   </div>
 
   <h3 style="margin-left: 12px; font-size: 35px;">Students</h3>
@@ -35,11 +36,29 @@
     <tr>
       <th>Name</th>
       <th>Email</th>
-      <th>Enrolled Courses</th>
+      <th>Action</th>
     </tr>
   </thead>
   <tbody id="studentList"></tbody>
 </table>
+
+  <div id="editOverlay" class="overlay-backdrop" role="dialog" aria-modal="true" aria-labelledby="overlayTitle">
+    <div class="overlay-panel">
+      <div class="overlay-header">
+        <h4 id="overlayTitle" class="overlay-title">Manage Students</h4>
+          <input type="checkbox" id="selectAllChk">
+          <span>Select All</span>
+        </label>
+      </div>
+      <div id="overlayBody" class="overlay-body">
+        <div class="muted">Loading students…</div>
+      </div>
+      <div class="overlay-actions">
+        <button type="button" id="deleteSelected" class="danger-btn">Remove Selected</button>
+        <button type="button" id="closeOverlay" class="secondary-btn">Cancel</button>
+      </div>
+    </div>
+  </div>
 
   <script src="/EduPilot/JavaScript/list_students.js"></script>
 

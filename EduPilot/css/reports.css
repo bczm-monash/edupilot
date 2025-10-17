@@ -1,57 +1,80 @@
-#reportsList {
-  list-style: none;
-  margin: 0;
-  padding: 12px;
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 16px;
-}
-
-.report-card {
-  background-color: #ffffff;
-  border: 1px solid #000000;
-  border-radius: 8px;
+.reports-layout {
   padding: 16px;
   display: flex;
   flex-direction: column;
-  min-height: 120px;
-  cursor: pointer;
-  transition: transform 0.12s ease, box-shadow 0.12s ease;
+  gap: 24px;
 }
 
-.report-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+.report-section {
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  padding: 20px 24px;
 }
 
-.report-btn {
-  flex: 1;
-  width: 100%;
-  padding: 15px;
-  font-size: 18px;
-  font-weight: bold;
-  background-color: #0a26c6;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  margin-bottom: 10px;
-  transition: background-color 0.3s ease, transform 0.2s ease;
-}
-
-.lesson-btn:hover {
-  background-color:#0a26c6;
-  transform: scale(1.02);
-}
-
-.report-title {
+.report-section h3 {
+  margin: 0 0 16px;
   font-size: 24px;
-  font-weight: bold;
-  margin-bottom: 5px;
+  color: #0a26c6;
 }
 
-.report-meta {
+.metric-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(160px, 1fr));
+  gap: 16px;
+}
+
+.metric-card {
+  background: #f7f9ff;
+  border: 1px solid rgba(10,38,198,0.08);
+  border-radius: 10px;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-height: 96px;
+}
+
+.metric-label {
   font-size: 14px;
-  font-weight: normal;
-  color: #333;
+  color: #4a5568;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.metric-value {
+  font-size: 26px;
+  font-weight: 700;
+  color: #1a202c;
+}
+
+.metric-subtext {
+  font-size: 13px;
+  color: #6b7280;
+}
+
+.empty-state {
+  font-size: 15px;
+  color: #6b7280;
+}
+
+@media (max-width: 1024px) {
+  .metric-grid {
+    grid-template-columns: repeat(2, minmax(160px, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .metric-grid {
+    grid-template-columns: minmax(160px, 1fr);
+  }
+  .report-section {
+    padding: 16px;
+  }
+  .report-section h3 {
+    font-size: 20px;
+  }
+  .metric-value {
+    font-size: 22px;
+  }
 }

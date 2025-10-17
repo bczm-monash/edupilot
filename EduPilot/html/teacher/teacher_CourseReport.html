@@ -3,67 +3,104 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Instructors - EduPilot</title>
+  <title>Reports - Teacher</title>
   <link rel="stylesheet" href="../../css/page.css">
-  <link rel="stylesheet" href="../../css/ClassroomCourseReports.css"> <!-- reuse lesson CSS -->
-  <script type="module" src="/EduPilot/JavaScript/supabase-init.js"></script>
+  <link rel="stylesheet" href="../../css/reports.css">
   <script src="/EduPilot/JavaScript/redirect.js"></script>
+  <script type="module" src="/EduPilot/JavaScript/supabase-init.js"></script>
 </head>
-<body>
+<body data-reports-role="teacher">
   <div class="navigationBar">
     <span class="logo">
       <img src="../../Images/logo.webp" alt="EduPilot logo" width="100">
       <h1>EduPilot</h1>
     </span>
     <div class="menu">
-      <button onclick="toAdmin()">Admin</button>
-      <button onclick="toAdminLesson()">Lesson</button>
-      <button onclick="toAdminCourse()">Course</button>
-      <button onclick="toAdminClassroom()">Classroom</button>
+      <button onclick="toTStudents()">Students</button>
+      <button onclick="toLesson()">Lesson</button>
+      <button onclick="toTCourse()">Course</button>
+      <button onclick="toTClassroom()">Classroom</button>
       <button onclick="toLogin()">Log Out</button>
     </div>
   </div>
 
-  <!-- Toolbar -->
-  <div class="toolbar">
-    <button type="button" class="secondary-btn back-btn" onclick="toAdmin()">Back</button>
-    <button type="button" id="editToggle" class="edit-btn">Edit</button>
-  </div>
-
-  <h3 style="margin-left: 12px; font-size: 35px;">Instructors</h3>
-
-  <table id="instructorTable" border="1" cellspacing="0" cellpadding="8">
-  <thead>
-    <tr>
-      <th>Total Users</th>
-      <th>Active Courses</th>
-      <th>Archived Courses</th>
-      <th>Average credit point per lesson</th>
-    </tr>
-  </thead>
-  <tbody id="TeacherCourseReport"></tbody>
-</table>
-
-  <!-- Overlay for edit mode -->
-  <div id="editOverlay" class="overlay-backdrop" role="dialog" aria-modal="true" aria-labelledby="overlayTitle">
-    <div class="overlay-panel">
-      <div class="overlay-header">
-        <h4 id="overlayTitle" class="overlay-title">Edit Instructors</h4>
-          <input type="checkbox" id="selectAllChk">
-          <span>Select All</span>
-        </label>
-      </div>
-      <div id="overlayBody" class="overlay-body">
-        <div class="muted">Loading instructors…</div>
-      </div>
-      <div class="overlay-actions">
-        <button type="button" id="deleteSelected" class="danger-btn">Delete Selected</button>
-        <button type="button" id="closeOverlay" class="secondary-btn">Cancel</button>
-      </div>
+  <main class="admin-dashboard">
+    <div class="admin-back">
+      <button type="button" class="secondary-btn" onclick="toTCourse()">Back</button>
     </div>
-  </div>
+    <h2>Your Reports</h2>
 
-  <script src="/EduPilot/JavaScript/list_instructors.js"></script>
-  
+    <section class="reports-layout" aria-live="polite">
+      <article class="report-section" id="teacherCourseReport" aria-labelledby="teacherCourseReportTitle">
+        <h3 id="teacherCourseReportTitle">Course Report</h3>
+        <div class="metric-grid">
+          <div class="metric-card">
+            <span class="metric-label">Total Students</span>
+            <span class="metric-value" data-metric="teacher-course-total-students">–</span>
+          </div>
+          <div class="metric-card">
+            <span class="metric-label">Active Courses</span>
+            <span class="metric-value" data-metric="teacher-course-active">–</span>
+          </div>
+          <div class="metric-card">
+            <span class="metric-label">Archived Courses</span>
+            <span class="metric-value" data-metric="teacher-course-archived">–</span>
+          </div>
+          <div class="metric-card">
+            <span class="metric-label">Avg Credit / Lesson</span>
+            <span class="metric-value" data-metric="teacher-course-avg-credit">–</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="report-section" id="teacherClassroomReport" aria-labelledby="teacherClassroomReportTitle">
+        <h3 id="teacherClassroomReportTitle">Classroom Report</h3>
+        <div class="metric-grid">
+          <div class="metric-card">
+            <span class="metric-label">Total Classrooms</span>
+            <span class="metric-value" data-metric="teacher-classroom-total">–</span>
+          </div>
+          <div class="metric-card">
+            <span class="metric-label">Ongoing Classrooms</span>
+            <span class="metric-value" data-metric="teacher-classroom-ongoing">–</span>
+          </div>
+          <div class="metric-card">
+            <span class="metric-label">Completed Classrooms</span>
+            <span class="metric-value" data-metric="teacher-classroom-completed">–</span>
+          </div>
+          <div class="metric-card">
+            <span class="metric-label">Avg Students / Classroom</span>
+            <span class="metric-value" data-metric="teacher-classroom-avg-students">–</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="report-section" id="teacherLessonReport" aria-labelledby="teacherLessonReportTitle">
+        <h3 id="teacherLessonReportTitle">Lesson Report</h3>
+        <div class="metric-grid">
+          <div class="metric-card">
+            <span class="metric-label">Total Lessons</span>
+            <span class="metric-value" data-metric="teacher-lesson-total">–</span>
+          </div>
+          <div class="metric-card">
+            <span class="metric-label">Assigned Lessons</span>
+            <span class="metric-value" data-metric="teacher-lesson-assigned">–</span>
+          </div>
+          <div class="metric-card">
+            <span class="metric-label">Unassigned Lessons</span>
+            <span class="metric-value" data-metric="teacher-lesson-unassigned">–</span>
+          </div>
+          <div class="metric-card">
+            <span class="metric-label">Avg Credit Points</span>
+            <span class="metric-value" data-metric="teacher-lesson-avg-credit">–</span>
+          </div>
+        </div>
+      </article>
+
+      <p class="empty-state" data-metric="reports-status" hidden>Loading reports…</p>
+    </section>
+  </main>
+
+  <script src="/EduPilot/JavaScript/teacher-reports.js"></script>
 </body>
 </html>

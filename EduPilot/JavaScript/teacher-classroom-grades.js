@@ -16,17 +16,6 @@
   let students = [];
   const gradeMap = new Map();
 
-  function classForGrade(value) {
-    switch ((value || '').toLowerCase()) {
-      case 'pass':
-        return 'pass';
-      case 'fail':
-        return 'fail';
-      default:
-        return 'pending';
-    }
-  }
-
   function normaliseGrade(value) {
     if (!value) return 'Not Graded';
     const normalised = value.trim().toLowerCase();
@@ -77,8 +66,17 @@
         parts.push(`Start: ${start.toLocaleDateString()}`);
       }
       if (data?.classroom_end_date) {
-        const end = new Date(data.classroom_end_date);
-        parts.push(`End: ${end.toLocaleDateString()}`);
+        const endRaw = data.classroom_end_date;
+        let endFormatted = String(endRaw);
+        try {
+          const parsed = new Date(endRaw);
+          if (!Number.isNaN(parsed.getTime())) {
+            endFormatted = parsed.toLocaleDateString();
+          }
+        } catch (err) {
+          endFormatted = String(endRaw);
+        }
+        parts.push(`End: ${endFormatted}`);
       }
       metaEl.textContent = parts.join(' • ');
     }
@@ -257,10 +255,6 @@
     select.value = currentGrade;
     select.dataset.prev = currentGrade;
 
-    const status = document.createElement('span');
-    status.className = `grade-status ${classForGrade(currentGrade)}`;
-    status.textContent = currentGrade;
-
     select.addEventListener('change', async (event) => {
       const value = event.target.value;
       const prev = event.target.dataset.prev || 'Not Graded';
@@ -271,8 +265,6 @@
       try {
         await saveGrade(studentId, lessonId, value);
         event.target.dataset.prev = value;
-        status.className = `grade-status ${classForGrade(value)}`;
-        status.textContent = value;
         renderOverallProgress();
       } catch (err) {
         console.error('Failed to save grade:', err);
@@ -284,7 +276,6 @@
     });
 
     gradeCell.appendChild(select);
-    gradeCell.appendChild(status);
 
     row.appendChild(nameCell);
     row.appendChild(gradeCell);
@@ -324,8 +315,13 @@
       table.className = 'lesson-grade-list';
 
       const tbody = document.createElement('tbody');
-      students.forEach((student) => {
-        tbody.appendChild(createGradeRow(student, lesson));
+      students.forEach((student, index) => {
+        const row = createGradeRow(student, lesson);
+        const select = row.querySelector('select.grade-select');
+        if (select) {
+          select.classList.add('float-right');
+        }
+        tbody.appendChild(row);
       });
 
       table.appendChild(tbody);

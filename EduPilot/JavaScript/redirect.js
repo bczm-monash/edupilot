@@ -133,3 +133,7 @@ function toTeacherClassroomGrades(id) {
     if (!id) return;
     window.location.href = `/EduPilot/html/teacher/classroom_grades.html?id=${encodeURIComponent(id)}`;
 }
+
+function toTWelcome() {
+    window.location.href = "/EduPilot/html/teacher/tWelcomePage.html";
+}

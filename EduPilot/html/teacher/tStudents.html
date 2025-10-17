@@ -9,14 +9,14 @@
   <script src="/EduPilot/JavaScript/redirect.js"></script>
   <script type="module" src="/EduPilot/JavaScript/supabase-init.js"></script>
 </head>
-<body data-students-context="teacher">
+<body>
   <div class="navigationBar">
     <span class="logo">
       <img src="../../Images/logo.webp" alt="EduPilot logo" width="100">
       <h1>EduPilot</h1>
     </span>
     <div class="menu">
-      <button onclick="toTStudents()">Students</button>
+      <button onclick="toTeacherAdmin()">Admin</button>
       <button onclick="toLesson()">Lesson</button>
       <button onclick="toTCourse()">Course</button>
       <button onclick="toTClassroom()">Classroom</button>
@@ -26,7 +26,7 @@
 
   <!-- Toolbar -->
   <div class="toolbar">
-    <button type="button" class="secondary-btn back-btn" onclick="toTCourse()">Back</button>
+    <button type="button" class="secondary-btn back-btn" onclick="toTeacherAdmin()">Back</button>
     <button type="button" id="editToggle" class="edit-btn">Edit</button>
   </div>
 
@@ -45,7 +45,7 @@
   <div id="editOverlay" class="overlay-backdrop" role="dialog" aria-modal="true" aria-labelledby="overlayTitle">
     <div class="overlay-panel">
       <div class="overlay-header">
-        <h4 id="overlayTitle" class="overlay-title">Manage Students</h4>
+        <h4 id="overlayTitle" class="overlay-title">Edit Students</h4>
           <input type="checkbox" id="selectAllChk">
           <span>Select All</span>
         </label>
@@ -54,13 +54,21 @@
         <div class="muted">Loading students…</div>
       </div>
       <div class="overlay-actions">
-        <button type="button" id="deleteSelected" class="danger-btn">Remove Selected</button>
+        <button type="button" id="deleteSelected" class="danger-btn">Delete Selected</button>
         <button type="button" id="closeOverlay" class="secondary-btn">Cancel</button>
       </div>
     </div>
   </div>
 
   <script src="/EduPilot/JavaScript/list_students.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const adminButton = document.querySelector('button[onclick="toTeacherAdmin()"]');
+      if (adminButton && isAdminModeActive()) {
+        adminButton.style.display = 'none';
+      }
+    });
+  </script>
 
 </body>
 </html>

@@ -109,6 +109,10 @@ function toTStudents() {
     window.location.href = "/EduPilot/html/teacher/tStudents.html";
 }
 
+function toTeacherAdmin() {
+    window.location.href = "/EduPilot/html/teacher/tAdmin.html";
+}
+
 function toTeacherReports() {
     window.location.href = "/EduPilot/html/teacher/teacher_CourseReport.html";
 }

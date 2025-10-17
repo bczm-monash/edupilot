@@ -17,7 +17,7 @@
             <h1>EduPilot</h1>
         </span>
         <div class="menu">
-            <button onclick="toTStudents()">Students</button>
+            <button onclick="toTeacherAdmin()">Admin</button>
             <button onclick="toLesson()">Lesson</button>
             <button onclick="toTCourse()">Course</button>
             <button onclick="toTClassroom()">Classroom</button>
@@ -56,9 +56,9 @@
     <script src="/EduPilot/JavaScript/admin-nav.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const studentsButton = document.querySelector('button[onclick="toTStudents()"]');
-            if (studentsButton && isAdminModeActive()) {
-                studentsButton.style.display = 'none';
+            const adminButton = document.querySelector('button[onclick="toTeacherAdmin()"]');
+            if (adminButton && isAdminModeActive()) {
+                adminButton.style.display = 'none';
             }
         });
     </script>

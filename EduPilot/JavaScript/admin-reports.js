@@ -77,7 +77,7 @@
         supabase.from('users').select('users_id, users_role'),
         supabase.from('course').select('course_id, course_status'),
         supabase.from('lesson').select('lesson_id, lesson_credit_pts'),
-        supabase.from('classroom').select('classroom_id, classroom_status'),
+        supabase.from('classroom').select('*'),
         supabase.from('classmate').select('classroom_id'),
         supabase.from('units').select('lesson_id'),
       ]);
@@ -126,7 +126,7 @@
       setMetric('classroom-total', classroomList.length);
       const ongoingStatuses = new Set(['ongoing', 'in progress', 'active']);
       const completedStatuses = new Set(['completed', 'done', 'finished']);
-      const classroomStatusList = classroomList.map((row) => normaliseStatus(row.classroom_status));
+      const classroomStatusList = classroomList.map((row) => normaliseStatus(row.classroom_status || row.status || row.state));
 
       const ongoingCount = classroomStatusList.filter((s) => ongoingStatuses.has(s)).length;
       const completedCount = classroomStatusList.filter((s) => completedStatuses.has(s)).length;

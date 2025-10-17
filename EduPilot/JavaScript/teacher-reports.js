@@ -78,7 +78,7 @@
       ] = await Promise.all([
         supabase.from('course').select('course_id, course_status').eq('users_id', teacherId),
         supabase.from('lesson').select('lesson_id, lesson_credit_pts').eq('users_id', teacherId),
-        supabase.from('classroom').select('classroom_id, classroom_status').eq('users_id', teacherId),
+        supabase.from('classroom').select('*').eq('users_id', teacherId),
       ]);
 
       if (coursesError || lessonsError || classroomsError) {
@@ -162,7 +162,7 @@
       let ongoing = 0;
       let completed = 0;
       classroomList.forEach((row) => {
-        const status = normalise(row.classroom_status);
+        const status = normalise(row.classroom_status || row.status || row.state);
         if (ongoingStatuses.has(status)) ongoing += 1;
         if (completedStatuses.has(status)) completed += 1;
       });

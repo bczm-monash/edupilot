@@ -162,10 +162,6 @@
       est.textContent = `Estimated Hours: ${lesson.lesson_est_hrs}`;
     }
 
-    const desc = document.createElement('div');
-    desc.className = 'lesson-desc';
-    if (lesson.lesson_desc) desc.textContent = lesson.lesson_desc;
-
     const open = () => {
       if (!lesson.lesson_id) return;
       const url = `/EduPilot/html/student/sLesson_content.html?id=${encodeURIComponent(lesson.lesson_id)}`;
@@ -185,8 +181,6 @@
     if (owner.textContent) li.appendChild(owner);
     if (credit.textContent) li.appendChild(credit);
     if (est.textContent) li.appendChild(est);
-    if (desc.textContent) li.appendChild(desc);
-
     return li;
   }
 

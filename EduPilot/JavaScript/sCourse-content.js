@@ -116,16 +116,9 @@
         hours.textContent = `Estimated Hours: ${hoursVal}`;
       }
 
-      const desc = document.createElement('div');
-      desc.className = 'lesson-desc';
-      if (lesson.lesson_desc) {
-        desc.textContent = lesson.lesson_desc;
-      }
-
       li.appendChild(title);
       if (credit.textContent) li.appendChild(credit);
       if (hours.textContent) li.appendChild(hours);
-      if (desc.textContent) li.appendChild(desc);
 
       if (lessonId) {
         li.tabIndex = 0;

@@ -4,8 +4,8 @@
   const COURSE_COUNT_EL = document.getElementById('courseCount');
   const CLASSROOM_COUNT_EL = document.getElementById('classroomCount');
   const STUDENT_COUNT_EL = document.getElementById('studentCount');
-  const BTN_CREATE_COURSE = document.getElementById('createCourseBtn');
-  const BTN_CREATE_CLASSROOM = document.getElementById('createClassroomBtn');
+  const BTN_BROWSE_COURSES = document.getElementById('browseCoursesBtn');
+  const BTN_VIEW_CLASSROOMS = document.getElementById('viewClassroomsBtn');
 
   const QUOTES = [
     '“The art of teaching is the art of assisting discovery.” — Mark Van Doren',
@@ -35,42 +35,17 @@
     return 'Instructor';
   }
 
-  function parseDate(value) {
-    if (!value) return null;
-    try {
-      const direct = new Date(value);
-      if (!Number.isNaN(direct.getTime())) return direct;
-    } catch (err) {
-      /* ignore */
-    }
-    const str = String(value).trim();
-    if (!str) return null;
-    const match = str.match(/^(\d{1,2})[\/](\d{1,2})[\/](\d{4})$/);
-    if (match) {
-      const [, d, m, y] = match.map(Number);
-      const parsed = new Date(y, m - 1, d);
-      if (!Number.isNaN(parsed.getTime())) return parsed;
-    }
-    return null;
-  }
-
-  function formatDate(value) {
-    const date = parseDate(value);
-    if (!date) return String(value || '');
-    return date.toLocaleDateString(undefined, {
-      month: 'short',
-      day: 'numeric',
-      year: 'numeric',
-    });
-  }
-
   function setupButtons() {
-    if (BTN_CREATE_COURSE) BTN_CREATE_COURSE.addEventListener('click', () => {
-      window.location.href = '/EduPilot/html/teacher/create_tCourse.html';
-    });
-    if (BTN_CREATE_CLASSROOM) BTN_CREATE_CLASSROOM.addEventListener('click', () => {
-      window.location.href = '/EduPilot/html/teacher/create_classroom.html';
-    });
+    if (BTN_BROWSE_COURSES) {
+      BTN_BROWSE_COURSES.addEventListener('click', () => {
+        window.location.href = '/EduPilot/html/teacher/tCourse.html';
+      });
+    }
+    if (BTN_VIEW_CLASSROOMS) {
+      BTN_VIEW_CLASSROOMS.addEventListener('click', () => {
+        window.location.href = '/EduPilot/html/teacher/tClassroom.html';
+      });
+    }
   }
 
   function updateGreeting(profile) {
@@ -90,7 +65,6 @@
     if (CLASSROOM_COUNT_EL) CLASSROOM_COUNT_EL.textContent = classrooms;
     if (STUDENT_COUNT_EL) STUDENT_COUNT_EL.textContent = students;
   }
-
 
   async function init() {
     const supabase = await waitForSupabase();
@@ -125,27 +99,19 @@
       updateGreeting(profile);
       setupButtons();
 
-      const [courseRes, classroomRes, lessonRes] = await Promise.all([
+      const [courseRes, classroomRes] = await Promise.all([
         supabase
           .from('course')
-          .select('course_id, course_title, course_status')
+          .select('course_id, course_status')
           .eq('users_id', teacherId),
         supabase
           .from('classroom')
-          .select('classroom_id, classroom_title, classroom_start_date, classroom_status, course_id')
-          .eq('users_id', teacherId),
-        supabase
-          .from('lesson')
-          .select('lesson_id')
+          .select('classroom_id, classroom_status')
           .eq('users_id', teacherId),
       ]);
 
       const courses = Array.isArray(courseRes?.data) ? courseRes.data : [];
       const classrooms = Array.isArray(classroomRes?.data) ? classroomRes.data : [];
-      const lessons = Array.isArray(lessonRes?.data) ? lessonRes.data : [];
-
-      const activeCourses = courses.filter((course) => (course.course_status || '').toLowerCase() !== 'archived');
-      const activeClassrooms = classrooms.filter((room) => (room.classroom_status || '').toLowerCase() !== 'archived');
 
       let students = [];
       if (classrooms.length) {
@@ -160,33 +126,17 @@
         }
       }
 
+      const activeCourses = courses.filter((course) => (course.course_status || '').toLowerCase() !== 'archived');
+      const activeClassrooms = classrooms.filter((room) => (room.classroom_status || '').toLowerCase() !== 'archived');
+
       updateStats({
         courses: activeCourses.length,
         classrooms: activeClassrooms.length,
         students: students.length,
       });
-
-      updateProgress({
-        active: activeClassrooms.length,
-        total: classrooms.length,
-      });
-
-      const courseTitleMap = new Map(
-        courses.map((course) => [course.course_id, course.course_title || course.course_id])
-      );
-
-      const upcomingClassrooms = classrooms
-        .map((room) => ({ ...room, startDate: parseDate(room.classroom_start_date) }))
-        .filter((room) => room.startDate)
-        .sort((a, b) => a.startDate - b.startDate);
-
-      const futureClassrooms = upcomingClassrooms.filter((room) => room.startDate.getTime() >= Date.now());
-      updateUpcoming(futureClassrooms.length ? futureClassrooms : upcomingClassrooms, courseTitleMap);
     } catch (err) {
       console.error('Failed to load teacher welcome data', err);
       updateStats({});
-      updateProgress({});
-      updateUpcoming([], new Map());
     }
   }
 

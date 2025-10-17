@@ -41,20 +41,43 @@
 
   function parseDate(value) {
     if (!value) return null;
-    try {
-      const direct = new Date(value);
-      if (!Number.isNaN(direct.getTime())) return direct;
-    } catch (err) {
-      /* fallthrough */
-    }
     const str = String(value).trim();
     if (!str) return null;
-    const match = str.match(/^(\d{1,2})[\/](\d{1,2})[\/](\d{4})$/);
-    if (match) {
-      const [, d, m, y] = match.map(Number);
+
+    const isoLike = str.match(
+      /^(\d{4})-(\d{2})-(\d{2})(?:[ T](\d{2})(?::(\d{2})(?::(\d{2}))?)?)?(?:\.(\d{1,6}))?(Z|[+-]\d{2}:?\d{2})?$/
+    );
+    if (isoLike) {
+      const [, y, m, d, hh = '00', mm = '00', ss = '00', frac = '', zone = ''] = isoLike;
+      const fractional = frac ? `.${frac}` : '';
+      const candidate = `${y}-${m}-${d}T${hh}:${mm}:${ss}${fractional}${zone || ''}`;
+      const parsed = new Date(candidate);
+      if (!Number.isNaN(parsed.getTime())) return parsed;
+      const fallback = new Date(Number(y), Number(m) - 1, Number(d), Number(hh), Number(mm), Number(ss));
+      if (!Number.isNaN(fallback.getTime())) return fallback;
+    }
+
+    const slash = str.match(/^(\d{1,2})[\/](\d{1,2})[\/](\d{4})$/);
+    if (slash) {
+      const [, dayRaw, monthRaw, yearRaw] = slash.map(Number);
+      const parsed = new Date(yearRaw, monthRaw - 1, dayRaw);
+      if (!Number.isNaN(parsed.getTime())) return parsed;
+    }
+
+    const dashed = str.match(/^(\d{4})[\/](\d{2})[\/](\d{2})$/);
+    if (dashed) {
+      const [, y, m, d] = dashed.map(Number);
       const parsed = new Date(y, m - 1, d);
       if (!Number.isNaN(parsed.getTime())) return parsed;
     }
+
+    try {
+      const direct = new Date(str);
+      if (!Number.isNaN(direct.getTime())) return direct;
+    } catch (err) {
+      /* ignore */
+    }
+
     return null;
   }
 

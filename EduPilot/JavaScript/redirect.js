@@ -79,7 +79,7 @@ function toCreateClassroom() {
 
 function toAdmin() {
     clearAdminModeFlag();
-    window.location.href = "/EduPilot/html/admin/adminpage.html";
+    window.location.href = "/EduPilot/html/admin/adminWelcomePage.html";
 }
 
 function toAdminLesson() {

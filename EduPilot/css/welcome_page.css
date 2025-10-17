@@ -197,6 +197,43 @@ body {
   gap: 12px;
 }
 
+.overview-list {
+  list-style: none;
+  margin: 16px 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.overview-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 14px;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  background: #f8fafc;
+  color: #1f2937;
+  font-size: 15px;
+}
+
+.overview-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.overview-value {
+  font-weight: 600;
+  font-size: 18px;
+  color: #0f172a;
+}
+
+.overview-list li .muted {
+  font-size: 13px;
+}
+
 .upcoming-item {
   display: flex;
   justify-content: space-between;

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Welcome - EduPilot Admin</title>
+  <link rel="stylesheet" href="../../css/page.css">
+  <link rel="stylesheet" href="../../css/welcome_page.css">
+  <script type="module" src="/EduPilot/JavaScript/supabase-init.js"></script>
+  <script src="/EduPilot/JavaScript/redirect.js"></script>
+</head>
+<body>
+  <div class="navigationBar">
+    <span class="logo">
+      <img src="../../Images/logo.webp" alt="EduPilot logo" width="100">
+      <h1>EduPilot</h1>
+    </span>
+    <div class="menu">
+      <button onclick="toAdmin()">Admin</button>
+      <button onclick="toAdminLesson()">Lesson</button>
+      <button onclick="toAdminCourse()">Course</button>
+      <button onclick="toAdminClassroom()">Classroom</button>
+      <button onclick="toLogin()">Log Out</button>
+    </div>
+  </div>
+
+  <main class="welcome-page">
+    <section class="hero-card admin-hero">
+      <div class="hero-text">
+        <p id="greeting" class="hero-greeting">Welcome, Admin</p>
+        <h1>System Overview</h1>
+        <p id="motivation" class="hero-quote">“Leadership is unlocking people’s potential to become better.” — Bill Bradley</p>
+        <div class="hero-actions">
+          <button type="button" class="primary-btn" id="manageStudentsBtn">Manage Students</button>
+          <button type="button" class="secondary-btn" id="manageInstructorsBtn">Manage Instructors</button>
+          <button type="button" class="secondary-btn" id="viewReportsBtn">View Reports</button>
+          <button type="button" class="secondary-btn" id="openDashboardBtn">Admin Dashboard</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="stats-grid" aria-label="Platform snapshot">
+      <article class="stat-card">
+        <h3>Total Students</h3>
+        <p id="studentCount" class="stat-value">0</p>
+        <p class="stat-label">Registered learners</p>
+      </article>
+      <article class="stat-card">
+        <h3>Total Instructors</h3>
+        <p id="instructorCount" class="stat-value">0</p>
+        <p class="stat-label">Active teaching staff</p>
+      </article>
+      <article class="stat-card">
+        <h3>Courses</h3>
+        <p id="courseCount" class="stat-value">0</p>
+        <p class="stat-label">Published catalog</p>
+      </article>
+      <article class="stat-card">
+        <h3>Classrooms</h3>
+        <p id="classroomCount" class="stat-value">0</p>
+        <p class="stat-label">Running cohorts</p>
+      </article>
+    </section>
+
+    <section class="progress-card" aria-labelledby="systemHealthTitle">
+      <div class="progress-heading">
+        <h2 id="systemHealthTitle">System Health</h2>
+        <span id="systemSummary" class="muted">Loading summary…</span>
+      </div>
+      <ul id="systemHighlights" class="overview-list"></ul>
+    </section>
+
+  </main>
+
+  <script src="/EduPilot/JavaScript/adminWelcomePage.js"></script>
+</body>
+</html>

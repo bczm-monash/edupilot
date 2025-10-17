@@ -67,6 +67,7 @@
   let currentUserId = '';
   let enrolledCourseIds = new Set();
   let cachedCourses = [];
+  let lockedCourseIds = new Set();
 
   async function ensureSupabaseReady(retry = 0) {
     if (window.supabase) return window.supabase;
@@ -172,6 +173,39 @@
 
     const courses = await fetchCoursesByIds(courseIds);
 
+    lockedCourseIds = new Set();
+    if (courses.length) {
+      try {
+        const supabase = await ensureSupabaseReady();
+        const { data: classroomLinks, error: classroomError } = await supabase
+          .from('classroom')
+          .select('classroom_id, course_id')
+          .in('course_id', courseIds);
+
+        if (!classroomError && Array.isArray(classroomLinks) && classroomLinks.length) {
+          const classroomIds = classroomLinks.map((row) => row.classroom_id).filter(Boolean);
+          if (classroomIds.length) {
+            const { data: memberships, error: membershipError } = await supabase
+              .from('classmate')
+              .select('classroom_id')
+              .eq('users_id', currentUserId)
+              .in('classroom_id', classroomIds);
+
+            if (!membershipError && Array.isArray(memberships)) {
+              const enrolledClassroomIds = new Set(memberships.map((row) => row.classroom_id).filter(Boolean));
+              classroomLinks.forEach((link) => {
+                if (enrolledClassroomIds.has(link.classroom_id) && link.course_id) {
+                  lockedCourseIds.add(String(link.course_id));
+                }
+              });
+            }
+          }
+        }
+      } catch (err) {
+        console.warn('Failed to determine locked courses:', err);
+      }
+    }
+
     if (!courses.length) {
       renderEmpty('You are not enrolled in any published courses.');
       return;
@@ -212,7 +246,12 @@
       const label = document.createElement('label');
       label.style.flex = '1';
       const teacher = course.owner_name ? ` | Instructor: ${course.owner_name}` : '';
-      label.textContent = `${id} - ${course.course_title || 'Untitled course'}${teacher}`;
+      const locked = lockedCourseIds.has(id);
+      label.textContent = `${id} - ${course.course_title || 'Untitled course'}${teacher}${locked ? ' (Enrolled in classroom)' : ''}`;
+      if (locked) {
+        checkbox.disabled = true;
+        row.classList.add('disabled-row');
+      }
 
       row.appendChild(checkbox);
       row.appendChild(label);
@@ -260,11 +299,22 @@
 
     const normalized = selectedIds.map((id) => String(id));
 
+    const actionable = normalized.filter((id) => !lockedCourseIds.has(id));
+    const blocked = normalized.filter((id) => lockedCourseIds.has(id));
+
+    if (blocked.length) {
+      alert(`You are enrolled in classrooms for the following courses and cannot unenroll: ${blocked.join(', ')}`);
+    }
+
+    if (!actionable.length) {
+      return;
+    }
+
     const { error } = await supabase
       .from('enrolment')
       .delete()
       .eq('user_id', currentUserId)
-      .in('course_id', normalized);
+      .in('course_id', actionable);
 
     if (error) {
       console.error('Failed to unenroll courses:', error);
@@ -273,7 +323,7 @@
     }
 
     const nextSet = new Set(enrolledCourseIds);
-    normalized.forEach((id) => nextSet.delete(id));
+    actionable.forEach((id) => nextSet.delete(id));
     enrolledCourseIds = nextSet;
     closeOverlay();
     alert('Selected courses have been unenrolled.');

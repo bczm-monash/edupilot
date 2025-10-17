@@ -11,6 +11,7 @@
   let currentUserId = '';
   let availableClassrooms = [];
   let courseTitleMap = {};
+  let enrolledCourseIds = new Set();
 
   function ensureSupabaseReady(retry = 0) {
     return new Promise((resolve) => {
@@ -79,6 +80,25 @@
     }
 
     return Array.isArray(data) ? data : [];
+  }
+
+  async function fetchEnrolledCourseIds(userId) {
+    const client = supabaseClient;
+    if (!client) return [];
+
+    const { data, error } = await client
+      .from('enrolment')
+      .select('course_id')
+      .eq('user_id', userId);
+
+    if (error) {
+      console.error('Failed to load enrolled course ids:', error);
+      return [];
+    }
+
+    return (data || [])
+      .map((row) => (row?.course_id ? String(row.course_id) : ''))
+      .filter(Boolean);
   }
 
   async function resolveTeacherNames(items) {
@@ -364,7 +384,16 @@
 
     currentUserId = user.id;
     const enrolledIds = await fetchEnrolledIds(user.id);
+    const courseIds = await fetchEnrolledCourseIds(user.id);
+    enrolledCourseIds = new Set(courseIds);
+
     availableClassrooms = await fetchAvailableClassrooms(enrolledIds);
+    const filtered = availableClassrooms.filter((room) => {
+      const courseId = room.course_id ? String(room.course_id) : '';
+      if (!courseId) return false;
+      return enrolledCourseIds.has(courseId);
+    });
+    availableClassrooms = filtered;
     await resolveTeacherNames(availableClassrooms);
     courseTitleMap = await fetchCourseTitles();
 

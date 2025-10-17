@@ -45,6 +45,10 @@ function toSClassroom() {
     window.location.href = "/EduPilot/html/student/sClassroom.html";
 }
 
+function toSWelcome() {
+    window.location.href = "/EduPilot/html/student/sWelcomePage.html";
+}
+
 function toAvailableClassrooms() {
     window.location.href = "/EduPilot/html/student/sClassroom_available.html";
 }

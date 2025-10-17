@@ -4,7 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Welcome Page - EduPilot</title>
+    <link rel="stylesheet" href="../../css/page.css">
     <link rel="stylesheet" href="../../css/welcome_page.css">
+    <script type="module" src="/EduPilot/JavaScript/supabase-init.js"></script>
     <script src="/EduPilot/JavaScript/redirect.js"></script>
 </head>
 <body>
@@ -21,18 +23,57 @@
         </div>
     </div>
 
-    <div class="container">
-        <div class="container1">
-            <h1>“Learning is a process<br>not an event.”</h1>
-            <p style="text-align: right;">by Elliott Masie</p>
-            <p style="font-size: 40px;">Welcome back!</p> <!-- Should have a name -->
-            <p style="font-size: 30px;">Your learning journey:</p>
-            <p style="font-size: 25px;">Lesson progress bar: </p>
-        </div>
-    </div>
-    
-    <div class="continueButton">
-        <button onclick="toSCourse()">Continue Journey</button>
-    </div>
+    <main class="welcome-page">
+        <section class="hero-card">
+            <div class="hero-text">
+                <p id="greeting" class="hero-greeting">Hello, Learner</p>
+                <h1>Welcome back to EduPilot</h1>
+                <p id="motivation" class="hero-quote">“Learning is a process, not an event.” — Elliott Masie</p>
+
+                <div class="hero-actions">
+                    <button type="button" class="primary-btn" id="goToCourses">Browse Courses</button>
+                    <button type="button" class="secondary-btn" id="goToClassrooms">View Classrooms</button>
+                </div>
+            </div>
+        </section>
+
+        <section class="stats-grid" aria-label="Learning summary">
+            <article class="stat-card">
+                <h3>Courses</h3>
+                <p id="courseCount" class="stat-value">0</p>
+                <p class="stat-label">Enrolled</p>
+            </article>
+            <article class="stat-card">
+                <h3>Classrooms</h3>
+                <p id="classroomCount" class="stat-value">0</p>
+                <p class="stat-label">Joined</p>
+            </article>
+            <article class="stat-card">
+                <h3>Lessons</h3>
+                <p id="lessonCount" class="stat-value">0</p>
+                <p class="stat-label">Assigned</p>
+            </article>
+        </section>
+
+        <section class="progress-card" aria-labelledby="progressTitle">
+            <div class="progress-heading">
+                <h2 id="progressTitle">Learning Progress</h2>
+                <span id="progressLabel" class="muted">0 of 0 lessons completed</span>
+            </div>
+            <div class="progress-bar">
+                <div id="progressFill" class="progress-fill" style="width: 0%"></div>
+            </div>
+        </section>
+
+        <section class="upcoming-card" aria-labelledby="upcomingTitle">
+            <h2 id="upcomingTitle">What's Next</h2>
+            <ul id="upcomingList" class="upcoming-list">
+                <li class="muted">Loading upcoming sessions…</li>
+            </ul>
+        </section>
+    </main>
+
+    <script src="/EduPilot/JavaScript/sWelcomePage.js"></script>
+    <script src="/EduPilot/JavaScript/redirect.js"></script>
 </body>
 </html>

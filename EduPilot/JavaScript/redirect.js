@@ -152,6 +152,7 @@ function toTWelcome() {
                 { name: 'Lavender', value: '#cea4f5ff', type: 'color' },
                 { name: 'Emerald', value: '#a8e9d3ff', type: 'color' },
                 { name: 'Slate', value: '#1f2937', type: 'color' },
+                { name: 'Carbon', value: '#000000', type: 'color' },
                 { name: 'Sunset', value: '#ffe4d1ff', type: 'color' },
                 { name: 'Blush', value: '#f6dbdfff', type: 'color' },
             ],
@@ -228,6 +229,7 @@ const THEME_NAME_MAP = new Map([
     ['#cea4f5ff', 'lavender'],
     ['#a8e9d3ff', 'emerald'],
     ['#1f2937', 'slate'],
+    ['#000000', 'black'],
     ['#ffe4d1ff', 'sunset'],
     ['#f6dbdfff', 'blush'],
     ['image|/EduPilot/Images/background_pic/aurora.svg', 'aurora'],
@@ -236,7 +238,7 @@ const THEME_NAME_MAP = new Map([
 ]);
 
 const DARK_BACKGROUND_VALUES = new Set(
-    ['#1f2937', 'image|/EduPilot/Images/background_pic/aurora.svg'].map((value) => valueKey(value))
+    ['#1f2937', '#000000', 'image|/EduPilot/Images/background_pic/aurora.svg'].map((value) => valueKey(value))
 );
 
 function isDarkBackground(value) {

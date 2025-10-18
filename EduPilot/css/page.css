@@ -655,6 +655,26 @@ body[data-app-theme="aurora"] :is(
   box-shadow: 0 18px 40px -18px rgba(59, 130, 246, 0.3);
 }
 
+body[data-app-theme="black"] :is(
+  .admin-card,
+  .report-section,
+  .metric-card,
+  .stat-card,
+  .progress-card,
+  .upcoming-card,
+  .form-card,
+  .lesson-card,
+  .lesson-grade-card,
+  .grades-card,
+  .course-card,
+  .classroom-card,
+  .overlay-panel
+) {
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.92), rgba(17, 17, 17, 0.9));
+  border-color: rgba(255, 255, 255, 0.45);
+  box-shadow: 0 20px 42px -18px rgba(0, 0, 0, 0.75);
+}
+
 body[data-app-theme="sunrise"] {
   --surface-panel-bg: rgba(254, 240, 199, 0.72);
   --surface-panel-fg: #78350f;
@@ -713,6 +733,16 @@ body[data-app-theme="ocean"] {
   --surface-panel-toggle-bg: rgba(219, 234, 254, 0.9);
   --surface-panel-toggle-hover-bg: rgba(219, 234, 254, 1);
   --surface-panel-toggle-fg: #0f172a;
+}
+
+body[data-app-theme="black"] {
+  --surface-panel-bg: rgba(10, 10, 10, 0.92);
+  --surface-panel-fg: #e5e7eb;
+  --surface-panel-border: rgba(255, 255, 255, 0.35);
+  --surface-panel-shadow: 0 20px 44px -18px rgba(0, 0, 0, 0.75);
+  --surface-panel-toggle-bg: rgba(75, 85, 99, 0.7);
+  --surface-panel-toggle-hover-bg: rgba(100, 116, 139, 0.85);
+  --surface-panel-toggle-fg: #f8fafc;
 }
 
 body.theme-dark {

@@ -62,6 +62,38 @@ h1{
     background-color: #222;
 }
 
+.back-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+  background-color: #f1f5f9;
+  color: #1f2937;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.12s ease, box-shadow 0.12s ease;
+}
+
+.back-btn:hover {
+  background-color: #e2e8f0;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.12);
+}
+
+.back-btn:focus-visible {
+  outline: 2px solid #2563eb;
+  outline-offset: 2px;
+}
+
+.back-btn:active {
+  transform: translateY(0);
+  box-shadow: none;
+}
+
 
 .site-title {
     font-size: 45px;
@@ -450,4 +482,16 @@ body.theme-dark .details-card .muted,
 body.theme-dark .course-card .muted,
 body.theme-dark .classroom-card .muted {
   color: #475569;
+}
+
+body.theme-dark .back-btn {
+  background-color: rgba(148, 163, 184, 0.2);
+  border-color: rgba(226, 232, 240, 0.4);
+  color: #f8fafc;
+  box-shadow: none;
+}
+
+body.theme-dark .back-btn:hover {
+  background-color: rgba(148, 163, 184, 0.28);
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.22);
 }

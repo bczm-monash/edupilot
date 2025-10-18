@@ -94,6 +94,25 @@ h1{
   box-shadow: none;
 }
 
+body[data-app-theme] :is(
+  .admin-card,
+  .report-section,
+  .metric-card,
+  .stat-card,
+  .progress-card,
+  .upcoming-card,
+  .form-card,
+  .lesson-card,
+  .lesson-grade-card,
+  .grades-card,
+  .course-card,
+  .classroom-card,
+  .overlay-panel
+) {
+  transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+  border: 1px solid rgba(15, 23, 42, 0.85);
+}
+
 
 .site-title {
     font-size: 45px;
@@ -409,6 +428,186 @@ img, video, svg {
 
 .report-placeholder {
   max-width: 560px;
+}
+
+body[data-app-theme="sky"] :is(
+  .admin-card,
+  .report-section,
+  .metric-card,
+  .stat-card,
+  .progress-card,
+  .upcoming-card,
+  .form-card,
+  .lesson-card,
+  .lesson-grade-card,
+  .grades-card,
+  .course-card,
+  .classroom-card,
+  .overlay-panel
+) {
+  background: linear-gradient(160deg, rgba(147, 197, 253, 0.38), rgba(255, 255, 255, 0.96));
+  border-color: rgba(15, 23, 42, 0.85);
+  box-shadow: 0 18px 40px -18px rgba(59, 130, 246, 0.4);
+}
+
+body[data-app-theme="lavender"] :is(
+  .admin-card,
+  .report-section,
+  .metric-card,
+  .stat-card,
+  .progress-card,
+  .upcoming-card,
+  .form-card,
+  .lesson-card,
+  .lesson-grade-card,
+  .grades-card,
+  .course-card,
+  .classroom-card,
+  .overlay-panel
+) {
+  background: linear-gradient(160deg, rgba(206, 164, 245, 0.34), rgba(255, 255, 255, 0.97));
+  border-color: rgba(15, 23, 42, 0.85);
+  box-shadow: 0 18px 40px -18px rgba(139, 92, 246, 0.32);
+}
+
+body[data-app-theme="emerald"] :is(
+  .admin-card,
+  .report-section,
+  .metric-card,
+  .stat-card,
+  .progress-card,
+  .upcoming-card,
+  .form-card,
+  .lesson-card,
+  .lesson-grade-card,
+  .grades-card,
+  .course-card,
+  .classroom-card,
+  .overlay-panel
+) {
+  background: linear-gradient(160deg, rgba(168, 233, 211, 0.32), rgba(255, 255, 255, 0.97));
+  border-color: rgba(15, 23, 42, 0.85);
+  box-shadow: 0 18px 40px -18px rgba(16, 185, 129, 0.28);
+}
+
+body[data-app-theme="sunset"] :is(
+  .admin-card,
+  .report-section,
+  .metric-card,
+  .stat-card,
+  .progress-card,
+  .upcoming-card,
+  .form-card,
+  .lesson-card,
+  .lesson-grade-card,
+  .grades-card,
+  .course-card,
+  .classroom-card,
+  .overlay-panel
+) {
+  background: linear-gradient(160deg, rgba(255, 228, 209, 0.36), rgba(255, 255, 255, 0.97));
+  border-color: rgba(15, 23, 42, 0.85);
+  box-shadow: 0 18px 40px -18px rgba(249, 115, 22, 0.26);
+}
+
+body[data-app-theme="blush"] :is(
+  .admin-card,
+  .report-section,
+  .metric-card,
+  .stat-card,
+  .progress-card,
+  .upcoming-card,
+  .form-card,
+  .lesson-card,
+  .lesson-grade-card,
+  .grades-card,
+  .course-card,
+  .classroom-card,
+  .overlay-panel
+) {
+  background: linear-gradient(160deg, rgba(246, 219, 223, 0.38), rgba(255, 255, 255, 0.98));
+  border-color: rgba(15, 23, 42, 0.85);
+  box-shadow: 0 18px 40px -18px rgba(244, 114, 182, 0.3);
+}
+
+body[data-app-theme="slate"] :is(
+  .admin-card,
+  .report-section,
+  .metric-card,
+  .stat-card,
+  .progress-card,
+  .upcoming-card,
+  .form-card,
+  .lesson-card,
+  .lesson-grade-card,
+  .grades-card,
+  .course-card,
+  .classroom-card,
+  .overlay-panel
+) {
+  background: linear-gradient(160deg, rgba(226, 232, 240, 0.52), rgba(248, 250, 252, 0.98));
+  border-color: rgba(15, 23, 42, 0.85);
+  box-shadow: 0 18px 40px -18px rgba(15, 23, 42, 0.28);
+}
+
+body[data-app-theme="aurora"] :is(
+  .admin-card,
+  .report-section,
+  .metric-card,
+  .stat-card,
+  .progress-card,
+  .upcoming-card,
+  .form-card,
+  .lesson-card,
+  .lesson-grade-card,
+  .grades-card,
+  .course-card,
+  .classroom-card,
+  .overlay-panel
+) {
+  background: linear-gradient(160deg, rgba(165, 180, 252, 0.32), rgba(125, 211, 252, 0.3), rgba(255, 255, 255, 0.97));
+  border-color: rgba(15, 23, 42, 0.85);
+  box-shadow: 0 18px 40px -18px rgba(59, 130, 246, 0.3);
+}
+
+body[data-app-theme="sunrise"] :is(
+  .admin-card,
+  .report-section,
+  .metric-card,
+  .stat-card,
+  .progress-card,
+  .upcoming-card,
+  .form-card,
+  .lesson-card,
+  .lesson-grade-card,
+  .grades-card,
+  .course-card,
+  .classroom-card,
+  .overlay-panel
+) {
+  background: linear-gradient(160deg, rgba(254, 215, 170, 0.38), rgba(255, 255, 255, 0.97));
+  border-color: rgba(15, 23, 42, 0.85);
+  box-shadow: 0 18px 40px -18px rgba(234, 179, 8, 0.28);
+}
+
+body[data-app-theme="ocean"] :is(
+  .admin-card,
+  .report-section,
+  .metric-card,
+  .stat-card,
+  .progress-card,
+  .upcoming-card,
+  .form-card,
+  .lesson-card,
+  .lesson-grade-card,
+  .grades-card,
+  .course-card,
+  .classroom-card,
+  .overlay-panel
+) {
+  background: linear-gradient(160deg, rgba(191, 219, 254, 0.34), rgba(255, 255, 255, 0.97));
+  border-color: rgba(15, 23, 42, 0.85);
+  box-shadow: 0 18px 40px -18px rgba(37, 99, 235, 0.3);
 }
 
 body.theme-dark {

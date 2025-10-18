@@ -186,6 +186,7 @@ function toTWelcome() {
         userId: null,
         currentValue: null,
         toggleBtn: null,
+        currentTheme: 'default',
         panelEl: null,
         swatchMap: new Map(),
         initialised: false,
@@ -221,6 +222,19 @@ function valueKey(value) {
     return trimmed;
 }
 
+const THEME_NAME_MAP = new Map([
+    ['__default__', 'default'],
+    ['#9bdbf7ff', 'sky'],
+    ['#cea4f5ff', 'lavender'],
+    ['#a8e9d3ff', 'emerald'],
+    ['#1f2937', 'slate'],
+    ['#ffe4d1ff', 'sunset'],
+    ['#f6dbdfff', 'blush'],
+    ['image|/EduPilot/Images/background_pic/aurora.svg', 'aurora'],
+    ['image|/EduPilot/Images/background_pic/sunrise.svg', 'sunrise'],
+    ['image|/EduPilot/Images/background_pic/ocean.svg', 'ocean'],
+]);
+
 const DARK_BACKGROUND_VALUES = new Set(
     ['#1f2937', 'image|/EduPilot/Images/background_pic/aurora.svg'].map((value) => valueKey(value))
 );
@@ -233,6 +247,24 @@ function applyContrastMode(value) {
     const body = document.body;
     if (!body) return;
     body.classList.toggle('theme-dark', isDarkBackground(value));
+}
+
+function themeNameForValue(value) {
+    const key = valueKey(value);
+    return THEME_NAME_MAP.get(key) || 'default';
+}
+
+function applyThemeTag(value) {
+    const body = document.body;
+    if (!body) return;
+    const themeName = themeNameForValue(value);
+    if (STATE.currentTheme === themeName) return;
+    STATE.currentTheme = themeName;
+    if (themeName === 'default') {
+        delete body.dataset.appTheme;
+    } else {
+        body.dataset.appTheme = themeName;
+    }
 }
 
 function isImageValue(value) {
@@ -259,6 +291,7 @@ function isImageValue(value) {
         const body = document.body;
         if (!body) return;
 
+        applyThemeTag(value);
         applyContrastMode(value);
 
         body.style.removeProperty('background');

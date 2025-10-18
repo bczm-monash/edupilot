@@ -217,6 +217,20 @@ function waitForSupabase(timeoutMs = 6000) {
     }
 
 const THEME_STORAGE_KEY = 'edupilotThemeValue';
+const pendingBodyOps = [];
+
+function flushPendingBodyOps() {
+    if (!pendingBodyOps.length) return;
+    const bodyNode = document.body;
+    if (!bodyNode) return;
+    while (pendingBodyOps.length) {
+        const op = pendingBodyOps.shift();
+        try {
+            op();
+        } catch (err) {
+        }
+    }
+}
 
 function valueKey(value) {
     if (value === null || value === undefined || value === '') return '__default__';
@@ -248,9 +262,25 @@ function isDarkBackground(value) {
 }
 
 function applyContrastMode(value) {
+    const isDark = isDarkBackground(value);
     const body = document.body;
-    if (!body) return;
-    body.classList.toggle('theme-dark', isDarkBackground(value));
+    const root = document.documentElement;
+
+    if (root) {
+        root.classList.toggle('theme-dark', isDark);
+    }
+
+    if (body) {
+        body.classList.toggle('theme-dark', isDark);
+        flushPendingBodyOps();
+    } else {
+        pendingBodyOps.push(() => {
+            const bodyNode = document.body;
+            if (bodyNode) {
+                bodyNode.classList.toggle('theme-dark', isDark);
+            }
+        });
+    }
 }
 
 function themeNameForValue(value) {
@@ -259,15 +289,34 @@ function themeNameForValue(value) {
 }
 
 function applyThemeTag(value) {
-    const body = document.body;
-    if (!body) return;
     const themeName = themeNameForValue(value);
     if (STATE.currentTheme === themeName) return;
     STATE.currentTheme = themeName;
-    if (themeName === 'default') {
-        delete body.dataset.appTheme;
+    const root = document.documentElement;
+
+    if (root) {
+        if (themeName === 'default') {
+            delete root.dataset.appTheme;
+        } else {
+            root.dataset.appTheme = themeName;
+        }
+    }
+
+    const setOnBody = () => {
+        const bodyNode = document.body;
+        if (!bodyNode) return;
+        if (themeName === 'default') {
+            delete bodyNode.dataset.appTheme;
+        } else {
+            bodyNode.dataset.appTheme = themeName;
+        }
+    };
+
+    if (document.body) {
+        setOnBody();
+        flushPendingBodyOps();
     } else {
-        body.dataset.appTheme = themeName;
+        pendingBodyOps.push(setOnBody);
     }
 }
 
@@ -291,6 +340,65 @@ function getStoredThemeValue() {
     }
 }
 
+function setBackgroundForTarget(target, value) {
+    if (!target) return;
+
+    target.style.removeProperty('background');
+    target.style.removeProperty('background-color');
+    target.style.removeProperty('background-image');
+    target.style.removeProperty('background-size');
+    target.style.removeProperty('background-position');
+    target.style.removeProperty('background-repeat');
+    target.style.removeProperty('background-attachment');
+
+    if (value === null || value === undefined || value === '') {
+        return;
+    }
+
+    const trimmed = String(value).trim();
+    if (trimmed.startsWith('image|')) {
+        const path = trimmed.slice('image|'.length);
+        target.style.setProperty('background-image', `url("${path}")`);
+        target.style.setProperty('background-size', 'cover');
+        target.style.setProperty('background-position', 'center');
+        target.style.setProperty('background-repeat', 'no-repeat');
+        target.style.setProperty('background-attachment', 'fixed');
+        target.style.setProperty('background-color', 'transparent');
+        return;
+    }
+
+    if (/^url\(/i.test(trimmed)) {
+        target.style.setProperty('background-image', trimmed);
+        target.style.setProperty('background-size', 'cover');
+        target.style.setProperty('background-position', 'center');
+        target.style.setProperty('background-repeat', 'no-repeat');
+        target.style.setProperty('background-attachment', 'fixed');
+        target.style.setProperty('background-color', 'transparent');
+        return;
+    }
+
+    if (/^https?:\/\//i.test(trimmed) || trimmed.startsWith('data:')) {
+        target.style.setProperty('background-image', `url("${trimmed}")`);
+        target.style.setProperty('background-size', 'cover');
+        target.style.setProperty('background-position', 'center');
+        target.style.setProperty('background-repeat', 'no-repeat');
+        target.style.setProperty('background-attachment', 'fixed');
+        target.style.setProperty('background-color', 'transparent');
+        return;
+    }
+
+    target.style.setProperty('background', trimmed);
+    target.style.setProperty('background-color', trimmed);
+}
+
+const initialThemeValue = getStoredThemeValue();
+if (initialThemeValue !== null && initialThemeValue !== undefined && initialThemeValue !== '') {
+    STATE.currentValue = initialThemeValue;
+    applyThemeTag(initialThemeValue);
+    applyContrastMode(initialThemeValue);
+    setBackgroundForTarget(document.documentElement, initialThemeValue);
+}
+
 function isImageValue(value) {
     if (!value) return false;
     const trimmed = String(value).trim();
@@ -311,64 +419,22 @@ function isImageValue(value) {
         return trimmed;
     }
 
-    function applyVisualBackground(value) {
+function applyVisualBackground(value) {
         const body = document.body;
-        if (!body) return;
+        const root = document.documentElement;
 
         applyThemeTag(value);
         applyContrastMode(value);
 
-        body.style.removeProperty('background');
-        body.style.removeProperty('background-color');
-        body.style.removeProperty('background-image');
-        body.style.removeProperty('background-size');
-        body.style.removeProperty('background-position');
-        body.style.removeProperty('background-repeat');
-        body.style.removeProperty('background-attachment');
-
         if (!value) {
+            setBackgroundForTarget(body, value);
+            setBackgroundForTarget(root, value);
             storeThemeValue(null);
             return;
         }
 
-        const trimmed = String(value).trim();
-        if (trimmed.startsWith('image|')) {
-            const path = trimmed.slice('image|'.length);
-            body.style.setProperty('background-image', `url("${path}")`);
-            body.style.setProperty('background-size', 'cover');
-            body.style.setProperty('background-position', 'center');
-            body.style.setProperty('background-repeat', 'no-repeat');
-            body.style.setProperty('background-attachment', 'fixed');
-            body.style.setProperty('background-color', 'transparent');
-            storeThemeValue(value);
-            return;
-        }
-
-        if (/^url\(/i.test(trimmed)) {
-            body.style.setProperty('background-image', trimmed);
-            body.style.setProperty('background-size', 'cover');
-            body.style.setProperty('background-position', 'center');
-            body.style.setProperty('background-repeat', 'no-repeat');
-            body.style.setProperty('background-attachment', 'fixed');
-            body.style.setProperty('background-color', 'transparent');
-            storeThemeValue(value);
-            return;
-        }
-
-        if (/^https?:\/\//i.test(trimmed) || trimmed.startsWith('data:')) {
-            body.style.setProperty('background-image', `url("${trimmed}")`);
-            body.style.setProperty('background-size', 'cover');
-            body.style.setProperty('background-position', 'center');
-            body.style.setProperty('background-repeat', 'no-repeat');
-            body.style.setProperty('background-attachment', 'fixed');
-            body.style.setProperty('background-color', 'transparent');
-            storeThemeValue(value);
-            return;
-        }
-
-        body.style.setProperty('background', trimmed);
-        body.style.setProperty('background-color', trimmed);
-        body.style.removeProperty('background-attachment');
+        setBackgroundForTarget(body, value);
+        setBackgroundForTarget(root, value);
         storeThemeValue(value);
     }
 
@@ -631,26 +697,40 @@ function isImageValue(value) {
     }
 
     async function initialiseBackgroundManager() {
-        if (isPickerDisabledForPage()) return;
-        if (STATE.supabase) return;
+        if (isPickerDisabledForPage()) {
+            flushPendingBodyOps();
+            return;
+        }
+        if (STATE.supabase) {
+            flushPendingBodyOps();
+            return;
+        }
         const stored = getStoredThemeValue();
         if (stored !== null && stored !== undefined && stored !== '') {
             STATE.currentValue = stored;
-            applyVisualBackground(stored);
+            applyThemeTag(stored);
+            applyContrastMode(stored);
+            const root = document.documentElement;
+            if (root) {
+                setBackgroundForTarget(root, stored);
+            }
         }
         try {
             STATE.supabase = await waitForSupabase();
         } catch (err) {
             console.warn('Supabase unavailable, skipping background manager.');
+            flushPendingBodyOps();
             return;
         }
 
         await loadBackgroundPreference();
         if (!STATE.userId) {
+            flushPendingBodyOps();
             return;
         }
         createBackgroundControls();
         setActiveSwatch(STATE.currentValue);
+        flushPendingBodyOps();
     }
 
     if (typeof window !== 'undefined') {

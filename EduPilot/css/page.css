@@ -465,6 +465,21 @@ img, video, svg {
   max-width: 560px;
 }
 
+:root[data-app-theme="sky"] :is(
+  .admin-card,
+  .report-section,
+  .metric-card,
+  .stat-card,
+  .progress-card,
+  .upcoming-card,
+  .form-card,
+  .lesson-card,
+  .lesson-grade-card,
+  .grades-card,
+  .course-card,
+  .classroom-card,
+  .overlay-panel
+),
 body[data-app-theme="sky"] :is(
   .admin-card,
   .report-section,
@@ -485,6 +500,7 @@ body[data-app-theme="sky"] :is(
   box-shadow: 0 18px 40px -18px rgba(59, 130, 246, 0.4);
 }
 
+:root[data-app-theme="sky"],
 body[data-app-theme="sky"] {
   --surface-panel-bg: rgba(191, 219, 254, 0.6);
   --surface-panel-fg: #0f172a;
@@ -495,6 +511,21 @@ body[data-app-theme="sky"] {
   --surface-panel-toggle-fg: #0f172a;
 }
 
+:root[data-app-theme="lavender"] :is(
+  .admin-card,
+  .report-section,
+  .metric-card,
+  .stat-card,
+  .progress-card,
+  .upcoming-card,
+  .form-card,
+  .lesson-card,
+  .lesson-grade-card,
+  .grades-card,
+  .course-card,
+  .classroom-card,
+  .overlay-panel
+),
 body[data-app-theme="lavender"] :is(
   .admin-card,
   .report-section,
@@ -515,6 +546,7 @@ body[data-app-theme="lavender"] :is(
   box-shadow: 0 18px 40px -18px rgba(139, 92, 246, 0.32);
 }
 
+:root[data-app-theme="lavender"],
 body[data-app-theme="lavender"] {
   --surface-panel-bg: rgba(229, 215, 255, 0.6);
   --surface-panel-fg: #2c1b4b;
@@ -525,6 +557,21 @@ body[data-app-theme="lavender"] {
   --surface-panel-toggle-fg: #2c1b4b;
 }
 
+:root[data-app-theme="emerald"] :is(
+  .admin-card,
+  .report-section,
+  .metric-card,
+  .stat-card,
+  .progress-card,
+  .upcoming-card,
+  .form-card,
+  .lesson-card,
+  .lesson-grade-card,
+  .grades-card,
+  .course-card,
+  .classroom-card,
+  .overlay-panel
+),
 body[data-app-theme="emerald"] :is(
   .admin-card,
   .report-section,
@@ -545,6 +592,7 @@ body[data-app-theme="emerald"] :is(
   box-shadow: 0 18px 40px -18px rgba(16, 185, 129, 0.28);
 }
 
+:root[data-app-theme="emerald"],
 body[data-app-theme="emerald"] {
   --surface-panel-bg: rgba(209, 250, 229, 0.68);
   --surface-panel-fg: #064e3b;
@@ -555,6 +603,21 @@ body[data-app-theme="emerald"] {
   --surface-panel-toggle-fg: #064e3b;
 }
 
+:root[data-app-theme="sunset"] :is(
+  .admin-card,
+  .report-section,
+  .metric-card,
+  .stat-card,
+  .progress-card,
+  .upcoming-card,
+  .form-card,
+  .lesson-card,
+  .lesson-grade-card,
+  .grades-card,
+  .course-card,
+  .classroom-card,
+  .overlay-panel
+),
 body[data-app-theme="sunset"] :is(
   .admin-card,
   .report-section,
@@ -575,6 +638,7 @@ body[data-app-theme="sunset"] :is(
   box-shadow: 0 18px 40px -18px rgba(249, 115, 22, 0.26);
 }
 
+:root[data-app-theme="sunset"],
 body[data-app-theme="sunset"] {
   --surface-panel-bg: rgba(254, 215, 170, 0.68);
   --surface-panel-fg: #7c2d12;
@@ -585,6 +649,21 @@ body[data-app-theme="sunset"] {
   --surface-panel-toggle-fg: #7c2d12;
 }
 
+:root[data-app-theme="blush"] :is(
+  .admin-card,
+  .report-section,
+  .metric-card,
+  .stat-card,
+  .progress-card,
+  .upcoming-card,
+  .form-card,
+  .lesson-card,
+  .lesson-grade-card,
+  .grades-card,
+  .course-card,
+  .classroom-card,
+  .overlay-panel
+),
 body[data-app-theme="blush"] :is(
   .admin-card,
   .report-section,
@@ -605,6 +684,7 @@ body[data-app-theme="blush"] :is(
   box-shadow: 0 18px 40px -18px rgba(244, 114, 182, 0.3);
 }
 
+:root[data-app-theme="blush"],
 body[data-app-theme="blush"] {
   --surface-panel-bg: rgba(255, 228, 235, 0.7);
   --surface-panel-fg: #831843;
@@ -615,6 +695,21 @@ body[data-app-theme="blush"] {
   --surface-panel-toggle-fg: #831843;
 }
 
+:root[data-app-theme="slate"] :is(
+  .admin-card,
+  .report-section,
+  .metric-card,
+  .stat-card,
+  .progress-card,
+  .upcoming-card,
+  .form-card,
+  .lesson-card,
+  .lesson-grade-card,
+  .grades-card,
+  .course-card,
+  .classroom-card,
+  .overlay-panel
+),
 body[data-app-theme="slate"] :is(
   .admin-card,
   .report-section,
@@ -635,6 +730,21 @@ body[data-app-theme="slate"] :is(
   box-shadow: 0 18px 40px -18px rgba(15, 23, 42, 0.5);
 }
 
+:root[data-app-theme="aurora"] :is(
+  .admin-card,
+  .report-section,
+  .metric-card,
+  .stat-card,
+  .progress-card,
+  .upcoming-card,
+  .form-card,
+  .lesson-card,
+  .lesson-grade-card,
+  .grades-card,
+  .course-card,
+  .classroom-card,
+  .overlay-panel
+),
 body[data-app-theme="aurora"] :is(
   .admin-card,
   .report-section,
@@ -655,6 +765,21 @@ body[data-app-theme="aurora"] :is(
   box-shadow: 0 18px 40px -18px rgba(59, 130, 246, 0.3);
 }
 
+:root[data-app-theme="black"] :is(
+  .admin-card,
+  .report-section,
+  .metric-card,
+  .stat-card,
+  .progress-card,
+  .upcoming-card,
+  .form-card,
+  .lesson-card,
+  .lesson-grade-card,
+  .grades-card,
+  .course-card,
+  .classroom-card,
+  .overlay-panel
+),
 body[data-app-theme="black"] :is(
   .admin-card,
   .report-section,
@@ -675,6 +800,7 @@ body[data-app-theme="black"] :is(
   box-shadow: 0 20px 42px -18px rgba(0, 0, 0, 0.75);
 }
 
+:root[data-app-theme="sunrise"],
 body[data-app-theme="sunrise"] {
   --surface-panel-bg: rgba(254, 240, 199, 0.72);
   --surface-panel-fg: #78350f;
@@ -685,6 +811,21 @@ body[data-app-theme="sunrise"] {
   --surface-panel-toggle-fg: #78350f;
 }
 
+:root[data-app-theme="sunrise"] :is(
+  .admin-card,
+  .report-section,
+  .metric-card,
+  .stat-card,
+  .progress-card,
+  .upcoming-card,
+  .form-card,
+  .lesson-card,
+  .lesson-grade-card,
+  .grades-card,
+  .course-card,
+  .classroom-card,
+  .overlay-panel
+),
 body[data-app-theme="sunrise"] :is(
   .admin-card,
   .report-section,
@@ -705,6 +846,21 @@ body[data-app-theme="sunrise"] :is(
   box-shadow: 0 18px 40px -18px rgba(234, 179, 8, 0.28);
 }
 
+:root[data-app-theme="ocean"] :is(
+  .admin-card,
+  .report-section,
+  .metric-card,
+  .stat-card,
+  .progress-card,
+  .upcoming-card,
+  .form-card,
+  .lesson-card,
+  .lesson-grade-card,
+  .grades-card,
+  .course-card,
+  .classroom-card,
+  .overlay-panel
+),
 body[data-app-theme="ocean"] :is(
   .admin-card,
   .report-section,
@@ -725,6 +881,7 @@ body[data-app-theme="ocean"] :is(
   box-shadow: 0 18px 40px -18px rgba(37, 99, 235, 0.3);
 }
 
+:root[data-app-theme="ocean"],
 body[data-app-theme="ocean"] {
   --surface-panel-bg: rgba(219, 234, 254, 0.7);
   --surface-panel-fg: #0f172a;
@@ -735,6 +892,7 @@ body[data-app-theme="ocean"] {
   --surface-panel-toggle-fg: #0f172a;
 }
 
+:root[data-app-theme="black"],
 body[data-app-theme="black"] {
   --surface-panel-bg: rgba(10, 10, 10, 0.92);
   --surface-panel-fg: #e5e7eb;

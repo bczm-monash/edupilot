@@ -391,7 +391,12 @@ function toTWelcome() {
         }
     }
 
+    function isPickerDisabledForPage() {
+        return document.body?.dataset?.disableTheme === 'true';
+    }
+
     async function initialiseBackgroundManager() {
+        if (isPickerDisabledForPage()) return;
         if (STATE.supabase) return;
         try {
             STATE.supabase = await waitForSupabase();

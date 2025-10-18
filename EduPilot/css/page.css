@@ -131,6 +131,26 @@ img, video, svg {
   color: #0f172a;
 }
 
+.background-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.background-group-title {
+  margin: 0;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: #64748b;
+}
+
+.background-group--custom[hidden] {
+  display: none;
+}
+
 .background-swatches {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(88px, 1fr));
@@ -173,6 +193,13 @@ img, video, svg {
 .background-swatch.is-active .background-swatch-preview {
   border-color: #0a26c6;
   transform: scale(1.05);
+}
+
+.background-swatch--image .background-swatch-preview {
+  border: none;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
 .background-swatch-label {

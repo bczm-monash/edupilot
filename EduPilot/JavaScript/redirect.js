@@ -139,14 +139,42 @@ function toTWelcome() {
 }
 
 (function () {
-    const COLOR_OPTIONS = [
-        { name: 'Default', value: null },
-        { name: 'Sky', value: '#9bdbf7ff' },
-        { name: 'Lavender', value: '#cea4f5ff' },
-        { name: 'Emerald', value: '#a8e9d3ff' },
-        { name: 'Slate', value: '#1f2937' },
-        { name: 'Sunset', value: '#ffe4d1ff' },
-        { name: 'Blush', value: '#f6dbdfff' },
+    const PRESET_GROUPS = [
+        {
+            label: 'Colours',
+            options: [
+                { name: 'Default', value: null, type: 'default' },
+                { name: 'Sky', value: '#9bdbf7ff', type: 'color' },
+                { name: 'Lavender', value: '#cea4f5ff', type: 'color' },
+                { name: 'Emerald', value: '#a8e9d3ff', type: 'color' },
+                { name: 'Slate', value: '#1f2937', type: 'color' },
+                { name: 'Sunset', value: '#ffe4d1ff', type: 'color' },
+                { name: 'Blush', value: '#f6dbdfff', type: 'color' },
+            ],
+        },
+        {
+            label: 'Photos',
+            options: [
+                {
+                    name: 'Aurora',
+                    value: 'image|/EduPilot/Images/background_pic/aurora.svg',
+                    type: 'image',
+                    preview: '/EduPilot/Images/background_pic/aurora.svg',
+                },
+                {
+                    name: 'Sunrise',
+                    value: 'image|/EduPilot/Images/background_pic/sunrise.svg',
+                    type: 'image',
+                    preview: '/EduPilot/Images/background_pic/sunrise.svg',
+                },
+                {
+                    name: 'Ocean',
+                    value: 'image|/EduPilot/Images/background_pic/ocean.svg',
+                    type: 'image',
+                    preview: '/EduPilot/Images/background_pic/ocean.svg',
+                },
+            ],
+        },
     ];
 
     const STATE = {
@@ -155,9 +183,10 @@ function toTWelcome() {
         currentValue: null,
         toggleBtn: null,
         panelEl: null,
-        swatchListEl: null,
         swatchMap: new Map(),
         initialised: false,
+        customGroupWrapper: null,
+        customContainer: null,
     };
 
     function waitForSupabase(timeoutMs = 6000) {
@@ -181,37 +210,102 @@ function toTWelcome() {
         });
     }
 
-    function normaliseValue(value) {
-        if (value === null || value === undefined) return null;
-        return String(value).trim().toLowerCase();
+    function valueKey(value) {
+        if (value === null || value === undefined || value === '') return '__default__';
+        const trimmed = String(value).trim();
+        if (trimmed.startsWith('#')) return trimmed.toLowerCase();
+        return trimmed;
+    }
+
+    function isImageValue(value) {
+        if (!value) return false;
+        const trimmed = String(value).trim();
+        return (
+            trimmed.startsWith('image|') ||
+            /^url\(/i.test(trimmed) ||
+            /^https?:\/\//i.test(trimmed) ||
+            trimmed.startsWith('data:')
+        );
+    }
+
+    function previewForValue(value) {
+        if (!value) return '';
+        const trimmed = String(value).trim();
+        if (trimmed.startsWith('image|')) {
+            return trimmed.slice('image|'.length);
+        }
+        return trimmed;
     }
 
     function applyVisualBackground(value) {
         const body = document.body;
         if (!body) return;
 
+        body.style.removeProperty('background');
+        body.style.removeProperty('background-color');
+        body.style.removeProperty('background-image');
+        body.style.removeProperty('background-size');
+        body.style.removeProperty('background-position');
+        body.style.removeProperty('background-repeat');
+        body.style.removeProperty('background-attachment');
+
         if (!value) {
-            body.style.removeProperty('background');
-            body.style.removeProperty('background-color');
-            body.style.removeProperty('background-image');
-            body.style.removeProperty('background-size');
-            body.style.removeProperty('background-position');
             return;
         }
 
         const trimmed = String(value).trim();
+        if (trimmed.startsWith('image|')) {
+            const path = trimmed.slice('image|'.length);
+            body.style.setProperty('background-image', `url("${path}")`);
+            body.style.setProperty('background-size', 'cover');
+            body.style.setProperty('background-position', 'center');
+            body.style.setProperty('background-repeat', 'no-repeat');
+            body.style.setProperty('background-attachment', 'fixed');
+            body.style.setProperty('background-color', 'transparent');
+            return;
+        }
+
+        if (/^url\(/i.test(trimmed)) {
+            body.style.setProperty('background-image', trimmed);
+            body.style.setProperty('background-size', 'cover');
+            body.style.setProperty('background-position', 'center');
+            body.style.setProperty('background-repeat', 'no-repeat');
+            body.style.setProperty('background-attachment', 'fixed');
+            body.style.setProperty('background-color', 'transparent');
+            return;
+        }
+
+        if (/^https?:\/\//i.test(trimmed) || trimmed.startsWith('data:')) {
+            body.style.setProperty('background-image', `url("${trimmed}")`);
+            body.style.setProperty('background-size', 'cover');
+            body.style.setProperty('background-position', 'center');
+            body.style.setProperty('background-repeat', 'no-repeat');
+            body.style.setProperty('background-attachment', 'fixed');
+            body.style.setProperty('background-color', 'transparent');
+            return;
+        }
+
         body.style.setProperty('background', trimmed);
         body.style.setProperty('background-color', trimmed);
-        body.style.setProperty('background-image', 'none');
+        body.style.removeProperty('background-attachment');
     }
 
     function setActiveSwatch(value) {
-        const targetKey = normaliseValue(value);
+        const targetKey = valueKey(value);
+        let matched = false;
         STATE.swatchMap.forEach((btn, key) => {
             const isActive = key === targetKey;
             btn.classList.toggle('is-active', isActive);
             btn.setAttribute('aria-pressed', String(isActive));
+            if (isActive) matched = true;
         });
+        if (!matched) {
+            const defaultBtn = STATE.swatchMap.get('__default__');
+            if (defaultBtn) {
+                defaultBtn.classList.add('is-active');
+                defaultBtn.setAttribute('aria-pressed', 'true');
+            }
+        }
     }
 
     async function persistBackground(value) {
@@ -235,8 +329,8 @@ function toTWelcome() {
         STATE.toggleBtn.setAttribute('aria-expanded', 'false');
     }
 
-    function createSwatch(option) {
-        if (!STATE.swatchListEl) return;
+    function createSwatch(option, container) {
+        if (!container) return;
         const btn = document.createElement('button');
         btn.type = 'button';
         btn.className = 'background-swatch';
@@ -246,8 +340,25 @@ function toTWelcome() {
 
         const preview = document.createElement('span');
         preview.className = 'background-swatch-preview';
-        if (option.value) {
-            preview.style.setProperty('--swatch-color', option.value);
+        if (option.type === 'image') {
+            let backgroundValue = '';
+            if (option.value && String(option.value).trim().startsWith('image|')) {
+                const path = String(option.value).trim().slice('image|'.length);
+                backgroundValue = `url("${path}")`;
+            } else if (option.preview) {
+                const raw = String(option.preview).trim();
+                backgroundValue = /^url\(/i.test(raw) ? raw : `url("${raw}")`;
+            }
+            if (backgroundValue) {
+                preview.style.backgroundImage = backgroundValue;
+            }
+            btn.classList.add('background-swatch--image');
+        } else if (option.value) {
+            const fill = option.preview || option.value;
+            if (typeof option.value === 'string' && option.value.trim().startsWith('#')) {
+                preview.style.setProperty('--swatch-color', option.value);
+            }
+            preview.style.background = fill;
         } else {
             btn.classList.add('background-swatch--default');
         }
@@ -261,8 +372,8 @@ function toTWelcome() {
 
         btn.addEventListener('click', async () => {
             const selectedValue = option.value ?? null;
-            const currentNorm = normaliseValue(STATE.currentValue);
-            const nextNorm = normaliseValue(selectedValue);
+            const currentNorm = valueKey(STATE.currentValue);
+            const nextNorm = valueKey(selectedValue);
             if (currentNorm === nextNorm) {
                 STATE.panelEl.hidden = true;
                 STATE.toggleBtn.setAttribute('aria-expanded', 'false');
@@ -287,21 +398,28 @@ function toTWelcome() {
             }
         });
 
-        const normKey = normaliseValue(option.value);
+        const normKey = valueKey(option.value);
         STATE.swatchMap.set(normKey, btn);
-        STATE.swatchListEl.appendChild(btn);
+        container.appendChild(btn);
     }
 
     function ensureCustomSwatch(value) {
-        const norm = normaliseValue(value);
+        const norm = valueKey(value);
         if (!norm) return;
         if (STATE.swatchMap.has(norm)) return;
+        if (!STATE.customContainer || !STATE.customGroupWrapper) return;
+        const isImage = isImageValue(value);
         createSwatch({
             name: 'Saved',
             value,
-        });
+            type: isImage ? 'image' : 'color',
+            preview: isImage ? previewForValue(value) : value,
+        }, STATE.customContainer);
         const btn = STATE.swatchMap.get(norm);
         if (btn) btn.classList.add('background-swatch--custom');
+        if (STATE.customGroupWrapper && STATE.customContainer?.childElementCount > 0) {
+            STATE.customGroupWrapper.hidden = false;
+        }
     }
 
     function createBackgroundControls() {
@@ -331,11 +449,43 @@ function toTWelcome() {
         heading.className = 'background-panel-title';
         heading.textContent = 'Choose a background';
 
-        const swatchList = document.createElement('div');
-        swatchList.className = 'background-swatches';
-
         panel.appendChild(heading);
-        panel.appendChild(swatchList);
+
+        STATE.swatchMap.clear();
+
+        PRESET_GROUPS.forEach((group) => {
+            const wrapper = document.createElement('div');
+            wrapper.className = 'background-group';
+
+            const title = document.createElement('p');
+            title.className = 'background-group-title';
+            title.textContent = group.label;
+
+            const grid = document.createElement('div');
+            grid.className = 'background-swatches';
+
+            wrapper.appendChild(title);
+            wrapper.appendChild(grid);
+            panel.appendChild(wrapper);
+
+            group.options.forEach((option) => createSwatch(option, grid));
+        });
+
+        const customWrapper = document.createElement('div');
+        customWrapper.className = 'background-group background-group--custom';
+        customWrapper.hidden = true;
+
+        const customTitle = document.createElement('p');
+        customTitle.className = 'background-group-title';
+        customTitle.textContent = 'Your saved background';
+
+        const customGrid = document.createElement('div');
+        customGrid.className = 'background-swatches';
+
+        customWrapper.appendChild(customTitle);
+        customWrapper.appendChild(customGrid);
+        panel.appendChild(customWrapper);
+
         container.appendChild(toggleBtn);
         container.appendChild(panel);
 
@@ -343,10 +493,13 @@ function toTWelcome() {
 
         STATE.toggleBtn = toggleBtn;
         STATE.panelEl = panel;
-        STATE.swatchListEl = swatchList;
+        STATE.customGroupWrapper = customWrapper;
+        STATE.customContainer = customGrid;
 
-        COLOR_OPTIONS.forEach(createSwatch);
         ensureCustomSwatch(STATE.currentValue);
+        if (STATE.customGroupWrapper && STATE.customContainer && !STATE.customContainer.childElementCount) {
+            STATE.customGroupWrapper.hidden = true;
+        }
         setActiveSwatch(STATE.currentValue);
 
         toggleBtn.addEventListener('click', () => {

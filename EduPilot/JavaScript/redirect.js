@@ -397,6 +397,11 @@ if (initialThemeValue !== null && initialThemeValue !== undefined && initialThem
     applyThemeTag(initialThemeValue);
     applyContrastMode(initialThemeValue);
     setBackgroundForTarget(document.documentElement, initialThemeValue);
+    if (document.body) {
+        setBackgroundForTarget(document.body, initialThemeValue);
+    } else {
+        pendingBodyOps.push(() => setBackgroundForTarget(document.body, initialThemeValue));
+    }
 }
 
 function isImageValue(value) {

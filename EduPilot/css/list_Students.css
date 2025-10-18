@@ -119,13 +119,15 @@
 
 /* General table styling */
 #studentTable {
-  width: 90%;                 /* occupy most of the page */
-  margin: 20px auto;           /* center horizontally */
-  border-collapse: collapse;   /* merge borders */
+  width: 100%;
+  margin: 0;
+  border-collapse: collapse;
+  border-spacing: 0;
   font-family: Arial, sans-serif;
   font-size: 16px;
-  background-color: #fff;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  background: transparent;
+  color: inherit;
+  min-width: 560px;
 }
 
 /* Header styling */
@@ -136,20 +138,25 @@
   letter-spacing: 1px;
 }
 
-#studentable th,
 #studentTable td {
-  border: 1px solid #ddd;
+  border: 1px solid rgba(15, 23, 42, 0.12);
+  padding: 12px;
+  text-align: center;
+}
+
+#studentTable th {
+  border: 1px solid rgba(15, 23, 42, 0.12);
   padding: 12px;
   text-align: center;
 }
 
 /* Row styling */
 #studentTable tbody tr:nth-child(even) {
-  background-color: #f9f9f9;
+  background-color: rgba(15, 23, 42, 0.04);
 }
 
 #studentTable tbody tr:hover {
-  background-color: #f1f1f1;
+  background-color: rgba(15, 23, 42, 0.08);
   transition: 0.3s;
 }
 
@@ -160,6 +167,28 @@
   border-radius: 6px;
   cursor: pointer;
   font-size: 14px;
+}
+
+:root.theme-dark #studentTable thead,
+body.theme-dark #studentTable thead {
+  border-color: rgba(255, 255, 255, 0.16);
+}
+
+:root.theme-dark #studentTable th,
+:root.theme-dark #studentTable td,
+body.theme-dark #studentTable th,
+body.theme-dark #studentTable td {
+  border-color: rgba(255, 255, 255, 0.16);
+}
+
+:root.theme-dark #studentTable tbody tr:nth-child(even),
+body.theme-dark #studentTable tbody tr:nth-child(even) {
+  background-color: rgba(255, 255, 255, 0.08);
+}
+
+:root.theme-dark #studentTable tbody tr:hover,
+body.theme-dark #studentTable tbody tr:hover {
+  background-color: rgba(255, 255, 255, 0.12);
 }
 
 .delete-btn {

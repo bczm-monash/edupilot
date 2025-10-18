@@ -101,6 +101,35 @@ h1{
   box-shadow: none;
 }
 
+.theme-surface {
+  border: 1px solid #0d0d0d;
+  border-radius: 12px;
+  background: #ffffff;
+  box-shadow: 0 16px 28px rgba(15, 23, 42, 0.12);
+  transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+  display: block;
+  overflow: hidden;
+}
+
+.table-surface {
+  margin: 20px auto;
+  max-width: 90%;
+  padding: 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.table-surface.theme-surface {
+  padding: 16px;
+}
+
+@media (max-width: 768px) {
+  .table-surface {
+    max-width: 100%;
+    margin: 16px;
+  }
+}
+
 body[data-app-theme] :is(
   .admin-card,
   .report-section,
@@ -500,6 +529,13 @@ body[data-app-theme="sky"] :is(
   box-shadow: 0 18px 40px -18px rgba(59, 130, 246, 0.4);
 }
 
+:root[data-app-theme="sky"] .theme-surface,
+body[data-app-theme="sky"] .theme-surface {
+  background: linear-gradient(160deg, rgba(147, 197, 253, 0.38), rgba(255, 255, 255, 0.96));
+  border-color: rgba(15, 23, 42, 0.85);
+  box-shadow: 0 18px 40px -18px rgba(59, 130, 246, 0.4);
+}
+
 :root[data-app-theme="sky"],
 body[data-app-theme="sky"] {
   --surface-panel-bg: rgba(191, 219, 254, 0.6);
@@ -541,6 +577,13 @@ body[data-app-theme="lavender"] :is(
   .classroom-card,
   .overlay-panel
 ) {
+  background: linear-gradient(160deg, rgba(206, 164, 245, 0.34), rgba(255, 255, 255, 0.97));
+  border-color: rgba(15, 23, 42, 0.85);
+  box-shadow: 0 18px 40px -18px rgba(139, 92, 246, 0.32);
+}
+
+:root[data-app-theme="lavender"] .theme-surface,
+body[data-app-theme="lavender"] .theme-surface {
   background: linear-gradient(160deg, rgba(206, 164, 245, 0.34), rgba(255, 255, 255, 0.97));
   border-color: rgba(15, 23, 42, 0.85);
   box-shadow: 0 18px 40px -18px rgba(139, 92, 246, 0.32);
@@ -592,6 +635,13 @@ body[data-app-theme="emerald"] :is(
   box-shadow: 0 18px 40px -18px rgba(16, 185, 129, 0.28);
 }
 
+:root[data-app-theme="emerald"] .theme-surface,
+body[data-app-theme="emerald"] .theme-surface {
+  background: linear-gradient(160deg, rgba(168, 233, 211, 0.32), rgba(255, 255, 255, 0.97));
+  border-color: rgba(15, 23, 42, 0.85);
+  box-shadow: 0 18px 40px -18px rgba(16, 185, 129, 0.28);
+}
+
 :root[data-app-theme="emerald"],
 body[data-app-theme="emerald"] {
   --surface-panel-bg: rgba(209, 250, 229, 0.68);
@@ -633,6 +683,13 @@ body[data-app-theme="sunset"] :is(
   .classroom-card,
   .overlay-panel
 ) {
+  background: linear-gradient(160deg, rgba(255, 228, 209, 0.36), rgba(255, 255, 255, 0.97));
+  border-color: rgba(15, 23, 42, 0.85);
+  box-shadow: 0 18px 40px -18px rgba(249, 115, 22, 0.26);
+}
+
+:root[data-app-theme="sunset"] .theme-surface,
+body[data-app-theme="sunset"] .theme-surface {
   background: linear-gradient(160deg, rgba(255, 228, 209, 0.36), rgba(255, 255, 255, 0.97));
   border-color: rgba(15, 23, 42, 0.85);
   box-shadow: 0 18px 40px -18px rgba(249, 115, 22, 0.26);
@@ -684,6 +741,13 @@ body[data-app-theme="blush"] :is(
   box-shadow: 0 18px 40px -18px rgba(244, 114, 182, 0.3);
 }
 
+:root[data-app-theme="blush"] .theme-surface,
+body[data-app-theme="blush"] .theme-surface {
+  background: linear-gradient(160deg, rgba(246, 219, 223, 0.38), rgba(255, 255, 255, 0.98));
+  border-color: rgba(15, 23, 42, 0.85);
+  box-shadow: 0 18px 40px -18px rgba(244, 114, 182, 0.3);
+}
+
 :root[data-app-theme="blush"],
 body[data-app-theme="blush"] {
   --surface-panel-bg: rgba(255, 228, 235, 0.7);
@@ -730,6 +794,13 @@ body[data-app-theme="slate"] :is(
   box-shadow: 0 18px 40px -18px rgba(15, 23, 42, 0.5);
 }
 
+:root[data-app-theme="slate"] .theme-surface,
+body[data-app-theme="slate"] .theme-surface {
+  background: linear-gradient(160deg, rgba(55, 65, 81, 0.85), rgba(17, 24, 39, 0.9));
+  border-color: rgba(255, 255, 255, 0.35);
+  box-shadow: 0 18px 40px -18px rgba(15, 23, 42, 0.5);
+}
+
 :root[data-app-theme="aurora"] :is(
   .admin-card,
   .report-section,
@@ -765,6 +836,13 @@ body[data-app-theme="aurora"] :is(
   box-shadow: 0 18px 40px -18px rgba(59, 130, 246, 0.3);
 }
 
+:root[data-app-theme="aurora"] .theme-surface,
+body[data-app-theme="aurora"] .theme-surface {
+  background: linear-gradient(160deg, rgba(165, 180, 252, 0.32), rgba(125, 211, 252, 0.3), rgba(255, 255, 255, 0.97));
+  border-color: rgba(15, 23, 42, 0.85);
+  box-shadow: 0 18px 40px -18px rgba(59, 130, 246, 0.3);
+}
+
 :root[data-app-theme="black"] :is(
   .admin-card,
   .report-section,
@@ -795,6 +873,13 @@ body[data-app-theme="black"] :is(
   .classroom-card,
   .overlay-panel
 ) {
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.92), rgba(17, 17, 17, 0.9));
+  border-color: rgba(255, 255, 255, 0.45);
+  box-shadow: 0 20px 42px -18px rgba(0, 0, 0, 0.75);
+}
+
+:root[data-app-theme="black"] .theme-surface,
+body[data-app-theme="black"] .theme-surface {
   background: linear-gradient(180deg, rgba(0, 0, 0, 0.92), rgba(17, 17, 17, 0.9));
   border-color: rgba(255, 255, 255, 0.45);
   box-shadow: 0 20px 42px -18px rgba(0, 0, 0, 0.75);
@@ -846,6 +931,13 @@ body[data-app-theme="sunrise"] :is(
   box-shadow: 0 18px 40px -18px rgba(234, 179, 8, 0.28);
 }
 
+:root[data-app-theme="sunrise"] .theme-surface,
+body[data-app-theme="sunrise"] .theme-surface {
+  background: linear-gradient(160deg, rgba(254, 215, 170, 0.38), rgba(255, 255, 255, 0.97));
+  border-color: rgba(15, 23, 42, 0.85);
+  box-shadow: 0 18px 40px -18px rgba(234, 179, 8, 0.28);
+}
+
 :root[data-app-theme="ocean"] :is(
   .admin-card,
   .report-section,
@@ -876,6 +968,13 @@ body[data-app-theme="ocean"] :is(
   .classroom-card,
   .overlay-panel
 ) {
+  background: linear-gradient(160deg, rgba(191, 219, 254, 0.34), rgba(255, 255, 255, 0.97));
+  border-color: rgba(15, 23, 42, 0.85);
+  box-shadow: 0 18px 40px -18px rgba(37, 99, 235, 0.3);
+}
+
+:root[data-app-theme="ocean"] .theme-surface,
+body[data-app-theme="ocean"] .theme-surface {
   background: linear-gradient(160deg, rgba(191, 219, 254, 0.34), rgba(255, 255, 255, 0.97));
   border-color: rgba(15, 23, 42, 0.85);
   box-shadow: 0 18px 40px -18px rgba(37, 99, 235, 0.3);
@@ -957,7 +1056,8 @@ body.theme-dark .lesson-card,
 body.theme-dark .grade-item,
 body.theme-dark .details-card,
 body.theme-dark .course-card,
-body.theme-dark .classroom-card {
+body.theme-dark .classroom-card,
+body.theme-dark .theme-surface {
   color: #f2f2f2;
   border-color: rgba(255, 255, 255, 0.7);
 
@@ -977,7 +1077,8 @@ body.theme-dark .lesson-card *,
 body.theme-dark .lesson-grade-card *,
 body.theme-dark .grades-card *,
 body.theme-dark .course-card *,
-body.theme-dark .classroom-card * {
+body.theme-dark .classroom-card *,
+body.theme-dark .theme-surface * {
   color: #f2f2f2;
 }
 

@@ -56,7 +56,7 @@ async function signIn(event) {
     if (role === 'Teacher') {
       toTWelcome();
     } else if (role === 'Admin') {
-      toAdmin();
+      toAWelcome();
     } else if (role == 'Student'){
       toSWelcome();
     } else {

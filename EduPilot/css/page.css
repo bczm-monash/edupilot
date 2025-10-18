@@ -744,11 +744,11 @@ body.theme-dark .admin-dashboard > h3 {
 }
 
 body.theme-dark .admin-dashboard > p.muted {
-  color: rgba(226, 232, 240, 0.85);
+  color: #ff5a5f;
 }
 
 body.theme-dark .muted {
-  color: rgba(226, 232, 240, 0.7);
+  color: #ff5a5f;
 }
 
 body.theme-dark .admin-card,
@@ -770,9 +770,27 @@ body.theme-dark .grade-item,
 body.theme-dark .details-card,
 body.theme-dark .course-card,
 body.theme-dark .classroom-card {
-  color: #ffffff;
+  color: #f2f2f2;
   border-color: rgba(255, 255, 255, 0.7);
 
+}
+
+body.theme-dark .admin-card h3,
+body.theme-dark .admin-card p,
+body.theme-dark .report-section h3,
+body.theme-dark .report-section p,
+body.theme-dark .metric-card .metric-label,
+body.theme-dark .metric-card .metric-value,
+body.theme-dark .stat-card h3,
+body.theme-dark .stat-card .stat-label,
+body.theme-dark .stat-card .stat-value,
+body.theme-dark .progress-card *,
+body.theme-dark .lesson-card *,
+body.theme-dark .lesson-grade-card *,
+body.theme-dark .grades-card *,
+body.theme-dark .course-card *,
+body.theme-dark .classroom-card * {
+  color: #f2f2f2;
 }
 
 body.theme-dark .admin-card .muted,
@@ -794,7 +812,7 @@ body.theme-dark .grade-item .muted,
 body.theme-dark .details-card .muted,
 body.theme-dark .course-card .muted,
 body.theme-dark .classroom-card .muted {
-  color: rgba(237, 240, 242, 0.72);
+  color: #ff5a5f;
 }
 
 body.theme-dark .back-btn {

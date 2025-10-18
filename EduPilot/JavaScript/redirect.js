@@ -193,11 +193,11 @@ function toTWelcome() {
         customContainer: null,
     };
 
-    function waitForSupabase(timeoutMs = 6000) {
-        if (window.supabase) return Promise.resolve(window.supabase);
-        return new Promise((resolve, reject) => {
-            const onReady = (event) => {
-                cleanup();
+function waitForSupabase(timeoutMs = 6000) {
+    if (window.supabase) return Promise.resolve(window.supabase);
+    return new Promise((resolve, reject) => {
+        const onReady = (event) => {
+            cleanup();
                 resolve(event?.detail?.supabase || window.supabase);
             };
             const cleanup = () => {
@@ -214,18 +214,32 @@ function toTWelcome() {
         });
     }
 
-    function valueKey(value) {
-        if (value === null || value === undefined || value === '') return '__default__';
-        const trimmed = String(value).trim();
-        if (trimmed.startsWith('#')) return trimmed.toLowerCase();
-        return trimmed;
-    }
+function valueKey(value) {
+    if (value === null || value === undefined || value === '') return '__default__';
+    const trimmed = String(value).trim();
+    if (trimmed.startsWith('#')) return trimmed.toLowerCase();
+    return trimmed;
+}
 
-    function isImageValue(value) {
-        if (!value) return false;
-        const trimmed = String(value).trim();
-        return (
-            trimmed.startsWith('image|') ||
+const DARK_BACKGROUND_VALUES = new Set(
+    ['#1f2937', 'image|/EduPilot/Images/background_pic/aurora.svg'].map((value) => valueKey(value))
+);
+
+function isDarkBackground(value) {
+    return DARK_BACKGROUND_VALUES.has(valueKey(value));
+}
+
+function applyContrastMode(value) {
+    const body = document.body;
+    if (!body) return;
+    body.classList.toggle('theme-dark', isDarkBackground(value));
+}
+
+function isImageValue(value) {
+    if (!value) return false;
+    const trimmed = String(value).trim();
+    return (
+        trimmed.startsWith('image|') ||
             /^url\(/i.test(trimmed) ||
             /^https?:\/\//i.test(trimmed) ||
             trimmed.startsWith('data:')
@@ -244,6 +258,8 @@ function toTWelcome() {
     function applyVisualBackground(value) {
         const body = document.body;
         if (!body) return;
+
+        applyContrastMode(value);
 
         body.style.removeProperty('background');
         body.style.removeProperty('background-color');

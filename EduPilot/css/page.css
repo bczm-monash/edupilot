@@ -378,3 +378,76 @@ img, video, svg {
 .report-placeholder {
   max-width: 560px;
 }
+
+body.theme-dark {
+  color: #f8fafc;
+}
+
+body.theme-dark h1,
+body.theme-dark h2,
+body.theme-dark h3,
+body.theme-dark h4,
+body.theme-dark h5,
+body.theme-dark h6,
+body.theme-dark p,
+body.theme-dark li,
+body.theme-dark span,
+body.theme-dark label {
+  color: inherit;
+}
+
+body.theme-dark .admin-dashboard > h3 {
+  color: #f8fafc;
+}
+
+body.theme-dark .admin-dashboard > p.muted {
+  color: rgba(226, 232, 240, 0.85);
+}
+
+body.theme-dark .muted {
+  color: rgba(226, 232, 240, 0.7);
+}
+
+body.theme-dark .admin-card,
+body.theme-dark .report-section,
+body.theme-dark .metric-card,
+body.theme-dark .grades-card,
+body.theme-dark .lesson-grade-card,
+body.theme-dark .stat-card,
+body.theme-dark .progress-card,
+body.theme-dark .upcoming-card,
+body.theme-dark .form-card,
+body.theme-dark .overlay-panel,
+body.theme-dark .background-panel,
+body.theme-dark table,
+body.theme-dark .card,
+body.theme-dark .grid-card,
+body.theme-dark .lesson-card,
+body.theme-dark .grade-item,
+body.theme-dark .details-card,
+body.theme-dark .course-card,
+body.theme-dark .classroom-card {
+  color: #0f172a;
+}
+
+body.theme-dark .admin-card .muted,
+body.theme-dark .report-section .muted,
+body.theme-dark .metric-card .muted,
+body.theme-dark .grades-card .muted,
+body.theme-dark .lesson-grade-card .muted,
+body.theme-dark .stat-card .muted,
+body.theme-dark .progress-card .muted,
+body.theme-dark .upcoming-card .muted,
+body.theme-dark .form-card .muted,
+body.theme-dark .overlay-panel .muted,
+body.theme-dark .background-panel .muted,
+body.theme-dark table .muted,
+body.theme-dark .card .muted,
+body.theme-dark .grid-card .muted,
+body.theme-dark .lesson-card .muted,
+body.theme-dark .grade-item .muted,
+body.theme-dark .details-card .muted,
+body.theme-dark .course-card .muted,
+body.theme-dark .classroom-card .muted {
+  color: #475569;
+}

@@ -15,17 +15,16 @@
     flex-shrink: 0;
     display:grid;
     place-items: center;
-
-    color: black;
-    background: whitesmoke;
-    border: none;
+    color: var(--surface-panel-toggle-fg, #111827);
+    background: var(--surface-panel-toggle-bg, #f8fafc);
+    border: 1px solid transparent;
     border-radius: 0 5px 5px 0;
     outline: none;
     cursor: pointer;
 }
 
 .side-panel-toggle:hover{
-    background: white;
+    background: var(--surface-panel-toggle-hover-bg, #ffffff);
 }
 
 .sp-icon-close{
@@ -37,9 +36,10 @@
     width: 40%;
     flex-shrink:0;
     padding:20px 20px 50px 50px;
-    color:black;
-    background: whitesmoke;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.35);
+    color: var(--surface-panel-fg, #111827);
+    background: var(--surface-panel-bg, #f5f5f5);
+    border: 1px solid var(--surface-panel-border, rgba(15, 23, 42, 0.15));
+    box-shadow: var(--surface-panel-shadow, 0 0 10px rgba(15, 23, 42, 0.12));
 }
 
 .side-panel-open .side-panel{

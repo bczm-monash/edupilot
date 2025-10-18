@@ -24,24 +24,47 @@
     </div>
 
     <main class="admin-dashboard">
-        <h2>Welcome back, Admin</h2>
+        <h3 style="margin-left: 12px; font-size: 35px;">System Admin</h3>
+        <p class="muted" style="margin-left: 12px; margin-top: -12px;">
+            Centralise user management and insights for the entire EduPilot platform.
+        </p>
 
         <section class="card-grid" aria-label="Admin quick actions">
-            <article class="admin-card" onclick="toAdminStudentList()">
-                <h3>Student Lists</h3>
+            <article class="admin-card" role="button" tabindex="0" data-action="toAdminStudentList">
+                <h3>Student List</h3>
                 <p>Manage students in the system.</p>
             </article>
 
-            <article class="admin-card" onclick="toAdminInstructorList()">
+            <article class="admin-card" role="button" tabindex="0" data-action="toAdminInstructorList">
                 <h3>Instructor List</h3>
-                <p>Manage Instructor in the system.</p>
+                <p>Manage instructors in the system.</p>
             </article>
 
-            <article class="admin-card" onclick="toAdminReports()">
+            <article class="admin-card" role="button" tabindex="0" data-action="toAdminReports">
                 <h3>Reports</h3>
                 <p>View overall course, classroom, lesson and system analytics.</p>
             </article>
         </section>
     </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelectorAll('.admin-card[data-action]').forEach((card) => {
+                const actionName = card.dataset.action;
+                const handler = window[actionName];
+                if (typeof handler !== 'function') return;
+
+                const invoke = () => handler();
+
+                card.addEventListener('click', invoke);
+                card.addEventListener('keypress', (event) => {
+                    if (event.key === 'Enter' || event.key === ' ') {
+                        event.preventDefault();
+                        invoke();
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 </html>

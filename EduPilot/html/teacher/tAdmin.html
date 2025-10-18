@@ -24,14 +24,18 @@
   </div>
 
   <main class="admin-dashboard">
-    <h2>Welcome back</h2>
-    <section class="card-grid" aria-label="Teacher quick actions">
-      <article class="admin-card" onclick="toTStudents()">
+    <h3 style="margin-left: 12px; font-size: 35px;">Teacher Admin</h3>
+    <p class="muted" style="margin-left: 12px; margin-top: -12px;">
+      Manage key teacher tools like student access and performance reports.
+    </p>
+
+    <section class="card-grid" aria-label="Teacher admin actions">
+      <article class="admin-card" role="button" tabindex="0" data-action="toTStudents">
         <h3>Student List</h3>
         <p>Manage students in the system.</p>
       </article>
 
-      <article class="admin-card" onclick="toTeacherReports()">
+      <article class="admin-card" role="button" tabindex="0" data-action="toTeacherReports">
         <h3>Reports</h3>
         <p>View course, classroom, and lesson analytics.</p>
       </article>
@@ -45,6 +49,22 @@
       if (adminButton && isAdminModeActive()) {
         adminButton.style.display = 'none';
       }
+
+      document.querySelectorAll('.admin-card[data-action]').forEach((card) => {
+        const actionName = card.dataset.action;
+        const handler = window[actionName];
+        if (typeof handler !== 'function') return;
+
+        const invoke = () => handler();
+
+        card.addEventListener('click', invoke);
+        card.addEventListener('keypress', (event) => {
+          if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault();
+            invoke();
+          }
+        });
+      });
     });
   </script>
 </body>

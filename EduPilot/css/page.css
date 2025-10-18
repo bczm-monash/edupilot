@@ -771,6 +771,8 @@ body.theme-dark .details-card,
 body.theme-dark .course-card,
 body.theme-dark .classroom-card {
   color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.7);
+
 }
 
 body.theme-dark .admin-card .muted,

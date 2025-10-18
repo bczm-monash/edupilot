@@ -485,6 +485,16 @@ body[data-app-theme="sky"] :is(
   box-shadow: 0 18px 40px -18px rgba(59, 130, 246, 0.4);
 }
 
+body[data-app-theme="sky"] {
+  --surface-panel-bg: rgba(191, 219, 254, 0.6);
+  --surface-panel-fg: #0f172a;
+  --surface-panel-border: rgba(59, 130, 246, 0.45);
+  --surface-panel-shadow: 0 18px 36px -20px rgba(59, 130, 246, 0.45);
+  --surface-panel-toggle-bg: rgba(191, 219, 254, 0.85);
+  --surface-panel-toggle-hover-bg: rgba(191, 219, 254, 1);
+  --surface-panel-toggle-fg: #0f172a;
+}
+
 body[data-app-theme="lavender"] :is(
   .admin-card,
   .report-section,
@@ -503,6 +513,16 @@ body[data-app-theme="lavender"] :is(
   background: linear-gradient(160deg, rgba(206, 164, 245, 0.34), rgba(255, 255, 255, 0.97));
   border-color: rgba(15, 23, 42, 0.85);
   box-shadow: 0 18px 40px -18px rgba(139, 92, 246, 0.32);
+}
+
+body[data-app-theme="lavender"] {
+  --surface-panel-bg: rgba(229, 215, 255, 0.6);
+  --surface-panel-fg: #2c1b4b;
+  --surface-panel-border: rgba(168, 85, 247, 0.4);
+  --surface-panel-shadow: 0 18px 36px -20px rgba(139, 92, 246, 0.38);
+  --surface-panel-toggle-bg: rgba(229, 215, 255, 0.85);
+  --surface-panel-toggle-hover-bg: rgba(229, 215, 255, 1);
+  --surface-panel-toggle-fg: #2c1b4b;
 }
 
 body[data-app-theme="emerald"] :is(
@@ -525,6 +545,16 @@ body[data-app-theme="emerald"] :is(
   box-shadow: 0 18px 40px -18px rgba(16, 185, 129, 0.28);
 }
 
+body[data-app-theme="emerald"] {
+  --surface-panel-bg: rgba(209, 250, 229, 0.68);
+  --surface-panel-fg: #064e3b;
+  --surface-panel-border: rgba(16, 185, 129, 0.45);
+  --surface-panel-shadow: 0 18px 36px -20px rgba(16, 185, 129, 0.32);
+  --surface-panel-toggle-bg: rgba(209, 250, 229, 0.9);
+  --surface-panel-toggle-hover-bg: rgba(209, 250, 229, 1);
+  --surface-panel-toggle-fg: #064e3b;
+}
+
 body[data-app-theme="sunset"] :is(
   .admin-card,
   .report-section,
@@ -545,6 +575,16 @@ body[data-app-theme="sunset"] :is(
   box-shadow: 0 18px 40px -18px rgba(249, 115, 22, 0.26);
 }
 
+body[data-app-theme="sunset"] {
+  --surface-panel-bg: rgba(254, 215, 170, 0.68);
+  --surface-panel-fg: #7c2d12;
+  --surface-panel-border: rgba(249, 115, 22, 0.4);
+  --surface-panel-shadow: 0 18px 36px -20px rgba(249, 115, 22, 0.32);
+  --surface-panel-toggle-bg: rgba(254, 215, 170, 0.9);
+  --surface-panel-toggle-hover-bg: rgba(254, 215, 170, 1);
+  --surface-panel-toggle-fg: #7c2d12;
+}
+
 body[data-app-theme="blush"] :is(
   .admin-card,
   .report-section,
@@ -563,6 +603,16 @@ body[data-app-theme="blush"] :is(
   background: linear-gradient(160deg, rgba(246, 219, 223, 0.38), rgba(255, 255, 255, 0.98));
   border-color: rgba(15, 23, 42, 0.85);
   box-shadow: 0 18px 40px -18px rgba(244, 114, 182, 0.3);
+}
+
+body[data-app-theme="blush"] {
+  --surface-panel-bg: rgba(255, 228, 235, 0.7);
+  --surface-panel-fg: #831843;
+  --surface-panel-border: rgba(236, 72, 153, 0.4);
+  --surface-panel-shadow: 0 18px 36px -20px rgba(236, 72, 153, 0.32);
+  --surface-panel-toggle-bg: rgba(255, 228, 235, 0.9);
+  --surface-panel-toggle-hover-bg: rgba(255, 228, 235, 1);
+  --surface-panel-toggle-fg: #831843;
 }
 
 body[data-app-theme="slate"] :is(
@@ -605,6 +655,16 @@ body[data-app-theme="aurora"] :is(
   box-shadow: 0 18px 40px -18px rgba(59, 130, 246, 0.3);
 }
 
+body[data-app-theme="sunrise"] {
+  --surface-panel-bg: rgba(254, 240, 199, 0.72);
+  --surface-panel-fg: #78350f;
+  --surface-panel-border: rgba(251, 191, 36, 0.46);
+  --surface-panel-shadow: 0 18px 36px -20px rgba(251, 191, 36, 0.34);
+  --surface-panel-toggle-bg: rgba(254, 240, 199, 0.92);
+  --surface-panel-toggle-hover-bg: rgba(254, 240, 199, 1);
+  --surface-panel-toggle-fg: #78350f;
+}
+
 body[data-app-theme="sunrise"] :is(
   .admin-card,
   .report-section,
@@ -643,6 +703,16 @@ body[data-app-theme="ocean"] :is(
   background: linear-gradient(160deg, rgba(191, 219, 254, 0.34), rgba(255, 255, 255, 0.97));
   border-color: rgba(15, 23, 42, 0.85);
   box-shadow: 0 18px 40px -18px rgba(37, 99, 235, 0.3);
+}
+
+body[data-app-theme="ocean"] {
+  --surface-panel-bg: rgba(219, 234, 254, 0.7);
+  --surface-panel-fg: #0f172a;
+  --surface-panel-border: rgba(56, 189, 248, 0.42);
+  --surface-panel-shadow: 0 18px 36px -20px rgba(37, 99, 235, 0.34);
+  --surface-panel-toggle-bg: rgba(219, 234, 254, 0.9);
+  --surface-panel-toggle-hover-bg: rgba(219, 234, 254, 1);
+  --surface-panel-toggle-fg: #0f172a;
 }
 
 body.theme-dark {

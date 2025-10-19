@@ -97,6 +97,7 @@ body {
 .primary-btn:hover {
   transform: translateY(-2px);
   box-shadow: 0 16px 28px rgba(37, 99, 235, 0.35);
+  background-color: darkblue;
 }
 
 .secondary-btn {
@@ -107,6 +108,8 @@ body {
 
 .secondary-btn:hover {
   transform: translateY(-2px);
+  box-shadow: 0 16px 28px rgba(255, 255, 255, 0.15);
+  background-color: rgba(235, 232, 232, 0.634);
 }
 
 .stats-grid {
